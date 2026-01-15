@@ -1,0 +1,145 @@
+User Progress Feature Tests
+
+***********************************************************
+HAPPY PATH
+***********************************************************
+
+1. Register a new user(auto login, and returns a token):
+curl -i -s -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d "{\"username\":\"alice\",\"password\":\"letmein\"}"
+
+Result:
+HTTP/1.1 201
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"token":"<TOKEN>","expiresAt":"<DATETIME>","user":{"id":1,"username":"alice","role":null}}
+
+***********************************************************
+
+2. Add two modules (run separately)
+
+curl -i -s -X POST http://localhost:8080/api/modules -H "Content-Type: application/json" -d "{\"title\":\"Module 1\",\"description\":\"First module\"}"
+curl -i -s -X POST http://localhost:8080/api/modules -H "Content-Type: application/json" -d "{\"title\":\"Module 2\",\"description\":\"Second module\"}"
+
+Result:
+HTTP/1.1 201
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"id":1,"title":"Module 1","description":"First module","lessons":[]}
+{"id":2,"title":"Module 2","description":"Second module","lessons":[]}
+
+***********************************************************
+
+3. Add two lessons to Module 1
+
+curl -i -s -X POST http://localhost:8080/api/modules/1/lessons -H "Content-Type: application/json" -d "{\"title\":\"Lesson 1A\",\"description\":\"Intro to Module 1\"}"
+curl -i -s -X POST http://localhost:8080/api/modules/1/lessons -H "Content-Type: application/json" -d "{\"title\":\"Lesson 1B\",\"description\":\"Deeper dive into Module 1\"}"
+
+Result:
+HTTP/1.1 201
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"id":1,"title":"Lesson 1A","description":"Intro to Module 1","moduleId":1}
+{"id":2,"title":"Lesson 1B","description":"Deeper dive into Module 1","moduleId":1}
+
+***********************************************************
+
+4. Add two lessons to Module 2
+
+curl -i -s -X POST http://localhost:8080/api/modules/2/lessons -H "Content-Type: application/json" -d "{\"title\":\"Lesson 2A\",\"description\":\"Intro to Module 2\"}"
+curl -i -s -X POST http://localhost:8080/api/modules/2/lessons -H "Content-Type: application/json" -d "{\"title\":\"Lesson 2B\",\"description\":\"Deeper dive into Module 2\"}"
+
+Result:
+HTTP/1.1 201
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"id":3,"title":"Lesson 2A","description":"Intro to Module 2","moduleId":2}
+{"id":4,"title":"Lesson 2B","description":"Deeper dive into Module 2","moduleId":2}
+
+***********************************************************
+
+5. Complete Lesson 1(Module 1, Lesson 1):
+
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/1/complete -H "X-AUTH-TOKEN: <TOKEN>"
+
+Result (No content):
+HTTP/1.1 204
+Date: <DATETIME>
+
+***********************************************************
+
+6. Complete Lesson 2(Module 1, Lesson 2):
+
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/2/complete -H "X-AUTH-TOKEN: <TOKEN>"
+
+Result (No content):
+HTTP/1.1 204
+Date: <DATETIME>
+
+***********************************************************
+
+7. Check overall user progress:
+
+curl -s http://localhost:8080/api/progress -H "X-AUTH-TOKEN: <TOKEN>"
+
+Result:
+HTTP/1.1 200
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"userId":1,"modules":[{"moduleId":1,"moduleTitle":"Module 1","completedLessons":[{"id":1,"title":"Lesson 1A"},{"id":2,"title":"Lesson 1B"}],"remainingLessons":[]},{"moduleId":2,"moduleTitle":"Module 2","completedLessons":[],"remainingLessons":[{"id":3,"title":"Lesson 2A"},{"id":4,"title":"Lesson 2B"}]}]}
+
+***********************************************************
+EDGE CASES
+***********************************************************
+
+8. Get overall progress with no token:
+curl -i http://localhost:8080/api/progress
+
+Result:
+HTTP/1.1 401
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"path":"/api/progress","message":"Invalid or missing token","status":401,"timestamp":"2025-09-27T23:36:09.234811700Z"}
+
+***********************************************************
+
+9. Complete a lesson without a token:
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/1/complete
+
+Result:
+HTTP/1.1 401
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"path":"/api/modules/1/lessons/1/complete","message":"Invalid or missing token","status":401,"timestamp":"2025-09-27T23:37:25.888267300Z"}
+
+***********************************************************
+
+10. Complete a lesson in a non-existent module
+curl -i -X POST http://localhost:8080/api/modules/99999/lessons/1/complete -H "X-AUTH-TOKEN: <TOKEN>"
+
+Result:
+HTTP/1.1 404
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"path":"/api/modules/99999/lessons/1/complete","message":"Unable to locate 'Module' associated with ID: 99999","status":404,"timestamp":"2025-09-27T23:39:25.222967400Z"}
+
+***********************************************************
+
+11. Complete a non-existent lesson:
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/99999/complete -H "X-AUTH-TOKEN: <TOKEN>"
+
+Result:
+HTTP/1.1 404
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: <DATETIME>
+{"path":"/api/modules/1/lessons/99999/complete","message":"Unable to locate 'Lesson' associated with ID: 99999","status":404,"timestamp":"2025-09-27T23:41:32.449483900Z"}
+
+***********************************************************

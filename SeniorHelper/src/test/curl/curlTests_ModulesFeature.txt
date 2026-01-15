@@ -1,0 +1,158 @@
+# --- Educational Modules Feature: Modules cURL Tests ---
+# --- Happy Path: Create a new Module -> Expect 201 (Run from Fall25CourseProjectDirectory) ---
+curl -i -X POST http://localhost:8080/api/modules -H "Content-Type: application/json" -d @SeniorHelper/src/test/curl/moduleData.json
+
+Result: HTTP/1.1 201
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Create a new Module without required 'title' field -> Expect 400 ---
+curl -i -X POST http://localhost:8080/api/modules -H "Content-Type: application/json" -d "{\"description\": \"Fail test.\"}"
+
+Result: HTTP/1.1 400
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules","message":"title: title is required","status":400,"timestamp":"2025-09-14T19:31:29.087380700Z"}
+
+# --- Happy Path: Retrieve all modules -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: No Modules exist -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+
+        []
+
+# --- Happy Path: Retrieve an existing Module -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules/1
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Module Not Found (Does not exist) -> Expect 404 ---
+curl -i -X GET http://localhost:8080/api/modules/111
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/111","message":"Unable to locate 'Module' associated with ID: 111","status":404,"timestamp":"2025-09-14T17:45:19.176535500Z"}
+
+# --- Happy Path: Update an existing Module by its ID (title only) -> Expect 200. ---
+curl -i -X PUT http://localhost:8080/api/modules/1 -H "Content-Type: application/json" -d "{\"title\": \"Updated module\"}"
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Specified Module does not exist for Update -> Expect 404 ---
+curl -i -X PUT http://localhost:8080/api/modules/99 -H "Content-Type: application/json" -d "{\"title\": \"Failed module\"}"
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/99","message":"Unable to locate 'Module' associated with ID: 99","status":404,"timestamp":"2025-09-14T18:08:13.187151400Z"}
+
+# --- Happy Path: Delete existing Module by its ID -> Expect 204 ---
+curl -i -X DELETE http://localhost:8080/api/modules/1
+
+Result: HTTP/1.1 204
+
+# --- Edge Case: Delete a Module that does not exist -> Expect 404 ---
+curl -i -X DELETE http://localhost:8080/api/modules/999
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/999","message":"Unable to locate 'Module' associated with ID: 999","status":404,"timestamp":"2025-09-14T18:18:15.413535100Z"}
+
+
+
+# --- Educational Modules Feature: Lessons cURL Tests ---
+# --- Happy Path: Create a new Lesson with valid Module ID (Must re-create Module if previously deleted.) ---
+curl -i -X POST http://localhost:8080/api/modules/1/lessons -H "Content-Type: application/json" -d "{\"title\": \"Create Lesson\", \"description\": \"Lesson create test.\"}"
+
+Result: HTTP/1.1 201
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Create a new Lesson without valid Module ID -> Expect 404 ---
+curl -i -X POST http://localhost:8080/api/modules/100/lessons -H "Content-Type: application/json" -d "{\"title\": \"Fail create\", \"description\": \"Fail test.\"}"
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/100/lessons","message":"Unable to locate 'Module' associated with ID: 100","status":404,"timestamp":"2025-09-14T18:04:07.482846700Z"}
+
+# --- Happy Path: Retrieve existing Lessons by Module -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules/1/lessons
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Retrieve existing Lessons from Non-existent Module -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules/999/lessons
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        []
+
+# --- Happy Path: Retrieve a Lesson within a Module -> Expect 200 ---
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/1
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Retrieve non-existent Lesson from existing Module -> Expect 404 ---
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/99
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/1/lessons/99","message":"Unable to locate 'Lesson' 99 within 'Module' 1","status":404,"timestamp":"2025-09-14T18:36:12.213474900Z"}
+
+# --- Happy Path: Update existing Lesson -> Expect 200 ---
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/1 -H "Content-Type: application/json" -d "{\"title\": \"Updated lesson title.\"}"
+
+Result: HTTP/1.1 200
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+# --- Edge Case: Specified Lesson does not exist for Update -> Expect 404 ---
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/99 -H "Content-Type: application/json" -d "{\"title\": \"Failed update.\"}"
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/1/lessons/99","message":"Unable to locate 'Lesson' 99 within 'Module' 1","status":404,"timestamp":"2025-09-14T18:48:22.602236600Z"}
+
+# --- Happy Path: Delete Lesson by its ID -> Expect 204 ---
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/2
+
+Result: HTTP/1.1 204
+
+# --- Edge Case: Delete a Lesson that does not exist. -> Expect 404  ---
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/99
+
+Result: HTTP/1.1 404
+        Content-Type: application/json
+        Transfer-Encoding: chunked
+
+        {"path":"/api/modules/1/lessons/99","message":"Unable to locate 'Lesson' 99 within 'Module' 1","status":404,"timestamp":"2025-09-14T18:53:29.979821700Z"}

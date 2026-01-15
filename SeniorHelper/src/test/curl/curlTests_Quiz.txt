@@ -1,0 +1,77 @@
+Quiz Feature cURL Tests
+***
+
+Happy Paths Module AND Lesson must exist before performing CRUD on 'Quiz'
+
+***
+1. Create a new quiz.       -> EXPECT 201
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/1/quizzes -H "Content-Type: application/json" -d "{\"name\": \"Quiz 1\"}"
+
+RESULT: HTTP/1.1 201
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+2. Retrieve one quiz.       -> EXPECT 200
+curl -i -X GET curl -i -X GET http://localhost:8080/api/modules/1/lessons/1/quizzes/1
+
+RESULT: HTTP/1.1 200
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+3. Retrieve all quizzes.
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/1/quizzes
+
+RESULT: HTTP/1.1 200
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+4. Update quiz.
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/1/quizzes/1 -H "Content-Type: application/json" -d "{\"name\": \"Updated Quiz\"}"
+
+RESULT: HTTP/1.1 200
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+5. Delete quiz.     -> EXPECT 204
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/1/quizzes/1
+
+RESULT: HTTP/1.1 204
+***
+
+EDGE CASES
+
+***
+1. Create a quiz for a lesson that does NOT exist.      -> EXPECT 404
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/999/quizzes -H "Content-Type: application/json" -d "{\"name\": \"Failed Quiz!\"}"
+
+RESULT: HTTP/1.1 404
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+2. Retrieve a quiz that doesn't exist.                  -> EXPECT 404
+curl -i -X GET curl -i -X GET http://localhost:8080/api/modules/1/lessons/1/quizzes/999
+
+RESULT: HTTP/1.1 404
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+3. Retrieve a non-existent list of quizzes.             -> EXPECT 404
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/999/quizzes
+
+RESULT: HTTP/1.1 404
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+4. Specified quiz does not exist for update.            -> EXPECT 404
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/1/quizzes/999 -H "Content-Type: application/json" -d "{\"name\": \"Failed Quiz Update\"}"
+
+RESULT: HTTP/1.1 404
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked
+***
+5. Delete quiz that does not exist.                     -> EXPECT 404
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/1/quizzes/999
+
+RESULT: HTTP/1.1 404
+    Content-Type:       application/json
+    Transfer-Encoding:  chunked

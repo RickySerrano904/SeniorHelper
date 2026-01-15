@@ -1,0 +1,73 @@
+Question Feature cURL Tests
+***
+
+Happy Paths (Module, Lesson AND Quiz must exist before performing CRUD on 'Question'
+
+***
+1. Create a new question.   -> EXPECT 201
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/1/quizzes/1/questions -H "Content-Type: application/json" -d "{\"text\": \"Create question Test?\"}"
+
+RESULT: HTTP/1.1 201
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+***
+2. Get all questions from a Quiz (Retrieving by 1 is not efficient).    -> EXPECT 200
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/1/quizzes/1/questions
+
+RESULT: HTTP/1.1 200
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+***
+3. Update a question    -> EXPECT 200
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/1/quizzes/1/questions/1 -H "Content-Type: application/json" -d "{\"text\": \"Update Question Test!\"}"
+
+RESULT: HTTP/1.1 200
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+***
+4. Delete a question    -> EXPECT 204
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/1/quizzes/1/questions/1
+
+HTTP/1.1 204
+Date: Mon, 29 Sep 2025 00:58:34 GMT
+
+***
+
+EDGE CASES
+
+***
+1. Create question for quiz that does not exist.            -> EXPECT 404
+curl -i -X POST http://localhost:8080/api/modules/1/lessons/1/quizzes/999/questions -H "Content-Type: application/json" -d "{\"text\": \"Create question Test?\"}"
+
+RESULT:  HTTP/1.1 404
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+
+{"path":"/api/modules/1/lessons/1/quizzes/999/questions","message":"Quiz not found with ID: 999","status":404,"timestamp":"2025-09-29T01:04:55.550097800Z"}
+***
+2. Retrieve non-existent list of questions                  -> EXPECT 404
+curl -i -X GET http://localhost:8080/api/modules/1/lessons/1/quizzes/999/questions
+
+RESULT: HTTP/1.1 404
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+
+{"path":"/api/modules/1/lessons/1/quizzes/999/questions","message":"Quiz not found with ID: 999","status":404,"timestamp":"2025-09-29T01:04:43.157129700Z"}
+***
+3. Update a question that does not exist.                   -> EXPECT 404
+curl -i -X PUT http://localhost:8080/api/modules/1/lessons/1/quizzes/1/questions/999 -H "Content-Type: application/json" -d "{\"text\": \"Update Question Test!\"}"
+
+RESULT: HTTP/1.1 404
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+
+{"path":"/api/modules/1/lessons/1/quizzes/1/questions/999","message":"Question not found with ID: 999","status":404,"timestamp":"2025-09-29T01:04:15.369033600Z"}
+***
+4. Delete a question that is not part of a valid quiz.      -> EXPECT 404
+curl -i -X DELETE http://localhost:8080/api/modules/1/lessons/1/quizzes/999/questions/1
+
+RESULT: HTTP/1.1 404
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+
+{"path":"/api/modules/1/lessons/1/quizzes/999/questions/1","message":"Quiz not found with ID: 999","status":404,"timestamp":"2025-09-29T01:03:17.535714400Z"}

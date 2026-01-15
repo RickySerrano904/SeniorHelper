@@ -1,0 +1,40 @@
+Phase 3: SeniorHelper Persons API Testing
+
+Phase 3: SeniorHelper Persons API Testing
+
+ GET all persons
+curl http://localhost:8080/api/persons
+
+ GET person by ID
+curl http://localhost:8080/api/persons/1
+
+ POST create a new person
+curl -X POST http://localhost:8080/api/persons `
+-H "Content-Type: application/json" `
+-d '{"firstName":"David","lastName":"Brown","email":"david@example.com","age":33}'
+
+ PUT update an existing person
+curl -X PUT http://localhost:8080/api/persons/1 `
+-H "Content-Type: application/json" `
+-d '{"firstName":"David","lastName":"Brown","email":"david.b@example.com","age":34}'
+
+ DELETE a person
+curl -X DELETE http://localhost:8080/api/persons/1
+
+ Edge cases / validation tests
+
+ Missing required fields -> expect 400
+curl -X POST http://localhost:8080/api/persons `
+-H "Content-Type: application/json" `
+-d '{}'
+
+ Invalid age -> expect 400
+curl -X POST http://localhost:8080/api/persons `
+-H "Content-Type: application/json" `
+-d '{"firstName":"Eve","lastName":"Adams","email":"eve@example.com","age":-5}'
+
+ Non-existent ID -> GET -> expect 404
+curl http://localhost:8080/api/persons/999
+
+# Non-existent ID -> DELETE -> expect 404
+curl -X DELETE http://localhost:8080/api/persons/999

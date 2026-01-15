@@ -1,0 +1,3 @@
+git checkout main
+git revert <commit-hash>
+git push origin main
