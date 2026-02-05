@@ -14,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
 
@@ -32,16 +35,29 @@ public class AuthController {
     // ---------- Login (public) ----------
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest req) {
-        final String username = req.getUsername(); // don't log passwords
+
+        final String username = req.getUsername();
         Profiler profiler = new Profiler("login");
         profiler.start("authService.login");
+
         try {
             LoginResponse resp = authService.login(req);
             logger.info("Login successful for user: {}", username);
             return ResponseEntity.ok(resp);
-        } catch (Exception e) {
-            logger.error("Login failed for user: {} - {}", username, e.getMessage());
-            throw e;
+
+        } catch (org.springframework.security.core.AuthenticationException ex) {
+            // Auth failures throw 401
+            logger.warn("Login failed for {}", username);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials", ex);
+
+        } catch (ResponseStatusException ex) {
+            throw ex;
+
+        } catch (Exception ex) {
+            // Non-auth errors throw 500
+            logger.error("Login error for {}: {}", username, ex.getMessage(), ex);
+            throw ex;
+
         } finally {
             TimeInstrument ti = profiler.stop();
             ti.print();
@@ -50,12 +66,11 @@ public class AuthController {
 
     // ---------- Logout ----------
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(
-            @AuthenticationPrincipal User me,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<Map<String, String>> logout(@AuthenticationPrincipal User me, HttpServletRequest request) {
+
         Profiler profiler = new Profiler("logout");
         profiler.start("authService.logout");
+
         try {
             String authorizationHeader = request.getHeader("Authorization");
             if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -72,6 +87,7 @@ public class AuthController {
 
             String who = (me != null) ? me.getUsername() : "user";
             return ResponseEntity.ok(Map.of("message", who + " logged out successfully"));
+
         } finally {
             TimeInstrument ti = profiler.stop();
             ti.print();

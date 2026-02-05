@@ -98,18 +98,13 @@ public class UserController {
 
     // ---------- EDIT A USER ----------
     // non-admins can edit self only; only admins may change roles
+    @PreAuthorize("hasRole('ADMIN') or principal.id == #id")
     @PutMapping("/{id}")
     public UserDto updateUser(@AuthenticationPrincipal User requester,
                               @PathVariable Integer id,
                               @Valid @RequestBody UserDto body) {
 
         boolean admin = requester.getRole() == Role.ADMIN;
-        boolean self  = requester.getId().equals(id);
-
-        // Only admins may edit others
-        if (!admin && !self) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators may update other users");
-        }
 
         // Only admins may change any user's role (including their own)
         String roleStr = body.getRole();
@@ -125,28 +120,13 @@ public class UserController {
     }
 
     // ---------- DELETE A USER ----------
-    // admins can delete anyone; users may self-delete
+    // Admins can delete anyone, users can only self-delete
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User requester,
-                                           @PathVariable Integer id) {
-
-        boolean admin = requester.getRole() == Role.ADMIN;
-        boolean self  = requester.getId().equals(id);
-
-        if (!(admin || self)) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "Only administrators may delete other accounts; users may delete their own");
-        }
-
-        // Revoke tokens, delete, logout if self
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        // Revoke tokens, then delete
         authService.logoutAllForUser(id);
         userService.deleteById(id);
-
-        if (self) {
-            org.springframework.security.core.context.SecurityContextHolder.clearContext();
-        }
-
         return ResponseEntity.noContent().build();
     }
 }
