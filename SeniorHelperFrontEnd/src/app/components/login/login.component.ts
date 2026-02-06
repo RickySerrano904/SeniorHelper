@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
+import { finalize, timeout } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -37,7 +37,10 @@ export class LoginComponent {
 
     this.authService
       .login({ username: this.username.trim(), password: this.password })
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        timeout(10000),
+        finalize(() => (this.loading = false))
+      )
       .subscribe({
         next: (resp) => {
           this.authService.saveToken(resp.token, this.remember);
@@ -45,10 +48,15 @@ export class LoginComponent {
           this.router.navigate(['/home']);
         },
         error: (err) => {
+          const status = err?.status;
           const msg =
-            err?.error?.message ||
-            err?.error?.error ||
-            'Login failed. Please check your credentials.';
+            status === 401
+              ? 'Invalid username or password.'
+              : status === 0
+                ? 'Unable to reach the server. Is it running?'
+                : err?.error?.message ||
+                  err?.error?.error ||
+                  'Login failed. Please check your credentials.';
           this.errorMessage = msg;
         }
       });
