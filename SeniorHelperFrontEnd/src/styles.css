@@ -28,9 +28,12 @@ body {
   font-family: 'Inter', sans-serif;
   color: #1F2937;
   background: #e3e6ea;
+  font-size: 20pt;
+  font-weight: 400;
 }
 
 app-root {
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
