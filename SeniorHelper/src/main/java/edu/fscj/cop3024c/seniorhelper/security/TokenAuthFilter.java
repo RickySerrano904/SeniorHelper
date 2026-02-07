@@ -35,12 +35,12 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         String token = null;
 
-        if (StringUtils.hasText(header)) {
-            // Accept both "Bearer <token>" and raw "<token>"
-            token = header.startsWith("Bearer ") ? header.substring(7) : header.trim();
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+            token = header.substring(7).trim();
         }
 
-        if (StringUtils.hasText(token)) {
+        if (StringUtils.hasText(token)
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
             authService.findUserByToken(token).ifPresent((User user) -> {
                 // Map your domain role to Spring Security authorities
                 // e.g. Role.ADMIN -> "ROLE_ADMIN"
