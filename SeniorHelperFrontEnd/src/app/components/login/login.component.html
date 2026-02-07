@@ -1,0 +1,53 @@
+<div class="page">
+  <div class="page-content">
+    <main class="login-card" aria-label="Login form">
+      <header class="login-header">
+        <h1>Senior Helper</h1>
+        <p>Sign in to your account</p>
+      </header>
+
+      <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+        <label class="field">
+          <span>Username:</span>
+          <input
+            type="text"
+            name="username"
+            [(ngModel)]="username"
+            autocomplete="username"
+            required
+          />
+        </label>
+
+        <label class="field">
+          <span>Password:</span>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+
+        <label class="remember">
+          <input type="checkbox" name="remember" [(ngModel)]="remember" />
+          <span>Remember me</span>
+        </label>
+
+        <button class="btn primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Signing In...' : 'Sign In' }}
+        </button>
+        <button class="btn secondary" type="button">Register</button>
+
+        @if (errorMessage) {
+          <p class="status error">{{ errorMessage }}</p>
+        }
+        @if (successMessage) {
+          <p class="status success">{{ successMessage }}</p>
+        }
+      </form>
+    </main>
+  </div>
+
+  <footer class="page-footer">&copy; Florida State College at Jacksonville. All Rights Reserved.</footer>
+</div>

@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --page-bg: #e3e6ea;
+  --card-bg: #ffffff;
+  --card-border: #e1e6eb;
+  --accent: #679b96;
+  --accent-dark: #507b76;
+  --accent-glow: rgba(95, 143, 138, 0.2);
+  --text-strong: #1F2937;
+  --text-muted: #3b3f46;
+  --input-bg: #f4f6f8;
+  --input-border: #d7dde3;
+  --button-secondary-bg: #eef1f4;
+  --button-secondary-hover: #e2e7ec;
+  --footer-text: #679b96;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #1F2937;
+  background: #e3e6ea;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
