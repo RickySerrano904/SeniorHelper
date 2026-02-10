@@ -1,0 +1,70 @@
+.modules-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-top: 48px;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.module-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
+  width: 500px;
+  min-width: 300px;
+  max-width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--text-strong);
+  font-weight: 500;
+}
+.education-container {
+  min-height: 80vh;
+  padding: 2rem;
+  width: 100%;
+  max-width: 900px;
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 18px 40px rgba(25, 35, 44, 0.12), 0 2px 6px rgba(25, 35, 44, 0.08);
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.modules-list {
+  margin-top: 2rem;
+}
+
+.edu-title-box {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
+  font-size: 40px;
+  font-weight: bold;
+  padding: 0 64px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-bottom: 32px;
+  margin-top: 12px;
+  color: var(--text-strong);
+  width: 100%;
+  max-width: calc(100vw - 48px);
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.page-content {
+  flex: 1;
+  width: 100vw;
+  max-width: 100vw;
+  display: block;
+  padding: 48px 0 32px 0;
+}
