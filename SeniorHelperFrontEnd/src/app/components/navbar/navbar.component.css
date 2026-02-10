@@ -1,0 +1,66 @@
+.navbar {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.app-name {
+  font-size: 24pt;
+  font-weight: 700;
+  color: var(--footer-text);
+  font-family: 'Inter', sans-serif;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-icon:hover {
+  background-color: var(--accent-glow);
+  color: var(--accent-dark);
+}
+
+.nav-icon .material-icons {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.logout-text {
+  font-size: 24pt;
+  font-weight: 700;
+  color: var(--footer-text);
+  font-family: 'Inter', sans-serif;
+}
