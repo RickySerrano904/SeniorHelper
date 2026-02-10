@@ -37,7 +37,7 @@
         <button class="btn primary" type="submit" [disabled]="loading">
           {{ loading ? 'Signing In...' : 'Sign In' }}
         </button>
-        <button class="btn secondary" type="button">Register</button>
+        <button class="btn secondary" type="button" routerLink="/register">Register</button>
 
         @if (errorMessage) {
           <p class="status error">{{ errorMessage }}</p>
