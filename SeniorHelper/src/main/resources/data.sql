@@ -31,12 +31,16 @@ INSERT INTO users (username, salt, hash, role) VALUES
 ('BeatriceFamily', 'GMdYfTLRVfSAPyPZmuAHSoCENAzIGeLsyzv3JOyzujw=', 'gRdPpzCQrGBJVIG2j8uMefVDLqs6k9M0VUYSM/xTVyg=', 'FAMILY');
 
 -- =========================
--- Modules (2)
+-- Modules (6 - Updated to mimic Figma UI Prototype)
 -- =========================
 INSERT INTO modules (title, description)
 VALUES
-('Module 1', 'Recognizing Common Scam Tactics'),
-('Module 2', 'Password Safety and Account Protection');
+('Spotting Fake Messages', 'Learn to identify and avoid phishing emails and messages'),
+('Passwords & Privacy', 'Create strong, unique passwords and use a Password Manager to remember safely'),
+('Device Defense', 'Install system updates regularly to ensure your device has the latest security features'),
+('Safe Shopping Online', 'Verify secure websites and use protected payments like credit cards for purchases'),
+('Imposter Scams', 'Detect callers or messengers pretending to be government officials or tech support'),
+('What to Do If Scammed', 'Follow a recovery plan to report the incident and secure your financial accounts');
 
 -- =========================
 -- Lessons (2 per module)

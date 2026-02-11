@@ -20,7 +20,7 @@
 }
 
 .app-name {
-  font-size: 24pt;
+  font-size: 20pt;
   font-weight: 700;
   color: var(--footer-text);
   font-family: 'Inter', sans-serif;
@@ -59,7 +59,7 @@
 }
 
 .logout-text {
-  font-size: 24pt;
+  font-size: 20pt;
   font-weight: 700;
   color: var(--footer-text);
   font-family: 'Inter', sans-serif;
