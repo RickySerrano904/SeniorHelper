@@ -5,6 +5,9 @@
   margin-top: 48px;
   margin-left: 24px;
   margin-right: 24px;
+
+  justify-content: center;
+  align-items: stretch;
 }
 
 .module-card {
