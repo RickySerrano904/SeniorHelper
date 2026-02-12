@@ -1,8 +1,64 @@
-<div class="page">
+<div class="page home-page">
   <div class="page-content">
-    <main class="card" aria-label="Home">
-      <h1>Welcome</h1>
-      <p>You are signed in.</p>
-    </main>
+    <section class="hero" aria-label="Welcome">
+      <div class="hero-text">
+        <span class="welcome-pill">Welcome back</span>
+        <h1>Hi {{ displayName }}</h1>
+        <p>
+          Write something useful here??? <.<
+        </p>
+      </div>
+
+      <div class="hero-panel" aria-label="Upcoming appointments">
+        <div class="panel-title-row">
+          <div class="panel-title">Upcoming Appointments</div>
+          <a routerLink="/appointments" class="panel-link">View all</a>
+        </div>
+
+        @let appointments = (upcomingAppointments$ | async);
+
+        @if (appointments === null) {
+          <div class="panel-empty">Loading appointments...</div>
+        } @else if (appointments.length === 0) {
+          <div class="panel-empty">No upcoming appointments yet.</div>
+          <a routerLink="/appointments" class="panel-cta">Add an appointment</a>
+        } @else {
+          <div class="appointment-list">
+            @for (appointment of appointments; track appointment.id) {
+              <div class="appointment-item">
+                <div class="appointment-title">{{ appointment.title || 'Appointment' }}</div>
+                <div class="appointment-meta">
+                  <span>{{ appointment.start | date: 'MMM d, h:mm a' }}</span>
+                  @if (appointment.location) {
+                    <span class="appointment-dot">&bull;</span>
+                    <span>{{ appointment.location }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="quick-grid" aria-label="Quick links">
+      <a routerLink="/appointments" class="quick-card">
+        <div class="quick-card-title">Appointments</div>
+        <p>Something something something about appointments.</p>
+        <span class="quick-card-link">Manage schedule</span>
+      </a>
+
+      <a routerLink="/connections" class="quick-card">
+        <div class="quick-card-title">Connections</div>
+        <p>Something something something about caregivers.</p>
+        <span class="quick-card-link">See connections</span>
+      </a>
+
+      <a routerLink="/education" class="quick-card">
+        <div class="quick-card-title">Educational Modules</div>
+        <p>Something something something about education.</p>
+        <span class="quick-card-link">View modules</span>
+      </a>
+    </section>
   </div>
 </div>

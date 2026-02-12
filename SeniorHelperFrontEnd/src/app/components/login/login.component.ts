@@ -43,6 +43,7 @@ export class LoginComponent {
         next: (resp) => {
           this.loading = false;
           this.authService.saveToken(resp.token, this.remember);
+          this.authService.saveUsername(this.username.trim(), this.remember);
           this.successMessage = resp.message || 'Signed in successfully.';
           this.router.navigate(['/home']);
           this.cdr.detectChanges();

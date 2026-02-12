@@ -5,35 +5,232 @@
 
 .page {
   min-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 16px;
+  padding: 40px 20px 48px;
+  background: var(--page-bg);
+  color: var(--text-strong);
 }
 
 .page-content {
   width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.card {
-  width: min(420px, 92vw);
-  background: var(--card-bg);
-  border-radius: 10px;
-  padding: 32px 36px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 18px 40px rgba(25, 35, 44, 0.12), 0 2px 6px rgba(25, 35, 44, 0.08);
-  text-align: center;
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 24px;
+  align-items: stretch;
 }
 
-.card h1 {
-  margin: 0 0 8px;
-  font-size: 1.7rem;
+.hero-text {
+  padding: 8px 4px;
+}
+
+.welcome-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(88, 126, 122, 0.18);
+  color: var(--accent-dark);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero-text h1 {
+  font-size: clamp(2rem, 2vw + 1.4rem, 2.8rem);
+  margin: 14px 0 12px;
+  font-weight: 700;
   color: var(--text-strong);
 }
 
-.card p {
+.hero-text p {
   margin: 0;
   color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: var(--accent-dark);
+}
+
+.hero-panel {
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--text-strong);
+}
+
+.panel-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+
+.appointment-list {
+  display: grid;
+  gap: 12px;
+}
+
+.appointment-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(88, 126, 122, 0.08);
+  border: 1px solid rgba(88, 126, 122, 0.18);
+  display: grid;
+  gap: 4px;
+}
+
+.appointment-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.appointment-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.appointment-dot {
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.panel-empty {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.panel-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px dashed var(--card-border);
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.quick-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  gap: 10px;
+}
+
+.quick-card:hover {
+  border-color: var(--accent);
+}
+
+.quick-card-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.quick-card p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.quick-card-link {
+  font-weight: 600;
+  color: var(--accent-dark);
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    order: 2;
+  }
+
+  .quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 28px 16px 44px;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2rem, 6vw, 2.6rem);
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
 }

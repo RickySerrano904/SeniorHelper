@@ -54,6 +54,7 @@ export class RegisterComponent {
               next: (resp) => {
                 this.loading = false;
                 this.authService.saveToken(resp.token, true);
+                this.authService.saveUsername(this.username.trim(), true);
                 this.successMessage = resp.message || 'Signed in successfully.';
                 this.router.navigate(['/home']);
                 this.cdr.detectChanges();
