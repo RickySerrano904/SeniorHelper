@@ -1,31 +1,62 @@
-.modules-cards-container {
+.page-content {
   display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
-  margin-top: 48px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  padding: 24px;
+  margin-top: 20px;
   margin-left: 24px;
   margin-right: 24px;
-
-  justify-content: center;
-  align-items: stretch;
+  margin-bottom: 20px;
+  width: auto;
 }
 
-.module-card {
+.edu-title-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: auto;
+
+  width: 100%;
+  min-height: 100px;
+  padding: 24px 32px;
+
   background: var(--card-bg);
   border-radius: 10px;
   border: 1px solid var(--card-border);
   box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
-  width: 585px;
-  min-width: 300px;
+
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.modules-cards-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.module-card {
+  flex: 1 1 580px;
+  width: auto;
   max-width: 100%;
-  height: 300px;
+  height: auto;
+  min-height:300px;
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: flex-start;
   justify-content: flex-start;
   padding: 30px;
-  text-align: left;
   gap: 10px;
+
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
 }
 
 .module-number {
@@ -33,20 +64,14 @@
   font-weight: 700;
   color: var(--text-muted);
   display: inline-block; 
-
-  /* Pill Height & Width */
-  width: 20%;
   height: auto;
-
-  /* Pill Styling */
   background: #f1f5f9;
   padding: 4px 12px;
   border-radius: 20px;
-  
-  /* Spacing */
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   margin-top: 0px;
-  text-align: center;
+  justify-content: center;
+  align-items: stretch;
 }
 
 .module-title {
@@ -82,40 +107,6 @@
   box-shadow: 0 18px 40px rgba(25, 35, 44, 0.12), 0 2px 6px rgba(25, 35, 44, 0.08);
   margin-left: 24px;
   margin-right: 24px;
-}
-
-.modules-list {
-  margin-top: 2rem;
-}
-
-.edu-title-box {
-  background: var(--card-bg);
-  border-radius: 10px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
-  font-size: 40px;
-  font-weight: bold;
-  padding: 0 32px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  margin-bottom: 32px;
-  margin-top: 12px;
-  color: var(--text-strong);
-  width: 100%;
-  max-width: calc(100% - 48px);
-  margin-left: 24px;
-  margin-right: 24px;
-}
-
-.page-content {
-  flex: 1;
-  width: 100%;
-  max-width: 100%;
-  display: block;
-  padding: 48px 0 32px 0;
-  overflow-x: hidden;
 }
 
 .btn {
