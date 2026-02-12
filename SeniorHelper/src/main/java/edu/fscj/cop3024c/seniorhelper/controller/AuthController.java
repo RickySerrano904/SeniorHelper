@@ -53,20 +53,6 @@ public class AuthController {
             LoginResponse resp = authService.login(req);
             logger.info("Login successful for user: {}", username);
             return ResponseEntity.ok(resp);
-
-        } catch (org.springframework.security.core.AuthenticationException ex) {
-            // Auth failures throw 401
-            logger.warn("Login failed for {}", username);
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials", ex);
-
-        } catch (ResponseStatusException ex) {
-            throw ex;
-
-        } catch (Exception ex) {
-            // Non-auth errors throw 500
-            logger.error("Login error for {}: {}", username, ex.getMessage(), ex);
-            throw ex;
-
         } finally {
             TimeInstrument ti = profiler.stop();
             ti.print();
