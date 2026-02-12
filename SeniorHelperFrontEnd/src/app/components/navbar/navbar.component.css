@@ -24,6 +24,7 @@
   font-weight: 700;
   color: var(--footer-text);
   font-family: 'Inter', sans-serif;
+  text-decoration: none;
 }
 
 .navbar-actions {

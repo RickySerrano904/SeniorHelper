@@ -19,8 +19,8 @@
   padding: 48px 16px 32px;
 }
 
-.login-card {
-  width: min(420px, 92vw);
+.register-card {
+  width: min(460px, 92vw);
   background: var(--card-bg);
   border-radius: 10px;
   padding: 36px 40px 32px;
@@ -28,11 +28,11 @@
   box-shadow: 0 18px 40px rgba(25, 35, 44, 0.12), 0 2px 6px rgba(25, 35, 44, 0.08);
 }
 
-.login-header {
+.register-header {
   text-align: center;
 }
 
-.login-header h1 {
+.register-header h1 {
   margin: 0;
   font-size: 1.9rem;
   font-weight: 600;
@@ -40,13 +40,13 @@
   letter-spacing: -0.02em;
 }
 
-.login-header p {
+.register-header p {
   margin: 6px 0 0;
   font-size: 0.95rem;
   color: var(--text-muted);
 }
 
-.login-form {
+.register-form {
   margin-top: 24px;
   display: flex;
   flex-direction: column;
@@ -78,15 +78,31 @@
   background: #fff;
 }
 
-.remember {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.role-group {
+  margin: 4px 0 2px;
+  padding: 12px 12px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  display: grid;
+  gap: 10px;
+}
+
+.role-group legend {
+  padding: 0 6px;
   font-size: 0.9rem;
   color: var(--text-muted);
 }
 
-.remember input {
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--text-strong);
+}
+
+.role-option input {
   width: 16px;
   height: 16px;
   accent-color: var(--accent);
@@ -123,15 +139,6 @@
   background: var(--accent-dark);
 }
 
-.btn.secondary {
-  background: var(--button-secondary-bg);
-  color: var(--text-strong);
-}
-
-.btn.secondary:hover {
-  background: var(--button-secondary-hover);
-}
-
 .status {
   margin: 2px 0 0;
   font-size: 0.9rem;
@@ -146,15 +153,8 @@
   color: #6FAF8E;
 }
 
-.page-footer {
-  margin: 6px 0 16px;
-  font-size: 0.85rem;
-  color: var(--footer-text);
-  text-align: center;
-}
-
 @media (max-width: 520px) {
-  .login-card {
+  .register-card {
     padding: 28px 24px;
   }
 }

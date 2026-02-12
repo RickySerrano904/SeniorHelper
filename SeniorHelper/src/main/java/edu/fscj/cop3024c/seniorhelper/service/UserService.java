@@ -54,6 +54,9 @@ public class UserService {
     public User save(UserDto dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            user.setEmail(dto.getEmail().trim());
+        }
 
         // set role from DTO (default to SENIOR if missing)
         if (dto.getRole() != null && !dto.getRole().isBlank()) {
@@ -80,6 +83,9 @@ public class UserService {
     public UserDto updateUser(Integer id, UserDto userDetails) {
         User existingUser = findByIdEntity(id);
         existingUser.setUsername(userDetails.getUsername());
+        if (userDetails.getEmail() != null && !userDetails.getEmail().isBlank()) {
+            existingUser.setEmail(userDetails.getEmail().trim());
+        }
 
         if (userDetails.getRole() != null && !userDetails.getRole().isBlank()) {
             try {
@@ -112,6 +118,7 @@ public class UserService {
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
+                user.getEmail(),
                 user.getRole() != null ? user.getRole().name() : null
         );
     }
