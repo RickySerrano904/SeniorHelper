@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { EducationComponent } from './components/education/education.component';
 import { RegisterComponent } from './components/register/register.component';
+import { HomeComponent } from './components/home/home.component';
+import { EducationComponent } from './components/education/education.component';
+import { ModuleComponent } from './components/module/module.component';
+import { LessonComponent } from './components/lesson/lesson.component';
+import { QuizComponent } from './components/quiz/quiz.component'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -10,5 +13,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
   { path: 'education', component: EducationComponent },
+  { path: 'education/:moduleId', component: ModuleComponent },
+  { path: 'education/:moduleId/lessons/:lessonId', component: LessonComponent },
+  { path: 'education/:moduleId/quiz', component: QuizComponent},
   { path: '**', redirectTo: 'login' }
 ];

@@ -16,8 +16,9 @@
           <p class="module-description">{{ module.description }}</p>
 
           <!-- Button (16-point bolded)-->
-          <button class="btn primary">Start Module</button>
-
+          <button 
+            class="btn primary"
+            [routerLink]="['/education', module.id]">Start Module</button>
         </div>
       }
     </div>
