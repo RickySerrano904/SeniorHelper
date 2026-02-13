@@ -140,4 +140,10 @@ INSERT INTO quiz_completions (user_id, quiz_id, completed_at) VALUES
 -- =========================
 INSERT INTO appointments (senior_id, title, location, notes, start, "end") VALUES
     (7, 'Yearly Physical', 'UF Health North', 'Just a yearly checkup',
-     TIMESTAMP '2026-12-25 13:43:41.373', TIMESTAMP '2025-12-25 14:43:41.373');
+     TIMESTAMP '2026-10-25 13:43:41.373', TIMESTAMP '2025-10-25 14:43:41.373'),
+
+    (7, 'Routine Bloodwork', 'Baptist Health', 'Full blood panel',
+     TIMESTAMP '2026-10-27 14:00:00', TIMESTAMP '2026-10-27 15:00:00'),
+
+    (7, 'Teeth Cleaning', 'Oceanway Dental', 'Routine teeth cleaning',
+     TIMESTAMP '2026-11-01 09:00:00', TIMESTAMP '2026-11-01 10:00:00');

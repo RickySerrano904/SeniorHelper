@@ -7,6 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { Appointment } from '../../models/appointment.model';
 import { AppointmentService } from '../../services/appointment.service';
 
+const DEFAULT_DISPLAY_NAME = 'friend';
+const MAX_UPCOMING_APPOINTMENTS = 3;
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -22,8 +25,16 @@ export class HomeComponent {
     private authService: AuthService,
     private appointmentService: AppointmentService
   ) {
-    this.displayName = this.authService.getUsername() || 'friend';
-    this.upcomingAppointments$ = this.appointmentService.getMyAppointments().pipe(
+    this.displayName = this.getDisplayName();
+    this.upcomingAppointments$ = this.loadUpcomingAppointments();
+  }
+
+  private getDisplayName(): string {
+    return this.authService.getUsername() || DEFAULT_DISPLAY_NAME;
+  }
+
+  private loadUpcomingAppointments(): Observable<Appointment[]> {
+    return this.appointmentService.getMyAppointments().pipe(
       map((appointments) => this.toUpcomingAppointments(appointments)),
       catchError(() => of([]))
     );
@@ -34,7 +45,7 @@ export class HomeComponent {
     return (appointments ?? [])
       .filter((appointment) => this.getStartTime(appointment) >= now)
       .sort((left, right) => this.getStartTime(left) - this.getStartTime(right))
-      .slice(0, 3);
+      .slice(0, MAX_UPCOMING_APPOINTMENTS);
   }
 
   private getStartTime(appointment: Appointment): number {
