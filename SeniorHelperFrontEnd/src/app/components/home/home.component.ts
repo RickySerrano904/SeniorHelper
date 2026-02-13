@@ -8,7 +8,7 @@ import { Appointment } from '../../models/appointment.model';
 import { AppointmentService } from '../../services/appointment.service';
 
 const DEFAULT_DISPLAY_NAME = 'friend';
-const MAX_UPCOMING_APPOINTMENTS = 3;
+const MAX_UPCOMING_APPOINTMENTS = 4;
 
 @Component({
   selector: 'app-home',
