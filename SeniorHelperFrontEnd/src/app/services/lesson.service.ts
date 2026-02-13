@@ -12,4 +12,8 @@ export class LessonService {
     getLessonById(moduleId: number, lessonId: number): Observable<Lesson> {
         return this.http.get<Lesson>(`${this.apiUrl}/${moduleId}/lessons/${lessonId}`);
     }
+
+    markAsComplete(moduleId: number, lessonId: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${moduleId}/lessons/${lessonId}/complete`, {});
+    }
 }

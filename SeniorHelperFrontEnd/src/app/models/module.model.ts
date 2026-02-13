@@ -3,6 +3,7 @@ export interface Lesson {
     title: string;
     description: string;
     completed: boolean;
+    contentBlocks?: any[];
 }
 
 export interface Answer {
