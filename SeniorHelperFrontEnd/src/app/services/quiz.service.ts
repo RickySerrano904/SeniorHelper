@@ -13,4 +13,8 @@ export class QuizService {
     getQuizById(moduleId: number): Observable<Quiz> {
         return this.http.get<Quiz>(`${this.apiUrl}/${moduleId}/quiz`);
     }
+
+    markAsComplete(moduleId: number, quizId: number): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${moduleId}/quiz/${quizId}/complete`, {});
+    }
 }
