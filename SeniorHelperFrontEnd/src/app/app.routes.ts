@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanActivateChildFn, CanDeactivateFn, Router, Routes } from '@angular/router';
+import { CanActivateChildFn, CanActivateFn, CanDeactivateFn, Router, Routes } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -26,6 +26,12 @@ const requireAuthChild: CanActivateChildFn = (_route, state) => {
   });
 };
 
+// Keep authenticated users from navigating back to the login screen.
+const guestOnlyGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  return authService.isAuthenticated() ? inject(Router).createUrlTree(['/home']) : true;
+};
+
 // If a component exposes canDeactivate(), defer navigation decision to it.
 const pendingChangesGuard: CanDeactivateFn<DeactivatableComponent> = (component) => {
   if (!component || typeof component.canDeactivate !== 'function') {
@@ -37,7 +43,7 @@ const pendingChangesGuard: CanDeactivateFn<DeactivatableComponent> = (component)
 export const routes: Routes = [
   // Entry route resolves through the protected home path.
   { path: '', pathMatch: 'full', redirectTo: 'home' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [guestOnlyGuard] },
   { path: 'register', component: RegisterComponent, canDeactivate: [pendingChangesGuard] },
   {
     path: '',
