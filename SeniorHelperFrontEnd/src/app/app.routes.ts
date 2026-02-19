@@ -15,15 +15,13 @@ type DeactivatableComponent = {
 };
 
 // Protect child routes under the private route group.
-const requireAuthChild: CanActivateChildFn = (_route, state) => {
+const requireAuthChild: CanActivateChildFn = () => {
   const authService = inject(AuthService);
   if (authService.isAuthenticated()) {
     return true;
   }
 
-  return inject(Router).createUrlTree(['/login'], {
-    queryParams: { returnUrl: state.url }
-  });
+  return inject(Router).createUrlTree(['/login']);
 };
 
 // Keep authenticated users from navigating back to the login screen.

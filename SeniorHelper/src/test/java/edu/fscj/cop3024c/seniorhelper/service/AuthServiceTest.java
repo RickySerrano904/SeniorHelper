@@ -53,6 +53,7 @@ class AuthServiceTest {
         // Then
         assertThat(resp).isNotNull();
         assertThat(resp.getToken()).isNotBlank();
+        assertThat(resp.getToken().split("\\.")).hasSize(3);
         assertThat(resp.getMessage()).contains(username + " logged on successfully");
 
         // Token should resolve back to the same user
