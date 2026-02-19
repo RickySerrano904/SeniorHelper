@@ -1,34 +1,34 @@
 -- =========================
 -- Users (seniors, caregiver, admin)
 -- =========================
-INSERT INTO users (username, salt, hash, role) VALUES
+INSERT INTO users (username, email, first_name, last_name, salt, hash, role) VALUES
 
 --password for all users is: 'password'
 
 --id: 1
-('BaudelaireAdmin', 'ydJ2wCfF1UyFUIGB+zPujU49znvnSephWCSUpKgsVX4=', 'yb0nfYHSbJ3M2xVVjCpXW1LYbvUDtPqdeQB9g4NTVE4=', 'ADMIN'),
+('BaudelaireAdmin', 'baudelaire.admin@seniorhelper.local', 'Baudelaire', 'Admin', 'ydJ2wCfF1UyFUIGB+zPujU49znvnSephWCSUpKgsVX4=', 'yb0nfYHSbJ3M2xVVjCpXW1LYbvUDtPqdeQB9g4NTVE4=', 'ADMIN'),
 --id: 2
-('DayneAdmin', '3npCHXX42Y7SwcDxniJBvM3x6nQ+8a0TonWKuw6nCsk=', 'zqaprzPMJDP6zMyGvYcCJrx5QP1gCj0pNj1MqhhQg9g=', 'ADMIN'),
+('DayneAdmin', 'dayne.admin@seniorhelper.local', 'Dayne', 'Admin', '3npCHXX42Y7SwcDxniJBvM3x6nQ+8a0TonWKuw6nCsk=', 'zqaprzPMJDP6zMyGvYcCJrx5QP1gCj0pNj1MqhhQg9g=', 'ADMIN'),
 --id: 3
-('DeweyAdmin', 'Wpd/YLoxqy+7sMTp0QnSx4ebOi53HFB2v4P7Mc8h8l4=', 'H/yX0mjIhX8idPV7/q5BgiOHEZ1HCD7q2QJya0NWsVg=', 'ADMIN'),
+('DeweyAdmin', 'dewey.admin@seniorhelper.local', 'Dewey', 'Admin', 'Wpd/YLoxqy+7sMTp0QnSx4ebOi53HFB2v4P7Mc8h8l4=', 'H/yX0mjIhX8idPV7/q5BgiOHEZ1HCD7q2QJya0NWsVg=', 'ADMIN'),
 --id: 4
-('TamiaAdmin', 'd9kXezXEkjF0/t8AEycRy+gnhkXWBpE0LbqxSCrdsh4=', 'goSlUKo5izH/FqxjkpjErm8SP9zGHwUyF5t8B4REoGQ=', 'ADMIN'),
+('TamiaAdmin', 'tamia.admin@seniorhelper.local', 'Tamia', 'Admin', 'd9kXezXEkjF0/t8AEycRy+gnhkXWBpE0LbqxSCrdsh4=', 'goSlUKo5izH/FqxjkpjErm8SP9zGHwUyF5t8B4REoGQ=', 'ADMIN'),
 --id: 5
-('LaurenAdmin', 'R88ML2dHsCSeMGThU1TB0dBEi8HJsZPJQCYjubCKThA=', 'SHTkxE6sw7GCCcRzyLqApYyKpxc7uYK+p1wr57/A0IQ=', 'ADMIN'),
+('LaurenAdmin', 'lauren.admin@seniorhelper.local', 'Lauren', 'Admin', 'R88ML2dHsCSeMGThU1TB0dBEi8HJsZPJQCYjubCKThA=', 'SHTkxE6sw7GCCcRzyLqApYyKpxc7uYK+p1wr57/A0IQ=', 'ADMIN'),
 --id: 6
-('RickyAdmin', 'LHEMYdL7wXX1n/Te0MtZMIwaWB62tYX5vut3k7hrzyY=', 'XmjrUwL0Si9aqZYF0l+sRAhJCZiBEkWxDUdJsVrErgo=', 'ADMIN'),
+('RickyAdmin', 'ricky.admin@seniorhelper.local', 'Ricky', 'Admin', 'LHEMYdL7wXX1n/Te0MtZMIwaWB62tYX5vut3k7hrzyY=', 'XmjrUwL0Si9aqZYF0l+sRAhJCZiBEkWxDUdJsVrErgo=', 'ADMIN'),
 --id: 7
-('JohnSenior', 'xLIMpTWxayc83HWei6vBMoMlg2mYFhOBM/+/SY/kcYI=', '+Df1zgqiCFlAyTdoBHyqCXiib9RPLH6P8uUQb4WGs24=', 'SENIOR'),
+('JohnSenior', 'john.senior@seniorhelper.local', 'John', 'Senior', 'xLIMpTWxayc83HWei6vBMoMlg2mYFhOBM/+/SY/kcYI=', '+Df1zgqiCFlAyTdoBHyqCXiib9RPLH6P8uUQb4WGs24=', 'SENIOR'),
 --id: 8
-('GertrudeSenior', 'AgnahNewZ4qEU0MRqJChpZPMgSzQtl4PdlC7jy7qRBs=', 'YV8Uq0hZTlisg2RITbSk+uNXSD6LZ1oPRt4N1X5RdR4=', 'SENIOR'),
+('GertrudeSenior', 'gertrude.senior@seniorhelper.local', 'Gertrude', 'Senior', 'AgnahNewZ4qEU0MRqJChpZPMgSzQtl4PdlC7jy7qRBs=', 'YV8Uq0hZTlisg2RITbSk+uNXSD6LZ1oPRt4N1X5RdR4=', 'SENIOR'),
 --id: 9
-('TimSenior', 'BMAVSc+jeTNzsFHcfhnUHeTjhgNZy6klGULmK1lFYn4=', 'rRNk/0Tq5JB1bN6mRvKNxRqyMZe4zjofZMJXOMOlLTc=', 'SENIOR'),
+('TimSenior', 'tim.senior@seniorhelper.local', 'Tim', 'Senior', 'BMAVSc+jeTNzsFHcfhnUHeTjhgNZy6klGULmK1lFYn4=', 'rRNk/0Tq5JB1bN6mRvKNxRqyMZe4zjofZMJXOMOlLTc=', 'SENIOR'),
 --id: 10
-('DorothyCaregiver', 'pkP4b5lTxL8HPqHu5MZVOZaJOeczVXvLZx0TidkEa6U=', 'ThiZ3KUEaaHhCArXkZjZtSUeFUu+7hQPOdoQjM+yvYo=', 'CAREGIVER'),
+('DorothyCaregiver', 'dorothy.caregiver@seniorhelper.local', 'Dorothy', 'Caregiver', 'pkP4b5lTxL8HPqHu5MZVOZaJOeczVXvLZx0TidkEa6U=', 'ThiZ3KUEaaHhCArXkZjZtSUeFUu+7hQPOdoQjM+yvYo=', 'CAREGIVER'),
 --id: 11
-('FrankCaregiver', 'YoFzz6jZVqaFQlKPnyf0AfH4K35ETFyC3J5eOeViG/w=', 'EONSwvav5XgS3BMzENg+RzH1WvO2oYGrN1z+PjRDzc4=', 'CAREGIVER'),
+('FrankCaregiver', 'frank.caregiver@seniorhelper.local', 'Frank', 'Caregiver', 'YoFzz6jZVqaFQlKPnyf0AfH4K35ETFyC3J5eOeViG/w=', 'EONSwvav5XgS3BMzENg+RzH1WvO2oYGrN1z+PjRDzc4=', 'CAREGIVER'),
 --id: 12
-('BeatriceFamily', 'GMdYfTLRVfSAPyPZmuAHSoCENAzIGeLsyzv3JOyzujw=', 'gRdPpzCQrGBJVIG2j8uMefVDLqs6k9M0VUYSM/xTVyg=', 'FAMILY');
+('BeatriceFamily', 'beatrice.family@seniorhelper.local', 'Beatrice', 'Family', 'GMdYfTLRVfSAPyPZmuAHSoCENAzIGeLsyzv3JOyzujw=', 'gRdPpzCQrGBJVIG2j8uMefVDLqs6k9M0VUYSM/xTVyg=', 'FAMILY');
 
 -- =========================
 -- Modules (6 - Updated to mimic Figma UI Prototype)
