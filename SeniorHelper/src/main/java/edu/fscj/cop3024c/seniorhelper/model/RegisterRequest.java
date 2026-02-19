@@ -15,6 +15,14 @@ public class RegisterRequest {
     @Size(max = 254, message = "email must be at most 254 characters")
     private String email;
 
+    @NotBlank(message = "firstName is required")
+    @Size(max = 100, message = "firstName must be at most 100 characters")
+    private String firstName;
+
+    @NotBlank(message = "lastName is required")
+    @Size(max = 100, message = "lastName must be at most 100 characters")
+    private String lastName;
+
     @NotBlank(message = "password is required")
     @Size(min = 8, max = 100, message = "password must be at least 8 characters")
     private String password;
@@ -36,6 +44,22 @@ public class RegisterRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {

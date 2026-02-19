@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  firstName = '';
+  lastName = '';
   username = '';
   email = '';
   password = '';
@@ -39,6 +41,8 @@ export class RegisterComponent {
 
     this.authService
       .register({
+        firstName: this.firstName.trim(),
+        lastName: this.lastName.trim(),
         username: this.username.trim(),
         email: this.email.trim(),
         password: this.password,

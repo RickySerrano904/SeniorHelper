@@ -1,11 +1,14 @@
 package edu.fscj.cop3024c.seniorhelper.service;
 
 import edu.fscj.cop3024c.seniorhelper.model.UserDto;
+import edu.fscj.cop3024c.seniorhelper.model.RegisterRequest;
 import edu.fscj.cop3024c.seniorhelper.entities.User;
 import edu.fscj.cop3024c.seniorhelper.error.NotFoundException;
 import edu.fscj.cop3024c.seniorhelper.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.security.SecureRandom;
@@ -51,12 +54,51 @@ public class UserService {
     }
 
     @Transactional
+    public UserDto register(RegisterRequest req) {
+        String role = trimOrNull(req.getRole());
+        if (role == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role is required");
+        }
+        if (role.equalsIgnoreCase("ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin accounts cannot be created from registration");
+        }
+
+        String username = trimOrNull(req.getUsername());
+        if (username == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is required");
+        }
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+        }
+
+        String email = trimOrNull(req.getEmail());
+        if (email == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is required");
+        }
+        email = email.toLowerCase(Locale.ROOT);
+        if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
+
+        UserDto dto = new UserDto();
+        dto.setUsername(username);
+        dto.setEmail(email);
+        dto.setFirstName(req.getFirstName());
+        dto.setLastName(req.getLastName());
+        dto.setPassword(req.getPassword());
+        dto.setRole(role);
+
+        User saved = save(dto);
+        return convertToDTO(saved);
+    }
+
+    @Transactional
     public User save(UserDto dto) {
         User user = new User();
-        user.setUsername(dto.getUsername());
-        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
-            user.setEmail(dto.getEmail().trim());
-        }
+        user.setUsername(trimOrNull(dto.getUsername()));
+        user.setEmail(trimOrNull(dto.getEmail()));
+        user.setFirstName(trimOrNull(dto.getFirstName()));
+        user.setLastName(trimOrNull(dto.getLastName()));
 
         // set role from DTO (default to SENIOR if missing)
         if (dto.getRole() != null && !dto.getRole().isBlank()) {
@@ -82,10 +124,10 @@ public class UserService {
     @Transactional
     public UserDto updateUser(Integer id, UserDto userDetails) {
         User existingUser = findByIdEntity(id);
-        existingUser.setUsername(userDetails.getUsername());
-        if (userDetails.getEmail() != null && !userDetails.getEmail().isBlank()) {
-            existingUser.setEmail(userDetails.getEmail().trim());
-        }
+        existingUser.setUsername(trimOrNull(userDetails.getUsername()));
+        existingUser.setEmail(trimOrNull(userDetails.getEmail()));
+        existingUser.setFirstName(trimOrNull(userDetails.getFirstName()));
+        existingUser.setLastName(trimOrNull(userDetails.getLastName()));
 
         if (userDetails.getRole() != null && !userDetails.getRole().isBlank()) {
             try {
@@ -119,8 +161,14 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getRole() != null ? user.getRole().name() : null
         );
+    }
+
+    private String trimOrNull(String value) {
+        return (value == null || value.isBlank()) ? null : value.trim();
     }
 
     // ===== Password hashing (PBKDF2WithHmacSHA1) =====

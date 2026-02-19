@@ -8,6 +8,28 @@
 
       <form class="register-form" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
         <label class="field">
+          <span>First Name:</span>
+          <input
+            type="text"
+            name="firstName"
+            [(ngModel)]="firstName"
+            autocomplete="given-name"
+            required
+          />
+        </label>
+
+        <label class="field">
+          <span>Last Name:</span>
+          <input
+            type="text"
+            name="lastName"
+            [(ngModel)]="lastName"
+            autocomplete="family-name"
+            required
+          />
+        </label>
+
+        <label class="field">
           <span>Username:</span>
           <input
             type="text"

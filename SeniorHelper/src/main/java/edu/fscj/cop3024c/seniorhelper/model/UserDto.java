@@ -14,9 +14,18 @@ public class UserDto {
     @Size(min = 3, max = 50, message = "username must be 3-50 characters")
     private String username;
 
+    @NotBlank(message = "email is required")
     @Email(message = "email must be valid")
     @Size(max = 254, message = "email must be at most 254 characters")
     private String email;
+
+    @NotBlank(message = "firstName is required")
+    @Size(max = 100, message = "firstName must be at most 100 characters")
+    private String firstName;
+
+    @NotBlank(message = "lastName is required")
+    @Size(max = 100, message = "lastName must be at most 100 characters")
+    private String lastName;
 
     // SENIOR, CAREGIVER, FAMILY, ADMIN
     private String role;
@@ -32,7 +41,15 @@ public class UserDto {
         this.username = username;
         this.email = email;
         this.role = role;
-        //this.password = password;
+    }
+
+    public UserDto(Integer id, String username, String email, String firstName, String lastName, String role) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
     }
 
 
@@ -68,6 +85,22 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {
