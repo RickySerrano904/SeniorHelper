@@ -1,0 +1,59 @@
+@if (lesson$ | async; as lesson) {
+
+<div class="page-container">
+    <!-- Back Navigation -->
+    <button class="back-link" [routerLink]="['/education', moduleId]">
+      <span class="material-icons">arrow_back</span> Back to Module
+    </button>
+    
+  <!-- Imported SQL Data from data.sql -->
+    <div class="content-card">
+    <header class="lesson-header">
+        <h1 class="main-title">{{ lesson.title }}</h1>
+        <p class="description">{{ lesson.description }}</p>
+    </header>
+
+    <hr class="divider">
+
+  <!-- Imported JSON Data from lesson-content.json -->
+    <div class="lesson-content">
+        @for (block of lesson.contentBlocks; track $index) {
+        
+        @if (block.header) {
+            <h2 class="content-h">{{ block.header }}</h2>
+        }
+
+        @if (block.body) {
+            <p class="content-p">{{ block.body }}</p>
+        }
+
+        @if (block['takeaway-header'] || block['takeaway-body']) {
+            <div class="takeaway-alert">
+            @if (block['takeaway-header']) {
+                <strong class="takeaway-h">
+                    <span class="material-icons warn-icon">warning </span>
+                    {{ block['takeaway-header'] }}</strong>
+            }
+            @if (block['takeaway-body']) {
+                <p class="takeaway-p">{{ block['takeaway-body'] }}</p>
+            }
+            </div>
+        }
+        }
+    </div>
+
+  <!-- Navigation Footer -->
+    <footer class="lesson-footer">
+    <!-- Links back to the specific Module view -->
+        <button class="btn primary" [routerLink]="['/education', moduleId]">
+        Back to Module
+        </button>
+        <button class="btn primary" (click)="markAsComplete()">
+        Mark Complete & Continue
+        </button>
+    </footer>
+    </div>
+</div>
+} @else {
+  <div class="loader">Fetching lesson details...</div>
+}

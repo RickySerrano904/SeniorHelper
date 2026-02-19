@@ -1,0 +1,65 @@
+@if (module$ | async; as module) {
+  <!-- Calculate progress once for the entire template -->
+  @let progress = calculateProgress(module.lessons);
+
+  <div class="page-container">
+    <!-- Back Navigation -->
+    <button class="back-link" routerLink="/education">
+      <span class="material-icons">arrow_back</span> Back to All Modules
+    </button>
+
+    <!-- 1. Header Card (Module Info & Progress) -->
+    <div class="module-header-card">
+      <div class="module-number">Module {{ module.id }}</div>
+      <h1 class="main-title">{{ module.title }}</h1>
+      <p class="description">{{ module.description }}</p>
+
+      <div class="progress-section">
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="progress"></div>
+        </div>
+        <span class="progress-percent">{{ progress | number:'1.0-0' }}%</span>
+      </div>
+    </div>
+
+    <!-- 2. Lessons Card -->
+    <div class="content-card">
+      <h2 class="section-title">Lessons in This Module</h2>
+      <p class="description">Select a lesson to get started. We'll save your progress.</p>
+      <div class="lessons-list">
+        @for (lesson of module.lessons; track lesson.id) {
+          <div class="lesson-row" [routerLink]="['lessons', lesson.id]">
+            <div class="status-icon">
+              <span class="material-icons" [class.completed]="lesson.completed" [class.incomplete]="!lesson.completed">
+                {{ lesson.completed ? 'check_circle' : 'radio_button_unchecked' }}
+              </span>
+            </div>
+            <span class="lesson-title">{{ lesson.title }}</span>
+            <span class="material-icons arrow-icon">arrow_forward</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 3. Optional Quiz Card -->
+    @if (module.quiz) {
+      <div class="content-card quiz-card">
+        <div class="quiz-header">
+          <div class="quiz-info">
+            <h2 class="section-title">Module Quiz</h2>
+            <p class="description">Test your knowledge - available anytime!</p>
+          </div>
+        </div>
+        
+        <div class="quiz-description">
+          <span class="material-icons notice-icon">lightbulb</span>
+          This quiz helps reinforce key concepts from this module. Take it whenever you're ready to see how much you've learned!
+        </div>
+
+        <button 
+          class="btn primary" 
+          [routerLink]="['quiz']">Take Practice Quiz</button>
+      </div>
+    }
+  </div>
+}

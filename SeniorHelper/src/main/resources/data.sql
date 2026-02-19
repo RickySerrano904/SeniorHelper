@@ -35,25 +35,41 @@ INSERT INTO users (username, salt, hash, role) VALUES
 -- =========================
 INSERT INTO modules (title, description)
 VALUES
-('Spotting Fake Messages', 'Learn to identify and avoid phishing emails and messages'),
-('Passwords & Privacy', 'Create strong, unique passwords and use a Password Manager to remember safely'),
-('Device Defense', 'Install system updates regularly to ensure your device has the latest security features'),
-('Safe Shopping Online', 'Verify secure websites and use protected payments like credit cards for purchases'),
-('Imposter Scams', 'Detect callers or messengers pretending to be government officials or tech support'),
-('What to Do If Scammed', 'Follow a recovery plan to report the incident and secure your financial accounts');
+('Spotting Fake Messages', 'Learn how to recognize and avoid fake emails and scam messages'),
+('Passwords & Privacy', 'Protect your accounts with better passwords and safe storage'),
+('Device Defense', 'Keep your device secure with updates and basic protection steps'),
+('Safe Shopping Online', 'How to tell if a website is safe before you purchase'),
+('Imposter Scams', 'Avoid scams from fake tech support and government callers'),
+('What to Do If Scammed', 'How to recover and protect your accounts after a scam');
 
 -- =========================
 -- Lessons (2 per module)
 -- =========================
 INSERT INTO lessons (title, description, module_id)
 VALUES
--- Module 1
-('Lesson 1', 'What are Email and Text Scams?', 1),
-('Lesson 2', 'Spotting Phishing Websites: URLs, padlocks, and warning signs seniors should know.', 1),
+-- Module 1 (Spotting Fake Messages)
+('Lesson 1 - What Fake Messages Look Like', 'Learn the common signs of fake emails, texts, and online messages.', 1),
+('Lesson 2 - What To Do When You Get One', 'Know the safest steps to take when you receive a suspicious message.', 1),
 
--- Module 2
-('Lesson 1', 'Creating Strong Passwords', 2),
-('Lesson 2', 'Two-Factor Authentication: Why it matters and how to set it up safely.', 2);
+-- Module 2 (Passwords & Privacy)
+('Lesson 1 - How to Create Strong Passwords', 'Learn the simple ways to create passwords that are hard to guess.', 2),
+('Lesson 2 - Password Mistakes to Avoid', 'Avoid common habits that make accounts easy to break into.', 2),
+
+-- Module 3 (Device Defense)
+('Lesson 1 - Why Device Updates Matter', 'Understand how updates fix security problems and keep you protected.', 3),
+('Lesson 2 - Turning On Automatic Updates', 'Learn how to enable automatic updates on your devices.', 3),
+
+-- Module 4 (Safe Shopping Online)
+('Lesson 1 - How to Tell if a Website Is Safe', 'Check for security signs before entering payment details.', 4),
+('Lesson 2 - Safer Ways to Pay Online', 'Choose payment methods that give you fraud protection.', 4),
+
+-- Module 5 (Imposter Scams)
+('Lesson 1 - Impersonation Scams', 'Recognize how scammers pretend to be officials, tech support, or family members.', 5),
+('Lesson 2 - How to Verify Who Contacted You', 'Use safe methods to confirm if a caller or sender is real.', 5),
+
+-- Module 6 (What to Do If Scammed)
+('Lesson 1 - What to Do Right Away', 'Take immediate steps to stop further damage, secure your accounts, and document what happened.', 6),
+('Lesson 2 - Report, Recover, Prevent', 'Learn who to contact, how to recover your accounts, and prevention methods.', 6);
 
 -- =========================
 -- Quizzes (1 per module)

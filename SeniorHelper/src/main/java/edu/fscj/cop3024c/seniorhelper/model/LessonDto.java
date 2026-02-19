@@ -3,6 +3,7 @@ package edu.fscj.cop3024c.seniorhelper.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 public class LessonDto {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -14,6 +15,8 @@ public class LessonDto {
 
     private String description;
 
+    private List<Object> contentBlocks;
+
     // Getters & Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -23,4 +26,7 @@ public class LessonDto {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public List<Object> getContentBlocks() { return contentBlocks; }
+    public void setContentBlocks(List<Object> contentBlocks) { this.contentBlocks = contentBlocks; }
 }

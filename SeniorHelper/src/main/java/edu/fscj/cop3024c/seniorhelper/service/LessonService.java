@@ -1,5 +1,8 @@
 package edu.fscj.cop3024c.seniorhelper.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.core.io.*;
 import edu.fscj.cop3024c.seniorhelper.entities.Lesson;
 import edu.fscj.cop3024c.seniorhelper.entities.Module;
 import edu.fscj.cop3024c.seniorhelper.error.NotFoundException;
@@ -8,7 +11,10 @@ import edu.fscj.cop3024c.seniorhelper.repository.LessonRepository;
 import edu.fscj.cop3024c.seniorhelper.repository.ModuleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,10 +22,12 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final ModuleRepository moduleRepository;
+    private final ObjectMapper objectMapper;
 
     public LessonService(LessonRepository lessonRepository, ModuleRepository moduleRepository) {
         this.lessonRepository = lessonRepository;
         this.moduleRepository = moduleRepository;
+        this.objectMapper = new ObjectMapper();
     }
     // 1. Retrieve all lessons within a module.
     @Transactional(readOnly = true)
@@ -34,7 +42,19 @@ public class LessonService {
         Lesson lesson = lessonRepository.findByIdAndModuleId(lessonId, moduleId)
                 .orElseThrow(() -> new NotFoundException(
                         "Unable to locate 'Lesson' " + lessonId + " within 'Module' " + moduleId));
-        return convertToDto(lesson);
+
+        LessonDto dto = convertToDto(lesson);
+
+        // Inject rich content from JSON file.
+        dto.setContentBlocks(loadContentFromJson(lessonId));
+
+        return dto;
+
+//        ORIGINAL CODE
+//        Lesson lesson = lessonRepository.findByIdAndModuleId(lessonId, moduleId)
+//                .orElseThrow(() -> new NotFoundException(
+//                        "Unable to locate 'Lesson' " + lessonId + " within 'Module' " + moduleId));
+//        return convertToDto(lesson);
     }
     // 3. Create a new lesson.
     @Transactional
@@ -85,5 +105,23 @@ public class LessonService {
         dto.setTitle(lesson.getTitle());
         dto.setDescription(lesson.getDescription());
         return dto;
+    }
+
+    // 7. Isolated JSON Reader for frontend body-content.
+    private List<Object> loadContentFromJson(Integer lessonId) {
+        try {
+            Resource resource = new ClassPathResource("lesson-content.json");
+
+            // Read file into a Map.
+            Map<String, List<Object>> allContent = objectMapper.readValue(
+                    resource.getInputStream(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            return allContent.getOrDefault(lessonId.toString(), List.of());
+        } catch (IOException e) {
+            return List.of();
+        }
     }
 }
