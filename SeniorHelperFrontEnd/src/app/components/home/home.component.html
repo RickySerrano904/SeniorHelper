@@ -1,8 +1,69 @@
-<div class="page">
+<div class="page home-page">
   <div class="page-content">
-    <main class="card" aria-label="Home">
-      <h1>Welcome</h1>
-      <p>You are signed in.</p>
-    </main>
+    <section class="welcome-card" aria-label="Welcome">
+      <h1>Hello, <span>{{ displayName }}</span>!</h1>
+      <p>What would you like to do today?</p>
+    </section>
+
+    <section class="dashboard-grid" aria-label="Home dashboard">
+      <div class="quick-actions">
+        <a routerLink="/appointments" class="action-card">
+          <span class="material-icons action-icon" aria-hidden="true">calendar_month</span>
+          <div class="action-copy">
+            <h2>Calendar</h2>
+            <p>View and add events to your calendar</p>
+          </div>
+        </a>
+
+        <a routerLink="/connections" class="action-card">
+          <span class="material-symbols-outlined action-icon" aria-hidden="true">person_heart</span>
+          <div class="action-copy">
+            <h2>Connections</h2>
+            <p>Connect with caregivers and family members</p>
+          </div>
+        </a>
+
+        <a routerLink="/education" class="action-card">
+          <span class="material-icons action-icon" aria-hidden="true">auto_stories</span>
+          <div class="action-copy">
+            <h2>Education</h2>
+            <p>Access educational content on online safety</p>
+          </div>
+        </a>
+      </div>
+
+      <aside class="week-card" aria-label="This week at a glance">
+        <h2>This Week at a Glance</h2>
+
+        @let appointments = (upcomingAppointments$ | async);
+
+        @if (appointments === null) {
+          <div class="week-empty">Loading this week's schedule...</div>
+        } @else if (appointments.length === 0) {
+          <div class="week-empty">No events scheduled yet.</div>
+        } @else {
+          <div class="week-list">
+            @for (appointment of appointments; track appointment.id) {
+              <div class="week-item">
+                <div class="week-item-main">
+                  <div class="week-item-title">{{ appointment.title || 'Appointment' }}</div>
+                  <div class="week-item-date">
+                    @if (appointment.start) {
+                      <span>{{ appointment.start | date: 'MMM d, y, hh:mm a' }}</span>
+                    } @else {
+                      <span>Date and time to be announced</span>
+                    }
+                    @if (appointment.location) {
+                      <span class="week-meta-bullet" aria-hidden="true">&bull;</span>
+                      <span>{{ appointment.location }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </aside>
+    </section>
   </div>
 </div>

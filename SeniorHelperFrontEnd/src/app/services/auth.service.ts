@@ -9,6 +9,7 @@ import { RegisterResponse } from '../models/register-response.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly tokenKey = 'auth_token';
+  private readonly usernameKey = 'auth_username';
 
   constructor(private http: HttpClient) {}
 
@@ -31,12 +32,29 @@ export class AuthService {
     }
   }
 
+  saveUsername(username: string, remember: boolean) {
+    if (!username) return;
+    if (remember) {
+      localStorage.setItem(this.usernameKey, username);
+      sessionStorage.removeItem(this.usernameKey);
+    } else {
+      sessionStorage.setItem(this.usernameKey, username);
+      localStorage.removeItem(this.usernameKey);
+    }
+  }
+
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey) ?? sessionStorage.getItem(this.tokenKey);
+  }
+
+  getUsername(): string | null {
+    return localStorage.getItem(this.usernameKey) ?? sessionStorage.getItem(this.usernameKey);
   }
 
   clearToken() {
     localStorage.removeItem(this.tokenKey);
     sessionStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.usernameKey);
+    sessionStorage.removeItem(this.usernameKey);
   }
 }

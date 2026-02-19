@@ -8,7 +8,7 @@ INSERT INTO users (username, salt, hash, role) VALUES
 --id: 1
 ('BaudelaireAdmin', 'ydJ2wCfF1UyFUIGB+zPujU49znvnSephWCSUpKgsVX4=', 'yb0nfYHSbJ3M2xVVjCpXW1LYbvUDtPqdeQB9g4NTVE4=', 'ADMIN'),
 --id: 2
-('BrittonAdmin', '3npCHXX42Y7SwcDxniJBvM3x6nQ+8a0TonWKuw6nCsk=', 'zqaprzPMJDP6zMyGvYcCJrx5QP1gCj0pNj1MqhhQg9g=', 'ADMIN'),
+('DayneAdmin', '3npCHXX42Y7SwcDxniJBvM3x6nQ+8a0TonWKuw6nCsk=', 'zqaprzPMJDP6zMyGvYcCJrx5QP1gCj0pNj1MqhhQg9g=', 'ADMIN'),
 --id: 3
 ('DeweyAdmin', 'Wpd/YLoxqy+7sMTp0QnSx4ebOi53HFB2v4P7Mc8h8l4=', 'H/yX0mjIhX8idPV7/q5BgiOHEZ1HCD7q2QJya0NWsVg=', 'ADMIN'),
 --id: 4
@@ -156,4 +156,10 @@ INSERT INTO quiz_completions (user_id, quiz_id, completed_at) VALUES
 -- =========================
 INSERT INTO appointments (senior_id, title, location, notes, start, "end") VALUES
     (7, 'Yearly Physical', 'UF Health North', 'Just a yearly checkup',
-     TIMESTAMP '2025-12-25 13:43:41.373', TIMESTAMP '2025-12-25 14:43:41.373');
+     TIMESTAMP '2026-10-25 13:43:41.373', TIMESTAMP '2025-10-25 14:43:41.373'),
+
+    (7, 'Routine Bloodwork', 'Baptist Health', 'Full blood panel',
+     TIMESTAMP '2026-10-27 14:00:00', TIMESTAMP '2026-10-27 15:00:00'),
+
+    (7, 'Teeth Cleaning', 'Oceanway Dental', 'Routine teeth cleaning',
+     TIMESTAMP '2026-11-01 09:00:00', TIMESTAMP '2026-11-01 10:00:00');
