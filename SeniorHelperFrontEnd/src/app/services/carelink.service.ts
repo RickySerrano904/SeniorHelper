@@ -4,36 +4,25 @@ import { Observable } from 'rxjs';
 import { CareLinkModel } from '../models/carelink.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CareLinkService {
-
-  private apiUrl = 'http://localhost:8080/api/care-links';
+  private apiUrl = 'http://localhost:8080/api/carelink';
 
   constructor(private http: HttpClient) {}
 
-  getCareLinksByCaregiver(caregiverId: number): Observable<CareLinkModel[]> {
-    return this.http.get<CareLinkModel[]>(
-      `${this.apiUrl}/by-caregiver?caregiverId=${caregiverId}`
-    );
+  // View all connections
+  viewConnections(): Observable<CareLinkModel[]> {
+    return this.http.get<CareLinkModel[]>(`${this.apiUrl}/view`);
   }
 
-  getCareLinksBySenior(seniorId: number): Observable<CareLinkModel[]> {
-    return this.http.get<CareLinkModel[]>(
-      `${this.apiUrl}/by-senior?seniorId=${seniorId}`
-    );
+  // Create a new connection
+  createConnection(caregiverId: number, seniorId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create`, { caregiverId, seniorId });
   }
 
-  createCareLink(caregiverId: number, seniorId: number): Observable<any> {
-    return this.http.post(this.apiUrl, {
-      caregiverId,
-      seniorId
-    });
-  }
-
-  deleteCareLink(caregiverId: number, seniorId: number): Observable<any> {
-    return this.http.delete(
-      `${this.apiUrl}?caregiverId=${caregiverId}&seniorId=${seniorId}`
-    );
+  // Delete a connection
+  deleteConnection(caregiverId: number, seniorId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/delete`, { caregiverId, seniorId });
   }
 }
