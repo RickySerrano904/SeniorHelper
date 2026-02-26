@@ -4,7 +4,10 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { EducationComponent } from './components/education/education.component';
-// …other components…
+import { ModuleComponent } from './components/module/module.component';
+import { LessonComponent } from './components/lesson/lesson.component';
+import { QuizComponent } from './components/quiz/quiz.component';
+import { CarelinkComponent } from './components/carelink/carelink.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -12,8 +15,6 @@ export const routes: Routes = [
   // public pages
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-
-  // everything else is guarded
   {
     path: 'home',
     component: HomeComponent,
@@ -24,18 +25,14 @@ export const routes: Routes = [
     component: EducationComponent,
     canActivate: [authGuard]
   },
-  /*{
-    path: 'calendar',
-    compontent: CalendarComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'connections,'
-    component: ConnectionsComponent,
-    canActivate: [authGuard]
-  },
-*/
-  // add `canActivate: [AuthGuard]` to any additional routes…
 
   { path: '**', redirectTo: 'login' }          // optional, will hit guard
+];
+  { path: 'home', component: HomeComponent },
+  { path: 'education', component: EducationComponent },
+  { path: 'education/:moduleId', component: ModuleComponent },
+  { path: 'education/:moduleId/lessons/:lessonId', component: LessonComponent },
+  { path: 'education/:moduleId/quiz', component: QuizComponent},
+  { path: 'connections', component: CarelinkComponent },
+  { path: '**', redirectTo: 'login' }
 ];

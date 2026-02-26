@@ -1,0 +1,135 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 24px;
+    gap: 24px;
+    margin-top: 20px;
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  font-size: 16px;
+}
+
+.divider {
+    border: none;
+    margin: 32px 0 48px 0;
+}
+
+.content-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px rgba(25, 35, 44, 0.10), 0 1px 3px rgba(25, 35, 44, 0.08);
+    padding: 32px;
+}
+
+.main-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 16px 0 8px 0;
+    color: var(--text-strong);
+    line-height: 1.2;
+    width: 100%;
+    text-align: left;   
+}
+
+.description {
+    font-size: 16px;
+    color: var(--text-muted);
+}
+
+.content-h {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 48px 0 16px 0;
+    color: var(--text-strong);
+    line-height: 1.2;
+    width: 100%;
+    text-align: left;
+}
+
+.content-p {
+    font-size: 18px;
+    margin: 0 0 32px 0;
+    line-height: 1.5;
+}
+
+.warn-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.takeaway-h {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.takeaway-p {
+    line-height: 1.5;
+    margin: 0;
+}
+
+.takeaway-alert {
+    background: rgba(230, 181, 102, 0.25);
+    border-left: 4px solid #e6b566;
+    font-size: 16px;
+    color:#91713F;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 48px 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  margin-top: auto;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.primary {
+  margin-top: auto;
+  height: 50px;
+  margin-top: 6px;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-dark);
+}

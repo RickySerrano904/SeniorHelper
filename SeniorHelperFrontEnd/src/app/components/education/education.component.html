@@ -1,6 +1,6 @@
 <div class="page">
   <div class="page-content">
-    <div class="edu-title-box">Educational Modules</div>
+    <div class="edu-title-box">Learn to Stay Safe Online</div>
 
     <div class="modules-cards-container">
       @for (module of (modules$ | async); track module.id; let i = $index) {
@@ -16,8 +16,9 @@
           <p class="module-description">{{ module.description }}</p>
 
           <!-- Button (16-point bolded)-->
-          <button class="btn primary">Start Module</button>
-
+          <button 
+            class="btn primary"
+            [routerLink]="['/education', module.id]">Start Learning</button>
         </div>
       }
     </div>
