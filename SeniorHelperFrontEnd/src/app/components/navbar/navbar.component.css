@@ -58,10 +58,28 @@
   height: 32px;
   line-height: 32px;
 }
-
+.nav-icon.loguout-text {
+  font-size: 20pt;
+  font-weight: 700;
+  color: var(--footer-text);
+  font-family: 'Inter', sans-serif;
+}
 .logout-text {
   font-size: 20pt;
   font-weight: 700;
   color: var(--footer-text);
   font-family: 'Inter', sans-serif;
+}
+.navbar-actions button:hover {                     
+  background-color: var(--accent-glow);
+  color: var(--accent-dark);
+}
+button {
+  background: none;
+  border: none;
+  color: var(--footer-text);
+  font-size: 20pt;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
 }
