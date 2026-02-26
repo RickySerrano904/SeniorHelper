@@ -3,20 +3,17 @@ import { inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const auth = inject(AuthService);
-  const token = auth.getToken();
+  if (req.url.includes('/api/auth/login')) {
+    return next(req);
+  }
 
-  // Log every outgoing request for visibility
-  console.log('[AuthInterceptor] Outgoing request:', req.method, req.url);
-
+  const token = inject(AuthService).getToken();
   if (!token) {
     return next(req);
   }
 
   const authReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`
-    }
+    setHeaders: { Authorization: `Bearer ${token}` }
   });
 
   return next(authReq);

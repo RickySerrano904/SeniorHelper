@@ -8,10 +8,6 @@ import { RegisterResponse } from '../models/register-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
-   ;
-  }
   private readonly tokenKey = 'auth_token';
   private readonly usernameKey = 'auth_username';
 
@@ -70,6 +66,10 @@ export class AuthService {
     sessionStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.usernameKey);
     sessionStorage.removeItem(this.usernameKey);
+  }
+
+  clearToken(): void {
+    this.clearSession();
   }
 
   // Route guards use this to decide access quickly.
