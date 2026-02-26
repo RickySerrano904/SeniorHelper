@@ -2,93 +2,79 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CareLinkService } from '../../services/carelink.service';
-import { CareLinkModel } from '../../models/carelink.model';
+
+export interface CareLinkModel {
+  caregiverId: number;
+  caregiverName: string;
+  seniorId: number;
+  seniorName: string;
+  role: string;
+  connectedSince: string;
+}
 
 @Component({
   selector: 'app-carelink',
-  standalone: true,
+  standalone: true, // IMPORTANT
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './carelink.component.html',
   styleUrls: ['./carelink.component.css']
 })
 export class CarelinkComponent implements OnInit {
+  newSeniorId: number | null = null;
+  newFirstName: string = '';
+  newLastName: string = '';
 
   connections: CareLinkModel[] = [];
 
-  caregiverId!: number;
-  seniorId!: number;
-
-  currentUserId!: number;
-  currentUserRole!: string;
-
-  constructor(private careLinkService: CareLinkService) {}
-
   ngOnInit(): void {
-    this.loadUserFromStorage();
-    this.loadConnections();
-  }
-
-  private loadUserFromStorage(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-    this.currentUserId = user.id;
-    this.currentUserRole = user.role;
-  }
-
-  private loadConnections(): void {
-
-    if (this.currentUserRole === 'Caregiver') {
-      this.careLinkService
-        .getCareLinksByCaregiver(this.currentUserId)
-        .subscribe({
-          next: (data) => this.connections = data,
-          error: (err: any) => console.error(err)
-        });
-
-    } else if (this.currentUserRole === 'Senior') {
-      this.careLinkService
-        .getCareLinksBySenior(this.currentUserId)
-        .subscribe({
-          next: (data) => this.connections = data,
-          error: (err: any) => console.error(err)
-        });
-    }
+    this.connections = [
+      {
+        caregiverId: 1,
+        caregiverName: 'Nolan, Frank',
+        seniorId: 101,
+        seniorName: 'Caregiver',
+        role: 'Caregiver',
+        connectedSince: '2026-01-15'
+      },
+      {
+        caregiverId: 2,
+        caregiverName: 'Hernandez, Julia',
+        seniorId: 102,
+        seniorName: 'Family',
+        role: 'Family',
+        connectedSince: '2026-01-16'
+      },
+      {
+        caregiverId: 3,
+        caregiverName: 'Watson, Eric',
+        seniorId: 103,
+        seniorName: 'Family',
+        role: 'Family',
+        connectedSince: '2026-01-16'
+      }
+    ];
   }
 
   createConnection(): void {
+    if (!this.newSeniorId || !this.newFirstName || !this.newLastName) return;
 
-    if (!this.caregiverId || !this.seniorId) {
-      alert('Both IDs are required.');
-      return;
-    }
+    const newConn: CareLinkModel = {
+      caregiverId: Date.now(),
+      caregiverName: `${this.newFirstName}, ${this.newLastName}`,
+      seniorId: this.newSeniorId,
+      seniorName: 'Family',
+      role: 'Family',
+      connectedSince: new Date().toISOString().split('T')[0]
+    };
 
-    this.careLinkService
-      .createCareLink(this.caregiverId, this.seniorId)
-      .subscribe({
-        next: () => {
-          alert('Connection created successfully.');
-          this.loadConnections();
-          this.caregiverId = 0;
-          this.seniorId = 0;
-        },
-        error: (err: any) => console.error(err)
-      });
+    this.connections.push(newConn);
+
+    this.newSeniorId = null;
+    this.newFirstName = '';
+    this.newLastName = '';
   }
 
-  deleteConnection(caregiverId: number, seniorId: number): void {
-
-    if (!confirm('Are you sure you want to delete this connection?')) {
-      return;
-    }
-
-    this.careLinkService
-      .deleteCareLink(caregiverId, seniorId)
-      .subscribe({
-        next: () => {
-          this.loadConnections();
-        },
-        error: (err: any) => console.error(err)
-      });
+  deleteConnection(index: number): void {
+    this.connections.splice(index, 1);
   }
 }

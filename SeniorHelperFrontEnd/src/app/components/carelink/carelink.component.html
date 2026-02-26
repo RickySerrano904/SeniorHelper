@@ -1,61 +1,55 @@
-<div class="container">
+<div class="carelink-container">
+  <!-- Back to Home Page-->
+  <button class="back-btn" routerLink="/home">
+    <span class="material-icons">arrow_back</span>Back to Dashboard
+  </button>
 
-  <h2>Carelink</h2>
-
-  <!-- Create Connection Form -->
-  <div class="form-card">
-    <h3>Create Connection</h3>
-
-    <label>
-      Caregiver ID
-      <input type="number" [(ngModel)]="caregiverId">
-    </label>
-
-    <label>
-      Senior ID
-      <input type="number" [(ngModel)]="seniorId">
-    </label>
-
-    <button class="btn primary" (click)="createConnection()">
-      Create
-    </button>
+  <div class="carelink-page">
+    <div class="page-content">
+      <section class="connections-card">
+        <span class="material-icons">groups</span>
+        <h1>Connections</h1>
+      </section>
+    </div>
   </div>
 
-  <!-- Connections Table -->
-  @if (connections && connections.length > 0) {
-    <div class="table-card">
-      <table>
-        <thead>
-        <tr>
-          <th>Caregiver</th>
-          <th>Senior</th>
-          <th>Role</th>
-          <th>Connected Since</th>
-          <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-          @for (conn of connections; track conn.caregiverId) {
-            <tr>
-              <td>{{ conn.caregiverName }}</td>
-              <td>{{ conn.seniorName }}</td>
-              <td>{{ conn.role }}</td>
-              <td>{{ conn.connectedSince | date }}</td>
-              <td>
-                <button class="btn danger"
-                        (click)="deleteConnection(conn.caregiverId, conn.seniorId)">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  } @else {
-    <div>
-      No connections found.
-    </div>
-  }
+  <section class="connection-grid">
+    <aside class="create-card">
+      <!-- Left: Create Connection -->
+      <div class="create-connection">
+        <h3>Create Connection</h3>
+          <p>Connect with a new user:</p>
+          <p>Enter the user's ID to give them access to help manage your schedule.</p>
 
+          <form (ngSubmit)="createConnection()">
+          <label>
+          User ID:
+          <input type="number" [(ngModel)]="newSeniorId" name="seniorId" required>
+          </label>
+          <label>
+          First Name:
+          <input type="text" [(ngModel)]="newFirstName" name="firstName" required>
+          </label>
+          <label>
+          Last Name:
+          <input type="text" [(ngModel)]="newLastName" name="lastName" required>
+          </label>
+          <button type="submit" class="submit-btn">Submit</button>
+          </form>
+      </div>
+    </aside>
+        
+
+      
+      <!-- Right: View Connections -->
+      <aside class="view-card">
+      <h3>Your Connections:</h3>
+      <div *ngFor="let conn of connections; let i = index" class="connection-item">
+          <p><strong>{{ conn.caregiverName }}</strong></p>
+          <p>{{ conn.role }}</p>
+          <p>Connected since: {{ conn.connectedSince | date }}
+          <button class="delete-btn" (click)="deleteConnection(i)">Delete</button>
+      </div>
+      </aside>
+  </section>
 </div>
