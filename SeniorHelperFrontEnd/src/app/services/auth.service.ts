@@ -8,6 +8,10 @@ import { RegisterResponse } from '../models/register-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(this.tokenKey);
+   ;
+  }
   private readonly tokenKey = 'auth_token';
   private readonly usernameKey = 'auth_username';
 
