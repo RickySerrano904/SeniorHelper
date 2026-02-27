@@ -54,7 +54,7 @@
 }
 
 .content-h {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     margin: 48px 0 16px 0;
     color: var(--text-strong);
@@ -64,7 +64,7 @@
 }
 
 .content-p {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0 0 32px 0;
     line-height: 1.5;
 }
@@ -89,6 +89,7 @@
 }
 
 .takeaway-p {
+    font-size: 16px;
     line-height: 1.5;
     margin: 0;
 }

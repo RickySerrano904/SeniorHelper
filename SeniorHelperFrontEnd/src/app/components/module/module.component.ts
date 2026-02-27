@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http'; // Added for the progress call
+import { HttpClient } from '@angular/common/http';
 import { ModuleService } from '../../services/module.service';
 import { Module } from '../../models/module.model';
 import { Observable, switchMap, forkJoin, map } from 'rxjs';
