@@ -6,16 +6,12 @@
       @for (module of (modules$ | async); track module.id; let i = $index) {
         <div class="module-card">
 
-          <!-- Module number badge -->
           <span class="module-number">Module {{ i + 1 }}</span>
 
-          <!-- Title (24-point bolded)-->
           <h2 class="module-title">{{ module.title }}</h2>
 
-          <!-- Description (16-point regular) -->
           <p class="module-description">{{ module.description }}</p>
 
-          <!-- Button (16-point bolded)-->
           <button 
             class="btn primary"
             [routerLink]="['/education', module.id]">Start Learning</button>

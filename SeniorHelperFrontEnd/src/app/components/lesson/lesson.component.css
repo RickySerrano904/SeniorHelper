@@ -69,6 +69,12 @@
     line-height: 1.5;
 }
 
+.lesson-footer {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
 .warn-icon {
     font-size: 24px;
     flex-shrink: 0;
@@ -128,6 +134,10 @@
   background: var(--accent);
   color: #fff;
   box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+}
+
+.btn.primary:hover {
+    transform: translateY(-1px); 
 }
 
 .btn.primary:hover:not(:disabled) {

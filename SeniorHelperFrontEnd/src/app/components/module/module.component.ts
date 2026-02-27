@@ -13,6 +13,7 @@ import { Observable, switchMap, forkJoin, map } from 'rxjs';
     templateUrl: './module.component.html',
     styleUrls: ['./module.component.css']
 })
+
 export class ModuleComponent {
     module$: Observable<Module>;
 
@@ -35,6 +36,7 @@ export class ModuleComponent {
                     progress: this.http.get<any>('http://localhost:8080/api/progress')
                 }).pipe(
                     map(({ module, progress }) => {
+                        
                         // Find the specific module inside the progress report
                         const moduleProgress = progress.modules.find((m: any) => m.moduleId === id);
 
