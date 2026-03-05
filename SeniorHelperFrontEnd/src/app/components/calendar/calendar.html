@@ -35,22 +35,32 @@
   <form [formGroup]="appointmentForm" (ngSubmit)="addAppointment()">
 
     <label>
-      Patient Name
-      <input type="text" formControlName="patientName" />
+      Title
+      <input type="text" formControlName="title" />
     </label>
 
     <label>
-      Appointment Details
-      <textarea formControlName="details" rows="4"></textarea>
+      Notes
+      <textarea formControlName="notes" rows="4"></textarea>
     </label>
 
     <label>
-      Appointment Date
-      <input type="date" formControlName="date" />
+      Location
+      <input type="text" formControlName="location" />
+    </label>
+
+    <label>
+      Start Date & Time
+      <input type="datetime-local" formControlName="start" />
+    </label>
+
+    <label>
+      End Date & Time
+      <input type="datetime-local" formControlName="end" />
     </label>
 
     <div class="button-row">
-      <button type="button" class="form-btn btn-cancel" (click)="cancel()">
+      <button type="button" class="form-btn btn-cancel">
         Cancel
       </button>
 
@@ -60,6 +70,5 @@
     </div>
 
   </form>
-</div>
 </div>
 

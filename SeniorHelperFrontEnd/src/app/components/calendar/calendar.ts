@@ -1,6 +1,7 @@
 import { CommonModule} from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AppointmentService } from '../../services/appointment.service';
 
 interface DayCell {
   date: Date;
@@ -36,11 +37,15 @@ export class Calendar implements OnInit {
     //Form Method
     appointmentForm: FormGroup;
     
-     constructor(private fb: FormBuilder) {
-       this.appointmentForm = this.fb.group({
-         patientName: [''], details: [''], date: [''] 
-        });
-       }
+constructor(private fb: FormBuilder, private appointmentService: AppointmentService) {
+  this.appointmentForm = this.fb.group({
+    title: [''],
+    notes: [''],
+    location: [''],
+    start: [''],
+    end: ['']
+  });
+}
 
   ngOnInit(): void {
     this.buildCalendar();
@@ -116,11 +121,38 @@ export class Calendar implements OnInit {
   hasEvents(cell: DayCell) {
     return (this.events[cell.iso] || []).length > 0;
   }
-  addAppointment() {
-     console.log(this.appointmentForm.value);
-  }
 
-  cancel() {
-     this.appointmentForm.reset();
-   }
+addAppointment() {
+  if (this.appointmentForm.invalid) return;
+
+  const formValue = this.appointmentForm.value;
+
+  const payload = {
+    ...formValue,
+    start: formValue.start ? formValue.start + ':00' : null,
+    end: formValue.end ? formValue.end + ':00' : null
+  };
+
+  const seniorId = 7; // 🔥 Replace with actual logged-in user ID
+
+  this.appointmentService.createAppointment(seniorId, payload)
+    .subscribe({
+      next: (response) => {
+        console.log('Saved to DB:', response);
+        alert('Appointment saved successfully!');
+        this.appointmentForm.reset();
+      },
+      error: (err) => {
+        console.error('Error saving appointment:', err);
+        alert('Error saving appointment.');
+      }
+    });
 }
+}
+
+//}
+
+  //cancel() {
+  //   this.appointmentForm.reset();
+  // }
+//}
