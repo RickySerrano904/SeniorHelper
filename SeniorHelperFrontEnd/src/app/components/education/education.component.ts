@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './education.component.html',
   styleUrls: ['./education.component.css']
 })
+
 export class EducationComponent {
   modules$;
   

@@ -10,36 +10,113 @@
       "takeaway-body":  "If a message creates urgency or asks for sensitive information, slow down and verify before taking any action."}
   ],
   "2": [
-
+    { "header": "Don't Click Links Inside Suspicious Messages" },
+    { "body": "If a message looks suspicious, do not click any links or buttons inside it. Links can take you to fake websites designed to steal your personal information. Close the message instead." },
+    { "header": "Never Share Personal Information by Message" },
+    { "body": "Legitimate banks, government agencies, and companies will never ask for your password, Social Security number, or payment details through a text or email. If asked, treat it as a scam." },
+    { "header": "Contact the Company Directly to Verify" },
+    { "body": "If you are unsure whether a message is real, call the company using a phone number from their official website — not a number provided in the message itself. This is the safest way to confirm." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "When in doubt, do not respond or click. Reach out to the organization directly using contact information you look up yourself." }
   ],
   "3": [
-
+    { "header": "A Strong Password Is Your First Line of Defense" },
+    { "body": "Your password protects your accounts from strangers getting in. A weak password — like your name or birthday — can be guessed quickly. A strong one is much harder to crack." },
+    { "header": "Make It Long and Mixed" },
+    { "body": "A good password is at least 12 characters long and includes a mix of uppercase letters, lowercase letters, numbers, and symbols. For example: River!Sunset42 is far stronger than password1." },
+    { "header": "Use a Passphrase to Make It Memorable" },
+    { "body": "A passphrase is a short sentence only you would know, like: \"My cat drinks coffee!\" It is easy for you to remember and very hard for anyone else to guess." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Longer passwords with a mix of characters are the hardest to break. A memorable phrase with a few numbers or symbols is a great approach." }
   ],
   "4": [
-
+    { "header": "Never Reuse the Same Password" },
+    { "body": "Using the same password across multiple accounts is risky. If one account gets hacked, criminals will try that same password on your email, bank, and other accounts." },
+    { "header": "Avoid Obvious Personal Details" },
+    { "body": "Passwords like your birthday, pet's name, or street address are easy for scammers to guess — especially if that information is visible on social media. Keep your passwords unrelated to your personal life." },
+    { "header": "Write Passwords Down Safely — Or Use a Manager" },
+    { "body": "It is okay to write passwords in a notebook kept somewhere secure at home. Avoid storing them in a phone note or email. If you are comfortable with technology, a password manager app can store them safely for you." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Each account should have its own unique password. Avoid personal details and store passwords somewhere safe." }
   ],
   "5": [
-
+    { "header": "Software Updates Fix Security Holes" },
+    { "body": "Every device — phone, tablet, or computer — has small weaknesses that hackers can exploit. When companies discover these weaknesses, they release updates to fix them. Keeping your device updated closes those doors." },
+    { "header": "Outdated Devices Are Easy Targets" },
+    { "body": "Criminals specifically look for devices running old software because those weaknesses are known and easier to exploit. Staying updated is one of the simplest things you can do to protect yourself." },
+    { "header": "Updates Also Improve How Your Device Works" },
+    { "body": "Beyond security, updates often make your device faster, fix bugs, and improve apps you already use. There is no downside to keeping things current." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Think of updates like locking a door that was left open. Installing them regularly is one of the easiest ways to stay protected." }
   ],
   "6": [
-
+    { "header": "Automatic Updates Do the Work for You" },
+    { "body": "Most phones, tablets, and computers have a setting that downloads and installs updates automatically — often overnight while you sleep. Turning this on means you never have to remember to update." },
+    { "header": "Where to Find the Setting" },
+    { "body": "On an iPhone or iPad: go to Settings → General → Software Update → Automatic Updates. On an Android: go to Settings → System → Software Update. On a Windows computer: go to Settings → Windows Update → turn on Automatic Updates." },
+    { "header": "You Can Still Review Updates Before They Install" },
+    { "body": "If you prefer to be in control, you can keep automatic updates on for downloading only, and choose when to install them. Either way, try not to delay updates for more than a few days." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Enabling automatic updates is the easiest way to stay protected. Set it once and your device handles the rest." }
   ],
   "7": [
-
+    { "header": "Look for the Padlock and HTTPS" },
+    { "body": "Before entering any payment or personal information, look at the web address bar at the top of your browser. A safe site will start with https:// and show a small padlock icon. If you see a warning or the padlock is missing, leave the site." },
+    { "header": "Check the Website Address Carefully" },
+    { "body": "Scam websites often use addresses that look almost right — like \"amaz0n.com\" instead of \"amazon.com.\" Always read the address closely before trusting a site, especially if you arrived there through a link." },
+    { "header": "Stick to Familiar or Recommended Retailers" },
+    { "body": "Shopping on well-known websites reduces your risk significantly. If you discover a new store, search for reviews online before making a purchase. Very low prices on unfamiliar sites are often a warning sign." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Always verify the web address and look for the padlock. When in doubt, shop only on sites you know and trust." }
   ],
   "8": [
-
+    { "header": "Credit Cards Offer the Best Fraud Protection" },
+    { "body": "When shopping online, paying by credit card is the safest choice. If something goes wrong, credit card companies make it easy to dispute charges and get your money back. Debit cards offer less protection." },
+    { "header": "Consider Using PayPal or a Virtual Card" },
+    { "body": "Services like PayPal let you pay without sharing your card number directly with a store. Some banks also offer virtual card numbers — a temporary number tied to your real card — for extra security." },
+    { "header": "Never Pay by Wire Transfer or Gift Card" },
+    { "body": "If an online seller asks you to pay by wire transfer, money order, or gift card, stop immediately. These payment methods cannot be reversed, and this is a major sign of a scam." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Use a credit card or trusted payment service when shopping online. Never pay through methods that cannot be refunded." }
   ],
   "9": [
-
+    { "header": "Scammers Pretend to Be People You Trust" },
+    { "body": "Imposter scammers pretend to be from the IRS, Medicare, Social Security, a bank, a tech company like Microsoft or Apple, or even a grandchild in trouble. They use familiar names to gain your trust quickly." },
+    { "header": "The Story Is Always Urgent and Alarming" },
+    { "body": "Common scripts include: \"Your computer has a virus,\" \"Your Social Security number was stolen,\" or \"I'm in jail and need bail money.\" These alarming stories are designed to make you act before you think." },
+    { "header": "Government Agencies Never Call Out of the Blue" },
+    { "body": "The IRS, Social Security Administration, and Medicare will never call you unexpectedly to demand payment or personal information. If you get such a call, hang up — it is a scam." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "If anyone contacts you out of the blue with an urgent or alarming story, slow down. Real officials do not demand immediate action by phone." }
   ],
   "10": [
-
+    { "header": "Hang Up and Call Back on a Number You Find Yourself" },
+    { "body": "If you receive a suspicious call, the safest move is to hang up and call the organization back using a phone number from their official website or a statement you received in the mail — not a number the caller gave you." },
+    { "header": "Do Not Be Pressured to Stay on the Line" },
+    { "body": "Scammers often insist you must not hang up or call anyone else. A real company or government agency will never prevent you from verifying their identity. Pressure to stay on the line is a red flag." },
+    { "header": "Ask a Trusted Person Before Acting" },
+    { "body": "If you are unsure whether a call or message is real, contact a trusted family member, friend, or neighbor before doing anything. A second opinion costs nothing and can save you from a costly mistake." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Never verify someone's identity using contact information they gave you. Always look up the number yourself, and talk to someone you trust if you are unsure." }
   ],
   "11": [
-
+    { "header": "Stop All Contact With the Scammer Immediately" },
+    { "body": "If you realize you have been scammed, stop responding right away. Do not send any more money, information, or gift cards — even if the scammer says it will fix the problem. Further contact only causes more harm." },
+    { "header": "Change Your Passwords Right Away" },
+    { "body": "If you shared any passwords or account information, change those passwords immediately. Start with your email and bank accounts. Use a different device if you think your computer may be compromised." },
+    { "header": "Call Your Bank If Money Was Involved" },
+    { "body": "Contact your bank or credit card company as soon as possible if you sent money or shared financial details. Ask them to freeze or monitor your account. The sooner you call, the better your chances of recovering funds." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Act quickly: stop contact, change passwords, and call your bank. Speed matters — the sooner you respond, the more damage you can prevent." }
   ],
   "12": [
-
+    { "header": "Report the Scam to Authorities" },
+    { "body": "Report what happened to the FTC at reportfraud.ftc.gov, or call 1-877-382-4357. You can also report to your state attorney general's office. Reporting helps protect others from the same scam." },
+    { "header": "Check Your Credit for Suspicious Activity" },
+    { "body": "If personal information was shared, consider placing a free credit freeze with the three major credit bureaus — Equifax, Experian, and TransUnion. This prevents criminals from opening new accounts in your name." },
+    { "header": "Learn One Prevention Step Going Forward" },
+    { "body": "After recovering, pick one habit to protect yourself in the future: use stronger passwords, register your number on the Do Not Call Registry at donotcall.gov, or simply pause before acting on any unexpected message or call." },
+    { "takeaway-header": "Key Takeaway",
+      "takeaway-body": "Reporting scams helps protect your community. After recovering, one small protective habit can make a big difference going forward." }
   ]
 }

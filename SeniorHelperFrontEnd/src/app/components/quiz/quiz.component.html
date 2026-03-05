@@ -1,0 +1,62 @@
+@if (quiz$ | async; as quiz) {
+  <div class="page-container">
+    
+    <!-- Back Navigation / Exit Quiz -->
+    <button class="back-link" [routerLink]="['/education', moduleId]">
+      <span class="material-icons">arrow_back</span> Exit Quiz
+    </button>
+
+    <!-- 1. Header Card (Module Info & Title) -->
+    <div class="module-header-card">
+      
+      <div class="module-number">Module {{ moduleId }} Quiz</div>
+      <h1 class="main-title">{{ quiz.name }}</h1>
+      <p class="description">Answer all questions below and submit when ready</p>
+
+    </div>
+
+    <!-- 2. Questions List -->
+    <div class="questions-list">
+      @for (question of quiz.questions; track question.id; let i = $index) {
+        <div class="content-card">
+          <h2 class="section-title">
+            {{ i + 1 }}. {{ question.text }}
+          </h2>
+          
+          <div class="answers-list">
+            
+            @for (answer of question.answers; track answer.id) {
+              <label class="answer-row">
+                <div class="radio-container">
+                  <input type="radio" 
+                         [name]="'q' + question.id" 
+                         [value]="answer.id">
+                  <span class="custom-radio"></span>
+                </div>
+               
+                <div class="answer-text-card">
+                  {{ answer.text }}
+                </div>
+              </label>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- 3. Mark Complete & Continue Button -->
+    <div class="quiz-footer">
+      <button class="btn primary" (click)="submitQuiz()">
+        Mark Complete & Continue
+      </button>
+    </div>
+  </div>
+} @else {
+  
+  <!-- Loading state for when the Observable hasn't resolved -->
+  <div class="page-container">
+    <div class="module-header-card">
+      <h1 class="main-title">Loading Quiz...</h1>
+    </div>
+  </div>
+}

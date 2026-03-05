@@ -63,6 +63,7 @@
     color: var(--text-muted);
 }
 
+/* Progress Bar */
 .progress-section {
   display: flex;
   align-items: center;
@@ -130,7 +131,7 @@
     color: var(--accent-dark);
 }
 
-/* Quiz Card Button */
+/* Button */
 .btn {
   width: 100%;
   border: 0;
@@ -159,6 +160,10 @@
   background: var(--accent);
   color: #fff;
   box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+}
+
+.btn.primary:hover {
+    transform: translateY(-1px); 
 }
 
 .btn.primary:hover:not(:disabled) {

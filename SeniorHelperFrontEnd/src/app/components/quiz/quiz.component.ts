@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
+import { Quiz } from '../../models/module.model';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-quiz',
@@ -12,10 +14,21 @@ import { QuizService } from '../../services/quiz.service';
 })
 
 export class QuizComponent {
-    quiz$;
+    quiz$: Observable<Quiz>;
+    moduleId: number;
 
-    constructor(private route: ActivatedRoute, private quizService: QuizService) {
-        const moduleId = this.route.snapshot.paramMap.get('moduleId');
-        this.quiz$ = this.quizService.getQuizById(Number(moduleId));
+    constructor(private route: ActivatedRoute, private quizService: QuizService, private router: Router) {
+        this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
+        this.quiz$ = this.quizService.getQuizById(this.moduleId);
     }
+
+    async submitQuiz() {
+        const quiz = await firstValueFrom(this.quiz$);
+
+        if (quiz.id) {
+            await firstValueFrom(this.quizService.markAsComplete(this.moduleId, quiz.id));
+            this.router.navigate(['/education', this.moduleId]);
+        }
+    }
+
 }

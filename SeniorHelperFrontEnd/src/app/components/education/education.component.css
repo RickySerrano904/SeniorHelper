@@ -139,6 +139,10 @@
   box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
 }
 
+.btn.primary:hover {
+    transform: translateY(-1px); 
+}
+
 .btn.primary:hover:not(:disabled) {
   background: var(--accent-dark);
 }

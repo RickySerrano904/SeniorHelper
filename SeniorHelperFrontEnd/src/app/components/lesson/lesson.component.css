@@ -54,7 +54,7 @@
 }
 
 .content-h {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     margin: 48px 0 16px 0;
     color: var(--text-strong);
@@ -64,9 +64,15 @@
 }
 
 .content-p {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0 0 32px 0;
     line-height: 1.5;
+}
+
+.lesson-footer {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
 }
 
 .warn-icon {
@@ -83,6 +89,7 @@
 }
 
 .takeaway-p {
+    font-size: 16px;
     line-height: 1.5;
     margin: 0;
 }
@@ -128,6 +135,10 @@
   background: var(--accent);
   color: #fff;
   box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+}
+
+.btn.primary:hover {
+    transform: translateY(-1px); 
 }
 
 .btn.primary:hover:not(:disabled) {
