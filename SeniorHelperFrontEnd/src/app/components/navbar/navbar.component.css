@@ -58,18 +58,31 @@
   height: 32px;
   line-height: 32px;
 }
-.nav-icon.loguout-text {
+.nav-icon.logout-button {
+  /* Match "Senior Helper" Typography exactly */
   font-size: 20pt;
   font-weight: 700;
-  color: var(--footer-text);
   font-family: 'Inter', sans-serif;
-}
-.logout-text {
-  font-size: 20pt;
-  font-weight: 700;
   color: var(--footer-text);
-  font-family: 'Inter', sans-serif;
+  
+  /* Layout & Alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;      /* Matches icon height for perfect alignment */
+  width: auto;       /* Removes the "weird circle" constraint */
+  padding: 0 16px;   /* Room for the shading box to breathe */
+  border-radius: 8px; /* Soft rectangular corners for shading */
+  
+  /* Reset Button Defaults */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 0;    /* Let the navbar gap handle the spacing */
+  transition: all 0.3s ease;
 }
+
 .navbar-actions button:hover {                     
   background-color: var(--accent-glow);
   color: var(--accent-dark);
@@ -82,4 +95,75 @@ button {
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
+}
+
+/* Hide the hamburger menu on big screens */
+.menu-toggle {
+  display: none !important; 
+}
+
+/* --- MOBILE VIEW --- */
+@media (max-width: 768px) {
+  
+  /* Show the Menu */
+  .menu-toggle {
+    display: flex !important;
+    color: var(--footer-text);
+    z-index: 101;
+  }
+
+  /* Hide Menu by default */
+  .navbar-actions {
+    display: none; 
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 10px;
+    width: 240px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    gap: 5px;
+    z-index: 100;
+  }
+
+  /* Show Menu when toggled in TS */
+  .navbar-actions.show {
+    display: flex;
+  }
+
+  /* Reset Icon Circles to List Rows */
+  .navbar-actions .nav-icon {
+    width: 100% !important;
+    height: 50px !important;
+    border-radius: 8px !important;
+    justify-content: flex-start !important;
+    padding: 0 15px !important;
+    gap: 15px;
+    color: var(--accent) !important;
+  }
+
+  /* Add Blue/Green labels using HTML 'title' */
+  .navbar-actions .nav-icon[title]:not(.logout-button)::after {
+    content: attr(title);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--footer-text);
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+  }
+
+  /* Fix Logout Button Alignment and Color */
+  .logout-button {
+    margin-left: 0 !important;
+    font-size: 16px !important; 
+    font-weight: 700;
+    color: var(--footer-text) !important;
+    border-top: 1px solid var(--card-border) !important;
+    margin-top: 8px;
+    padding-top: 12px !important;
+    height: auto !important;
+  }
 }

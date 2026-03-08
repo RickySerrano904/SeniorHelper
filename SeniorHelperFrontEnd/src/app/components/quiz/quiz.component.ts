@@ -17,17 +17,30 @@ export class QuizComponent {
     quiz$: Observable<Quiz>;
     moduleId: number;
 
-    constructor(private route: ActivatedRoute, private quizService: QuizService, private router: Router) {
+    constructor(
+        private route: ActivatedRoute, 
+        private quizService: QuizService, 
+        private router: Router) {
+
         this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
         this.quiz$ = this.quizService.getQuizById(this.moduleId);
     }
 
     async submitQuiz() {
-        const quiz = await firstValueFrom(this.quiz$);
+        console.log('Submitting quiz for moduleId:', this.moduleId);
 
-        if (quiz.id) {
-            await firstValueFrom(this.quizService.markAsComplete(this.moduleId, quiz.id));
+        try {
+            const quiz = await firstValueFrom(this.quiz$);
+
+            if (quiz && quiz.id) {
+                await firstValueFrom(this.quizService.markAsComplete(this.moduleId, quiz.id));
+                console.log('Quiz marked as complete for quizId:', quiz.id);
+            }
+
             this.router.navigate(['/education', this.moduleId]);
+            
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
         }
     }
 

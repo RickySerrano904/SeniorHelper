@@ -169,3 +169,34 @@
 .btn.primary:hover:not(:disabled) {
   background: var(--accent-dark);
 }
+
+/* Align title and status in one line */
+.quiz-title-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.section-title {
+  margin: 0;
+}
+
+.quiz-status-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.status-label {
+  font-size: 14pt;
+  font-weight: 600;
+  color: var(--footer-text);
+  text-transform: none;
+}
+
+/* Icon size and color */
+.status-icon {
+  color: var(--accent) !important;
+}

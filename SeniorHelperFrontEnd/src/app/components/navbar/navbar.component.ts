@@ -12,13 +12,23 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService, private router: Router)
-  {}
+  // Property to track menu visibility on small screens
+  isMenuOpen: boolean = false;
+
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
     clearToken(): void {
-    console.log('Logout clicked');
-  this.authService.clearToken();
-  console.log('Token cleared');
-  this.router.navigate(['/login']);
+      console.log('Logout clicked');
+      this.authService.clearToken();
+      console.log('Token cleared');
+      this.router.navigate(['/login']);
     }
  
 }

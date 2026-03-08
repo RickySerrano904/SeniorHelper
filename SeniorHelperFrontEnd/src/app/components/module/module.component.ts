@@ -50,9 +50,13 @@ export class ModuleComponent {
                                 };
                             });
 
-                            if (module.quiz && moduleProgress.quiz) {
-                                module.quiz.completed = moduleProgress.quiz.completed;
+                            if (module.quiz) {
+                                module.quiz.completed = moduleProgress.quiz ? moduleProgress.quiz.completed : false;
                             }
+
+                            // if (module.quiz && moduleProgress.quiz) {
+                            //     module.quiz.completed = moduleProgress.quiz.completed;
+                            // }
                         }
 
                         return module;

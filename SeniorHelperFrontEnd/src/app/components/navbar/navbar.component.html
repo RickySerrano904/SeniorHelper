@@ -5,13 +5,18 @@
       <a routerLink="/home" class="app-name">Senior Helper</a>
     </div>
 
+    <!-- Menu Button (Hidden on Desktop, Visible on Small Screens)-->
+     <button class="menu-toggle nav-icon" (click)="toggleMenu()">
+      <span class="material-icons">menu</span>
+     </button>
+
     <!-- Right side: Icons and logout -->
-    <div class="navbar-actions">
+    <div class="navbar-actions" [class.show]="isMenuOpen">
       <a routerLink="/home" class="nav-icon" title="Home">
         <span class="material-icons">home</span>
       </a>
 
-      <a routerLink="/appointments" class="nav-icon" title="Add Appointment">
+      <a routerLink="/appointments" class="nav-icon" title="Calendar">
         <span class="material-icons">calendar_month</span>
       </a>
 
@@ -27,7 +32,7 @@
         <span class="material-icons">manage_accounts</span>
       </a>
 
-      <button class="nav-icon logout-text" (click)="clearToken()">Logout</button>
+      <button class="nav-icon logout-button" (click)="clearToken()">Logout</button>
     </div>
   </div>
 </nav>
