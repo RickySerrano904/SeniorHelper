@@ -2,7 +2,7 @@
   <div class="page-content">
     <main class="login-card" aria-label="Login form">
       <header class="login-header">
-        <h1>Senior Helper</h1>
+        <h1 data-cy="login-title">Senior Helper</h1>
         <p>Sign in to your account</p>
       </header>
 
@@ -12,6 +12,7 @@
           <input
             type="text"
             name="username"
+            data-cy="username"
             [(ngModel)]="username"
             autocomplete="username"
             required
@@ -23,6 +24,7 @@
           <input
             type="password"
             name="password"
+            data-cy="password"
             [(ngModel)]="password"
             autocomplete="current-password"
             required
@@ -34,7 +36,7 @@
           <span>Remember me</span>
         </label>
 
-        <button class="btn primary" type="submit" [disabled]="loading">
+        <button class="btn primary" type="submit" [disabled]="loading" data-cy="submit-login">
           {{ loading ? 'Signing In...' : 'Sign In' }}
         </button>
         <button class="btn secondary" type="button" routerLink="/register">Register</button>
