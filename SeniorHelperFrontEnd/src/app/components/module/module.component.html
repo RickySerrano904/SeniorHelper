@@ -41,25 +41,36 @@
       </div>
     </div>
 
-    <!-- 3. Optional Quiz Card -->
-    @if (module.quiz) {
-      <div class="content-card quiz-card">
-        <div class="quiz-header">
-          <div class="quiz-info">
-            <h2 class="section-title">Module Quiz</h2>
-            <p class="description">Test your knowledge - available anytime!</p>
+  <!-- 3. Optional Quiz Card -->
+  @if (module.quiz) {
+    <div class="content-card quiz-card">
+      <div class="quiz-header-row">
+        <div class="quiz-title-group">
+          <h2 class="section-title">Module Quiz</h2>
+          
+          <div class="quiz-status-inline">
+            <span class="status-label" [class.incomplete-text]="!module.quiz.completed">
+              {{ module.quiz.completed ? 'Completed' : 'Incomplete' }}
+            </span>
+            <span class="material-icons status-icon" 
+                  [class.completed]="module.quiz.completed" 
+                  [class.incomplete]="!module.quiz.completed">
+              {{ module.quiz.completed ? 'check_circle' : 'radio_button_unchecked' }}
+            </span>
           </div>
         </div>
-        
-        <div class="quiz-description">
-          <span class="material-icons notice-icon">lightbulb</span>
-          This quiz helps reinforce key concepts from this module. Take it whenever you're ready to see how much you've learned!
-        </div>
-
-        <button 
-          class="btn primary" 
-          [routerLink]="['quiz']">Take Practice Quiz</button>
+        <p class="description">Test your knowledge - available anytime!</p>
       </div>
-    }
+      
+      <div class="quiz-description">
+        <span class="material-icons notice-icon">lightbulb</span>
+        This quiz helps reinforce key concepts from this module. Take it whenever you're ready to see how much you've learned!
+      </div>
+
+      <button class="btn primary" [routerLink]="['quiz']">
+        {{ module.quiz.completed ? 'Retake Practice Quiz' : 'Take Practice Quiz' }}
+      </button>
+    </div>
+  }
   </div>
 }

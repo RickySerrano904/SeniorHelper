@@ -76,64 +76,164 @@ VALUES
 -- =========================
 INSERT INTO quizzes (name, module_id)
 VALUES
-    ('Quiz - Recognizing Common Scam Tactics', 1),
-    ('Quiz - Password Safety and Account Protection', 2);
+    ('Quiz - Spotting Fake Messages',        1),
+    ('Quiz - Passwords & Privacy',           2),
+    ('Quiz - Device Defense',                3),
+    ('Quiz - Safe Shopping Online',          4),
+    ('Quiz - Imposter Scams',                5),
+    ('Quiz - What to Do If Scammed',         6);
 
 -- =========================
 -- Questions
 -- =========================
--- Module 1 Quiz Questions
-INSERT INTO questions (text, quiz_id) VALUES
-    ('What is one clue that a text message might be fake?', 1),
-    ('A friend asks for gift cards urgently by text. What should you do?', 1),
-    ('Which behavior helps reduce text scam risk?', 1);
 
--- Module 2 Quiz Questions
+-- Module 1
 INSERT INTO questions (text, quiz_id) VALUES
-    ('Which URL looks the most legitimate for your bank?', 2),
-    ('What does the lock icon (HTTPS) actually mean?',     2),
-    ('Which of these is a red flag on a shopping site?',   2);
+                                          ('Which of these is a common sign that a message is fake?', 1),
+                                          ('You get an unexpected text saying your bank account will be closed today. What should you do?', 1),
+                                          ('What is the safest thing to do when you receive a suspicious message?', 1);
+
+-- Module 2
+INSERT INTO questions (text, quiz_id) VALUES
+                                          ('Which of these is the strongest password?', 2),
+                                          ('Why is it risky to use the same password for multiple accounts?', 2),
+                                          ('Where is it safest to store your passwords?', 2);
+
+-- Module 3
+INSERT INTO questions (text, quiz_id) VALUES
+                                          ('Why are software updates important for your security?', 3),
+                                          ('What is the benefit of turning on automatic updates?', 3),
+                                          ('What happens if you keep using outdated software?', 3);
+
+-- Module 4
+INSERT INTO questions (text, quiz_id) VALUES
+                                          ('What should you look for in the browser address bar before entering payment details?', 4),
+                                          ('Which payment method gives you the best fraud protection when shopping online?', 4),
+                                          ('A new website is selling brand-name products at 90% off. What should you do?', 4);
+
+-- Module 5
+INSERT INTO questions (text, quiz_id) VALUES
+                                          ('A caller says they are from the IRS and demands immediate payment. What is this?', 5),
+                                          ('What is the safest way to verify if a caller is really from your bank?', 5),
+                                          ('Which of these is a warning sign of an imposter scam?', 5);
+
+-- Module 6
+INSERT INTO questions (text, quiz_id) VALUES
+                                          ('You just realized you were scammed. What should you do first?', 6),
+                                          ('Who should you contact if you sent money to a scammer?', 6),
+                                          ('Where can you report a scam to help protect others?', 6);
 
 -- =========================
 -- Answers
 -- =========================
 
--- Quiz 1, Q1
+-- Module 1, Q1
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. It uses your first and last name.', FALSE, (SELECT question_id FROM questions WHERE text = 'What is one clue that a text message might be fake?' AND quiz_id = 1)),
-('B. It comes from a known number.', FALSE, (SELECT question_id FROM questions WHERE text = 'What is one clue that a text message might be fake?' AND quiz_id = 1)),
-('C. It contains spelling mistakes', TRUE, (SELECT question_id FROM questions WHERE text = 'What is one clue that a text message might be fake?' AND quiz_id = 1));
+                                                     ('A. It uses your full name and looks official',                 FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a common sign that a message is fake?' AND quiz_id = 1)),
+                                                     ('B. It creates urgency and asks you to act immediately',        TRUE,  (SELECT question_id FROM questions WHERE text = 'Which of these is a common sign that a message is fake?' AND quiz_id = 1)),
+                                                     ('C. It comes from a phone number you recognize',               FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a common sign that a message is fake?' AND quiz_id = 1));
 
--- Quiz 1, Q2
+-- Module 1, Q2
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. Buy the cards and send the codes immediately', FALSE, (SELECT question_id FROM questions WHERE text = 'A friend asks for gift cards urgently by text. What should you do?' AND quiz_id = 1)),
-('B. Call your friend using a trusted number to verify', TRUE, (SELECT question_id FROM questions WHERE text = 'A friend asks for gift cards urgently by text. What should you do?' AND quiz_id = 1)),
-('C. Reply with your bank info to help them faster', FALSE, (SELECT question_id FROM questions WHERE text = 'A friend asks for gift cards urgently by text. What should you do?' AND quiz_id = 1));
+                                                     ('A. Click the link in the message to check your account',      FALSE, (SELECT question_id FROM questions WHERE text = 'You get an unexpected text saying your bank account will be closed today. What should you do?' AND quiz_id = 1)),
+                                                     ('B. Reply to the message asking for more details',             FALSE, (SELECT question_id FROM questions WHERE text = 'You get an unexpected text saying your bank account will be closed today. What should you do?' AND quiz_id = 1)),
+                                                     ('C. Call your bank directly using the number on their website',TRUE,  (SELECT question_id FROM questions WHERE text = 'You get an unexpected text saying your bank account will be closed today. What should you do?' AND quiz_id = 1));
 
--- Quiz 1, Q3
+-- Module 1, Q3
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. Click links in any message that looks urgent', FALSE, (SELECT question_id FROM questions WHERE text = 'Which behavior helps reduce text scam risk?' AND quiz_id = 1)),
-('B. Don’t reply to unknown senders and block/report spam', TRUE, (SELECT question_id FROM questions WHERE text = 'Which behavior helps reduce text scam risk?' AND quiz_id = 1)),
-('C. Share your PIN if the message says it’s your bank', FALSE, (SELECT question_id FROM questions WHERE text = 'Which behavior helps reduce text scam risk?' AND quiz_id = 1));
+                                                     ('A. Reply to ask if the message is real',                      FALSE, (SELECT question_id FROM questions WHERE text = 'What is the safest thing to do when you receive a suspicious message?' AND quiz_id = 1)),
+                                                     ('B. Do not click any links — verify by contacting the company directly', TRUE, (SELECT question_id FROM questions WHERE text = 'What is the safest thing to do when you receive a suspicious message?' AND quiz_id = 1)),
+                                                     ('C. Forward it to friends so they can check it for you',       FALSE, (SELECT question_id FROM questions WHERE text = 'What is the safest thing to do when you receive a suspicious message?' AND quiz_id = 1));
 
--- Quiz 2, Q1
+-- Module 2, Q1
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. bank.example.com.security-check.io', FALSE, (SELECT question_id FROM questions WHERE text = 'Which URL looks the most legitimate for your bank?' AND quiz_id = 2)),
-('B. secure-bank-login.co', FALSE, (SELECT question_id FROM questions WHERE text = 'Which URL looks the most legitimate for your bank?' AND quiz_id = 2)),
-('C. bank.example.com', TRUE, (SELECT question_id FROM questions WHERE text = 'Which URL looks the most legitimate for your bank?' AND quiz_id = 2));
+                                                     ('A. john1950',                                                 FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is the strongest password?' AND quiz_id = 2)),
+                                                     ('B. password123',                                              FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is the strongest password?' AND quiz_id = 2)),
+                                                     ('C. River!Sunset42',                                           TRUE,  (SELECT question_id FROM questions WHERE text = 'Which of these is the strongest password?' AND quiz_id = 2));
 
--- Quiz 2, Q2
+-- Module 2, Q2
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. The site is 100% trustworthy and safe', FALSE, (SELECT question_id FROM questions WHERE text = 'What does the lock icon (HTTPS) actually mean?' AND quiz_id = 2)),
-('B. Your connection is encrypted, but you still must verify', TRUE, (SELECT question_id FROM questions WHERE text = 'What does the lock icon (HTTPS) actually mean?' AND quiz_id = 2)),
-('C. The site is owned by the government', FALSE, (SELECT question_id FROM questions WHERE text = 'What does the lock icon (HTTPS) actually mean?' AND quiz_id = 2));
+                                                     ('A. If one account is hacked, criminals can access your other accounts too', TRUE, (SELECT question_id FROM questions WHERE text = 'Why is it risky to use the same password for multiple accounts?' AND quiz_id = 2)),
+                                                     ('B. It makes it harder to remember your passwords',            FALSE, (SELECT question_id FROM questions WHERE text = 'Why is it risky to use the same password for multiple accounts?' AND quiz_id = 2)),
+                                                     ('C. It slows down your internet connection',                   FALSE, (SELECT question_id FROM questions WHERE text = 'Why is it risky to use the same password for multiple accounts?' AND quiz_id = 2));
 
--- Quiz 2, Q3
+-- Module 2, Q3
 INSERT INTO answers (text, correct, question_id) VALUES
-('A. Typosquatted domain and unrealistic discounts', TRUE, (SELECT question_id FROM questions WHERE text = 'Which of these is a red flag on a shopping site?' AND quiz_id = 2)),
-('B. Clear return policy and known payment options', FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a red flag on a shopping site?' AND quiz_id = 2)),
-('C. Contact information that matches official channels', FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a red flag on a shopping site?' AND quiz_id = 2));
+                                                     ('A. In a text message or email to yourself',                   FALSE, (SELECT question_id FROM questions WHERE text = 'Where is it safest to store your passwords?' AND quiz_id = 2)),
+                                                     ('B. In a notebook kept in a secure place at home, or in a password manager', TRUE, (SELECT question_id FROM questions WHERE text = 'Where is it safest to store your passwords?' AND quiz_id = 2)),
+                                                     ('C. In a sticky note on your computer screen',                 FALSE, (SELECT question_id FROM questions WHERE text = 'Where is it safest to store your passwords?' AND quiz_id = 2));
 
+-- Module 3, Q1
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. They add new games and entertainment features',            FALSE, (SELECT question_id FROM questions WHERE text = 'Why are software updates important for your security?' AND quiz_id = 3)),
+                                                     ('B. They fix security weaknesses that hackers can exploit',    TRUE,  (SELECT question_id FROM questions WHERE text = 'Why are software updates important for your security?' AND quiz_id = 3)),
+                                                     ('C. They make your device look more modern',                   FALSE, (SELECT question_id FROM questions WHERE text = 'Why are software updates important for your security?' AND quiz_id = 3));
+
+-- Module 3, Q2
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Your device updates itself without you having to remember', TRUE,  (SELECT question_id FROM questions WHERE text = 'What is the benefit of turning on automatic updates?' AND quiz_id = 3)),
+                                                     ('B. It makes your device run faster immediately',              FALSE, (SELECT question_id FROM questions WHERE text = 'What is the benefit of turning on automatic updates?' AND quiz_id = 3)),
+                                                     ('C. It backs up all your photos automatically',                FALSE, (SELECT question_id FROM questions WHERE text = 'What is the benefit of turning on automatic updates?' AND quiz_id = 3));
+
+-- Module 3, Q3
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Nothing — old software works just as safely as new software', FALSE, (SELECT question_id FROM questions WHERE text = 'What happens if you keep using outdated software?' AND quiz_id = 3)),
+                                                     ('B. Your device becomes a known target for hackers',           TRUE,  (SELECT question_id FROM questions WHERE text = 'What happens if you keep using outdated software?' AND quiz_id = 3)),
+                                                     ('C. Your device will stop connecting to the internet',         FALSE, (SELECT question_id FROM questions WHERE text = 'What happens if you keep using outdated software?' AND quiz_id = 3));
+
+-- Module 4, Q1
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. A colorful logo and professional design',                  FALSE, (SELECT question_id FROM questions WHERE text = 'What should you look for in the browser address bar before entering payment details?' AND quiz_id = 4)),
+                                                     ('B. A padlock icon and an address starting with https://',     TRUE,  (SELECT question_id FROM questions WHERE text = 'What should you look for in the browser address bar before entering payment details?' AND quiz_id = 4)),
+                                                     ('C. A pop-up saying the site is verified',                     FALSE, (SELECT question_id FROM questions WHERE text = 'What should you look for in the browser address bar before entering payment details?' AND quiz_id = 4));
+
+-- Module 4, Q2
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Debit card, because it comes straight from your bank',     FALSE, (SELECT question_id FROM questions WHERE text = 'Which payment method gives you the best fraud protection when shopping online?' AND quiz_id = 4)),
+                                                     ('B. Wire transfer, because it is fast',                        FALSE, (SELECT question_id FROM questions WHERE text = 'Which payment method gives you the best fraud protection when shopping online?' AND quiz_id = 4)),
+                                                     ('C. Credit card or PayPal, because charges can be disputed',   TRUE,  (SELECT question_id FROM questions WHERE text = 'Which payment method gives you the best fraud protection when shopping online?' AND quiz_id = 4));
+
+-- Module 4, Q3
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Buy quickly before the deal expires',                      FALSE, (SELECT question_id FROM questions WHERE text = 'A new website is selling brand-name products at 90% off. What should you do?' AND quiz_id = 4)),
+                                                     ('B. Search for reviews of the site before making any purchase', TRUE,  (SELECT question_id FROM questions WHERE text = 'A new website is selling brand-name products at 90% off. What should you do?' AND quiz_id = 4)),
+                                                     ('C. It must be safe if it accepts credit cards',               FALSE, (SELECT question_id FROM questions WHERE text = 'A new website is selling brand-name products at 90% off. What should you do?' AND quiz_id = 4));
+
+-- Module 5, Q1
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. A legitimate IRS collections process',                     FALSE, (SELECT question_id FROM questions WHERE text = 'A caller says they are from the IRS and demands immediate payment. What is this?' AND quiz_id = 5)),
+                                                     ('B. An imposter scam — the IRS never calls demanding immediate payment', TRUE, (SELECT question_id FROM questions WHERE text = 'A caller says they are from the IRS and demands immediate payment. What is this?' AND quiz_id = 5)),
+                                                     ('C. A routine audit notification',                             FALSE, (SELECT question_id FROM questions WHERE text = 'A caller says they are from the IRS and demands immediate payment. What is this?' AND quiz_id = 5));
+
+-- Module 5, Q2
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Ask the caller for their employee ID number',              FALSE, (SELECT question_id FROM questions WHERE text = 'What is the safest way to verify if a caller is really from your bank?' AND quiz_id = 5)),
+                                                     ('B. Hang up and call the bank back using the number on your card or their website', TRUE, (SELECT question_id FROM questions WHERE text = 'What is the safest way to verify if a caller is really from your bank?' AND quiz_id = 5)),
+                                                     ('C. Trust them if they already know your account number',      FALSE, (SELECT question_id FROM questions WHERE text = 'What is the safest way to verify if a caller is really from your bank?' AND quiz_id = 5));
+
+-- Module 5, Q3
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. The caller gives you time to verify their identity',       FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a warning sign of an imposter scam?' AND quiz_id = 5)),
+                                                     ('B. The caller says you must not hang up or call anyone else', TRUE,  (SELECT question_id FROM questions WHERE text = 'Which of these is a warning sign of an imposter scam?' AND quiz_id = 5)),
+                                                     ('C. The caller sends a follow-up letter in the mail',          FALSE, (SELECT question_id FROM questions WHERE text = 'Which of these is a warning sign of an imposter scam?' AND quiz_id = 5));
+
+-- Module 6, Q1
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. Send one final message to ask for your money back',        FALSE, (SELECT question_id FROM questions WHERE text = 'You just realized you were scammed. What should you do first?' AND quiz_id = 6)),
+                                                     ('B. Stop all contact with the scammer and change your passwords immediately', TRUE, (SELECT question_id FROM questions WHERE text = 'You just realized you were scammed. What should you do first?' AND quiz_id = 6)),
+                                                     ('C. Wait a few days to see if the situation resolves itself',  FALSE, (SELECT question_id FROM questions WHERE text = 'You just realized you were scammed. What should you do first?' AND quiz_id = 6));
+
+-- Module 6, Q2
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. A neighbor or family member',                              FALSE, (SELECT question_id FROM questions WHERE text = 'Who should you contact if you sent money to a scammer?' AND quiz_id = 6)),
+                                                     ('B. Your bank or credit card company as soon as possible',     TRUE,  (SELECT question_id FROM questions WHERE text = 'Who should you contact if you sent money to a scammer?' AND quiz_id = 6)),
+                                                     ('C. The scammer to request a refund',                          FALSE, (SELECT question_id FROM questions WHERE text = 'Who should you contact if you sent money to a scammer?' AND quiz_id = 6));
+
+-- Module 6, Q3
+INSERT INTO answers (text, correct, question_id) VALUES
+                                                     ('A. There is no place to report scams',                        FALSE, (SELECT question_id FROM questions WHERE text = 'Where can you report a scam to help protect others?' AND quiz_id = 6)),
+                                                     ('B. Only to your local police department',                     FALSE, (SELECT question_id FROM questions WHERE text = 'Where can you report a scam to help protect others?' AND quiz_id = 6)),
+                                                     ('C. The FTC at reportfraud.ftc.gov or by calling 1-877-382-4357', TRUE, (SELECT question_id FROM questions WHERE text = 'Where can you report a scam to help protect others?' AND quiz_id = 6));
 -- =========================
 -- Lesson Completions
 -- =========================

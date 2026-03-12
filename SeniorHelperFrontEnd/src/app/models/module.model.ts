@@ -22,7 +22,7 @@ export interface Quiz {
     id?: number;
     name: string;
     questions?: Question[];
-    completed: boolean;
+    completed?: boolean;
 }
 
 export interface Module {
