@@ -35,11 +35,10 @@ export class LessonComponent {
         const nextLesson = lessons[currentIndex + 1];
 
         if (nextLesson) {
+            console.log(`Moving from ${lessonId} to ${nextLesson.id}`);
             this.router.navigate(['/education', this.moduleId, 'lessons', nextLesson.id]);
-            console.log(`Navigating to next lesson: ${nextLesson.title}`);
         } else {
             this.router.navigate(['/education', this.moduleId]);
-            console.log('No more lessons. Navigating back to module overview.');
         }
     }
 }

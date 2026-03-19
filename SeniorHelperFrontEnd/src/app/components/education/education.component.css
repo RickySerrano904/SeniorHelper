@@ -11,6 +11,19 @@
   width: auto;
 }
 
+.back-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  font-size: 16px;
+}
+
 .edu-title-box {
   display: flex;
   align-items: center;
