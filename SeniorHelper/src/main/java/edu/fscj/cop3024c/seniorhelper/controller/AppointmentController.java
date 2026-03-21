@@ -32,6 +32,13 @@ public class AppointmentController {
         return appointments.findBySeniorId(me.getId());
     }
 
+    @PostMapping("/me")
+    public AppointmentDto createMyAppointment(@AuthenticationPrincipal User me,
+                                              @RequestBody AppointmentDto body) {
+        Appointment created = appointments.createAppointmentForCurrentUser(me.getId(), dtoToEntityForWrite(body));
+        return AppointmentMapper.toDto(created);
+    }
+
     // ---------- LIST (by seniorId) ----------
     // The senior, and anyone authenticated who *has permission for that senior* can list.
     @GetMapping

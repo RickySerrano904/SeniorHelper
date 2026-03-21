@@ -1,0 +1,137 @@
+
+
+
+<div class="calendar-layout" (click)="closeContextMenu(); closeMonthYearPicker()">
+	<div class="calendar">
+		<header class="cal-header">
+			<button class="nav" (click)="prevMonth()">‹</button>
+      <button
+        type="button"
+        class="title-picker-button"
+        (click)="toggleMonthYearPicker($event)">
+        {{ monthNames[displayMonth] }} {{ displayYear }}
+      </button>
+			<button class="nav" (click)="nextMonth()">›</button>
+
+      <div class="month-year-picker" *ngIf="isMonthYearPickerOpen" (click)="onMonthYearSelectionClick($event)">
+        <label>
+          Month
+          <select [(ngModel)]="pickerMonth" [ngModelOptions]="{ standalone: true }">
+            <option *ngFor="let monthName of monthNames; let idx = index" [ngValue]="idx">{{ monthName }}</option>
+          </select>
+        </label>
+        <label>
+          Year
+          <select [(ngModel)]="pickerYear" [ngModelOptions]="{ standalone: true }">
+            <option *ngFor="let year of yearOptions" [ngValue]="year">{{ year }}</option>
+          </select>
+        </label>
+        <div class="picker-actions">
+          <button type="button" class="picker-btn" (click)="applyMonthYearSelection()">Go</button>
+          <button type="button" class="picker-btn picker-btn-cancel" (click)="closeMonthYearPicker()">Cancel</button>
+        </div>
+      </div>
+		</header>
+
+    <div class="calendar-actions">
+      <button type="button" class="add-appointment-btn" (click)="openAddAppointmentFromButton()">
+        Add New Appointment
+      </button>
+    </div>
+
+    <div class="weekday-row">
+      <div class="weekday" *ngFor="let wd of weekDays">{{ wd }}</div>
+    </div>
+
+		<div class="cal-grid">
+      <ng-container *ngFor="let week of weeks">
+        <div class="day" *ngFor="let day of week" [class.outside]="!day.inMonth" [class.holiday]="getHolidayName(day)" [class.has-events]="hasEvents(day)" (click)="openAddAppointment($event, day)" (contextmenu)="openDayMenu($event, day)">
+					<div class="day-num">{{ day.date.getDate() }}</div>
+          <div class="today-badge" *ngIf="isToday(day)">Today</div>
+          <div class="holiday-badge" *ngIf="getHolidayName(day)">
+            {{ getHolidayName(day) }}
+          </div>
+          <div class="event-list" *ngIf="events[day.iso] && events[day.iso].length > 0">
+            <div class="event-title" *ngFor="let appointment of events[day.iso]" (click)="openEditFromTitle($event, appointment)" (contextmenu)="openAppointmentMenu($event, day, appointment)">{{ appointment.title }}</div>
+          </div>
+				</div>
+			</ng-container>
+		</div>
+
+    <div class="month-empty" *ngIf="appointmentsLoaded && !hasAppointmentsThisMonth">
+      No appointments this month.
+    </div>
+	</div>
+</div>
+
+<div class="appointment-context-menu" *ngIf="contextMenuVisible" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
+  <button type="button" class="context-item" (click)="openAddFromMenu()">Add Appointment</button>
+  <button type="button" class="context-item" *ngIf="contextMenuAppointment" (click)="openEditFromMenu()">Edit Appointment</button>
+  <button type="button" class="context-item danger" *ngIf="contextMenuAppointment" (click)="deleteFromMenu()">Delete Appointment</button>
+</div>
+
+<div class="appointment-modal-backdrop" *ngIf="isAddAppointmentOpen" (click)="cancel()">
+  <div class="appointment-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ editingAppointmentId ? 'Edit Appointment' : 'Add New Appointment' }}</h2>
+      <button type="button" class="modal-close" (click)="cancel()">x</button>
+    </div>
+    <div class="modal-date">{{ selectedDateLabel }}</div>
+
+    <form [formGroup]="appointmentForm" (ngSubmit)="addAppointment()" class="appointment-form">
+      <label>
+        Title
+        <input type="text" formControlName="title" />
+      </label>
+      <div class="form-error" *ngIf="appointmentForm.get('title')?.touched && appointmentForm.get('title')?.invalid">
+        Title is required.
+      </div>
+
+      <label>
+        Notes
+        <textarea formControlName="notes" rows="4"></textarea>
+      </label>
+
+      <label>
+        Location
+        <input type="text" formControlName="location" />
+      </label>
+
+      <label>
+        Start
+        <input type="datetime-local" formControlName="start" />
+      </label>
+      <div class="form-error" *ngIf="appointmentForm.get('start')?.touched && appointmentForm.get('start')?.invalid">
+        Start date/time is required.
+      </div>
+
+      <label>
+        End (optional)
+        <input type="datetime-local" formControlName="end" />
+      </label>
+
+      <div class="form-error" *ngIf="appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start">
+        End date/time must be after start date/time.
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="form-btn btn-cancel" (click)="cancel()">
+          Cancel
+        </button>
+
+        <button type="submit" class="form-btn btn-submit" [disabled]="appointmentForm.invalid || isSubmitting || (appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start)">
+          Submit
+        </button>
+
+        <span class="submit-loading" *ngIf="isSubmitting" aria-live="polite">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          Saving...
+        </span>
+      </div>
+
+      <div class="form-error" *ngIf="submitError">{{ submitError }}</div>
+      <div class="form-success" *ngIf="submitSuccess">{{ submitSuccess }}</div>
+    </form>
+  </div>
+</div>
+
