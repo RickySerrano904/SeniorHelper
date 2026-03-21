@@ -16,6 +16,9 @@ public class AppointmentDto {
     private LocalDateTime start;
     private LocalDateTime end;
 
+    public AppointmentDto() {
+    }
+
     public AppointmentDto(Integer id,  String title, String notes,
                           String location, LocalDateTime start, LocalDateTime end) {
         this.id = id;

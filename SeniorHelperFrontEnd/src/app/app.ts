@@ -8,7 +8,10 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent, CommonModule, FormsModule],
-  templateUrl: './app.html'
+  templateUrl: './app.html',
+  host: {
+    '[class.calendar-route]': 'isCalendarPage()'
+  }
 })
 export class App {
   protected readonly title = signal('SeniorHelperFrontEnd');
@@ -18,5 +21,10 @@ export class App {
   isNotLoginPage(): boolean {
     const url = this.router.url;
     return !url.includes('login') && !url.includes('register');
+  }
+
+  isCalendarPage(): boolean {
+    const url = this.router.url;
+    return url === '/calendar' || url.startsWith('/calendar?') || url.startsWith('/calendar/');
   }
 }
