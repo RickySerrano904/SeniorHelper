@@ -29,13 +29,6 @@ export class EducationComponent {
     );
   }
 
-  // OLD CODE - Will Remove After Testing
-  // modules$;
-  
-  // constructor(private moduleService: ModuleService) {
-  //   this.modules$ = this.moduleService.getAllModules();
-  // }
-
   getButtonProgress(module: any): string {
     const completedCount = module.lessons?.filter((l: any) => l.completed).length || 0;
     const totalCount = module.lessons?.length || 0;

@@ -40,7 +40,7 @@ export class ModuleComponent {
                         // Find the specific module inside the progress report
                         const moduleProgress = progress.modules.find((m: any) => m.id === id);
 
-                        // Merge the 'completed' status into our module object
+                        // Merge the 'completed' status into module object
                         if (moduleProgress) {
                             module.lessons = module.lessons.map(lesson => {
                                 const progLesson = moduleProgress.lessons.find((pl: any) => pl.id === lesson.id);
