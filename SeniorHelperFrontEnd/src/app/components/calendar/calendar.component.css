@@ -236,6 +236,7 @@
 .month-empty {
   width: 100%;
   margin-top: 16px;
+  padding-bottom: 14px;
   text-align: center;
   color: var(--text-muted);
 }
