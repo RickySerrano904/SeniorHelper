@@ -14,6 +14,22 @@
   --footer-text: #679b96;
 }
 
+body.theme-dark {
+  --page-bg: #121820;
+  --card-bg: #1a222d;
+  --card-border: #2d3a4a;
+  --accent: #7db9b3;
+  --accent-dark: #69a8a1;
+  --accent-glow: rgba(125, 185, 179, 0.2);
+  --text-strong: #e7edf4;
+  --text-muted: #b7c2cd;
+  --input-bg: #111823;
+  --input-border: #314254;
+  --button-secondary-bg: #2a3544;
+  --button-secondary-hover: #334255;
+  --footer-text: #88c4bd;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -26,10 +42,11 @@ body {
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  color: #1F2937;
-  background: #e3e6ea;
+  color: var(--text-strong);
+  background: var(--page-bg);
   font-size: 20pt;
   font-weight: 400;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 app-root {
@@ -150,15 +167,21 @@ app-footer {
   border-radius: 4px;
   border: 1px solid var(--input-border);
   background: var(--input-bg);
+  color: var(--text-strong);
+  caret-color: var(--text-strong);
   font-size: 0.95rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.sh-field input::placeholder {
+  color: var(--text-muted);
 }
 
 .sh-field input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--accent-glow);
-  background: #fff;
+  background: var(--card-bg);
 }
 
 .sh-btn {
