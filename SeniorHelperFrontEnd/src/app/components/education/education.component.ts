@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Module } from '../../models/module.model';
 import { ModuleService } from '../../services/module.service';
 import { CommonModule } from '@angular/common';

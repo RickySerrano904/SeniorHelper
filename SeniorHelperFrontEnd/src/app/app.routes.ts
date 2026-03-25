@@ -8,6 +8,7 @@ import { LessonComponent } from './components/lesson/lesson.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { CarelinkComponent } from './components/carelink/carelink.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { guestOnlyGuard, pendingChangesGuard, requireAuthChildGuard } from './components/guards/auth.guard';
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'connections', component: CarelinkComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: 'education', component: EducationComponent },
       { path: 'education/:moduleId', component: ModuleComponent },
       { path: 'education/:moduleId/lessons/:lessonId', component: LessonComponent },

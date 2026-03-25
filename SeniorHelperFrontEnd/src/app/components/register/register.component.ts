@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -25,8 +25,7 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
   onSubmit(form: NgForm) {
@@ -61,12 +60,10 @@ export class RegisterComponent {
                 this.registrationCompleted = true;
                 this.successMessage = resp.message || 'Signed in successfully.';
                 this.router.navigate(['/home']);
-                this.cdr.detectChanges();
               },
               error: () => {
                 this.registrationCompleted = true;
                 this.successMessage = 'Account created. Please sign in.';
-                this.cdr.detectChanges();
               }
             });
         },
@@ -77,7 +74,6 @@ export class RegisterComponent {
             err?.error?.error ||
             'Registration failed. Please try again.';
           this.errorMessage = msg;
-          this.cdr.detectChanges();
         }
       });
   }
