@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.profile-header h1 {
+  font-size: 1.8rem;
+}
+
+.profile-form .sh-status {
+  margin: 14px 0 0;
+}

@@ -18,16 +18,23 @@ const DEFAULT_DISPLAY_NAME = 'friend';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  readonly displayName: string;
+  readonly displayName$: Observable<string>;
   readonly upcomingAppointments$: Observable<Appointment[]>;
 
   constructor(
     private readonly appointmentService: AppointmentService,
     private readonly authService: AuthService
   ) {
-    // Show remembered username if available; otherwise keep a friendly fallback.
-    this.displayName = this.authService.getUsername() || DEFAULT_DISPLAY_NAME;
+    this.displayName$ = this.loadDisplayName();
     this.upcomingAppointments$ = this.loadUpcomingAppointments();
+  }
+
+  private loadDisplayName(): Observable<string> {
+    const fallbackName = this.authService.getUsername() || DEFAULT_DISPLAY_NAME;
+    return this.authService.getMyFirstName().pipe(
+      map((firstName) => firstName || fallbackName),
+      catchError(() => of(fallbackName))
+    );
   }
 
   private loadUpcomingAppointments(): Observable<Appointment[]> {

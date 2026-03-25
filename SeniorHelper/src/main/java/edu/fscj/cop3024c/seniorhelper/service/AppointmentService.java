@@ -35,6 +35,14 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
+    @Transactional
+    public Appointment createAppointmentForCurrentUser(Integer userId, Appointment appointment) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        appointment.setSenior(user);
+        return appointmentRepository.save(appointment);
+    }
+
     public List<AppointmentDto> findBySeniorId(Integer seniorId) {
         return appointmentRepository.findBySeniorId(seniorId)
                 .stream()
