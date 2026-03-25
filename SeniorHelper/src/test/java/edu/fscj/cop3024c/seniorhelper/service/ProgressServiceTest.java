@@ -12,6 +12,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -115,29 +119,45 @@ class ProgressServiceTest {
         User user = new User();
         user.setId(1);
 
+        Answer correctAnswer = new Answer();
+        correctAnswer.setId(500);
+        correctAnswer.setCorrect(true);
+
+        Question question = new Question();
+        question.setId(1000);
+        question.setAnswers(List.of(correctAnswer));
+
         Quiz quiz = new Quiz();
         quiz.setId(quizId);
         quiz.setName("Safety Quiz");
+        quiz.setQuestions(List.of(question));
 
         Module module = new Module();
         module.setId(moduleId);
         module.setQuiz(quiz);
+
+        Map<Integer, Integer> userAnswers = new HashMap<>();
+        userAnswers.put(1000, 500);
 
         when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
         when(quizCompletionRepository.save(any(QuizCompletion.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // When
-        progressService.completeQuiz(moduleId, quizId, user);
+        progressService.completeQuiz(moduleId, quizId, userAnswers, user);
 
         // Then
         verify(quizCompletionRepository, times(1)).deleteByUserAndQuiz(user, quiz);
+        verify(quizCompletionRepository, times(1)).flush();
+
         ArgumentCaptor<QuizCompletion> captor = ArgumentCaptor.forClass(QuizCompletion.class);
         verify(quizCompletionRepository, times(1)).save(captor.capture());
 
         QuizCompletion saved = captor.getValue();
         assertThat(saved.getUser()).isEqualTo(user);
         assertThat(saved.getQuiz()).isEqualTo(quiz);
+
+        assertThat(saved.getCorrectCount()).isEqualTo(1);
     }
 
     // ---------------------------------------------------------

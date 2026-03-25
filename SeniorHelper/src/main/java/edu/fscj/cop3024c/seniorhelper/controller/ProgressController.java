@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class ProgressController {
@@ -93,8 +95,9 @@ public class ProgressController {
     @PostMapping("/modules/{moduleId}/quiz/{quizId}/complete")
     public ResponseEntity<Void> completeQuiz(@PathVariable Integer moduleId,
                                              @PathVariable Integer quizId,
+                                             @RequestBody Map<Integer, Integer> answers,
                                              @AuthenticationPrincipal User me) {
-        progressService.completeQuiz(moduleId, quizId, me);
+        progressService.completeQuiz(moduleId, quizId, answers, me);
         return ResponseEntity.noContent().build();
     }
 

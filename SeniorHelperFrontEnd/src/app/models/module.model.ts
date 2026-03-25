@@ -21,8 +21,10 @@ export interface Question {
 export interface Quiz {
     id?: number;
     name: string;
+    completed: boolean;
+    correctCount: number;
+    totalCount: number;
     questions?: Question[];
-    completed?: boolean;
 }
 
 export interface Module {

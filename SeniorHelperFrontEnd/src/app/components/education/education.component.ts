@@ -1,6 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Module } from '../../models/module.model';
-import { ModuleService } from '../../services/module.service';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, map } from 'rxjs';

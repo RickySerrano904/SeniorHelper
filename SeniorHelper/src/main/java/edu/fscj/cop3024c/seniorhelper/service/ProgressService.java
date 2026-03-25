@@ -54,10 +54,7 @@ public class ProgressService {
                 .map(c -> c.getLesson().getId())
                 .collect(Collectors.toSet());
 
-        // Completed quiz IDs for this user
-        Set<Integer> completedQuizIds = quizCompletionRepository.findAllByUser(user).stream()
-                .map(c -> c.getQuiz().getId())
-                .collect(Collectors.toSet());
+        List<QuizCompletion> allCompletions = quizCompletionRepository.findAllByUser(user);
 
         List<ProgressDto.Module> moduleDtos = new ArrayList<>();
 
@@ -81,8 +78,15 @@ public class ProgressService {
             // Module's single quiz (if present)
             Quiz quiz = m.getQuiz();
             if (quiz != null) {
-                boolean done = completedQuizIds.contains(quiz.getId());
-                mod.setQuiz(new ProgressDto.Quiz(quiz.getId(), quiz.getName(), done));
+                QuizCompletion qc = allCompletions.stream()
+                        .filter(c -> c.getQuiz().getId().equals(quiz.getId()))
+                        .findFirst().orElse(null);
+
+                boolean done = (qc != null);
+                Integer correct = done ? qc.getCorrectCount() : 0;
+                Integer total = (quiz.getQuestions() != null) ? quiz.getQuestions().size() : 0;
+
+                mod.setQuiz(new ProgressDto.Quiz(quiz.getId(), quiz.getName(), done, correct, total));
             } else {
                 mod.setQuiz(null);
             }
@@ -147,7 +151,7 @@ public class ProgressService {
     // QUIZZES ======================================================
 
     @Transactional
-    public void completeQuiz(Integer moduleId, Integer quizId, User user) {
+    public void completeQuiz(Integer moduleId, Integer quizId, Map<Integer, Integer> answers, User user) {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new NotFoundException("Unable to locate 'Module' ID: " + moduleId));
 
@@ -155,9 +159,24 @@ public class ProgressService {
                 .filter(q -> Objects.equals(q.getId(), quizId))
                 .orElseThrow(() -> new NotFoundException("Quiz " + quizId + " is not associated with Module " + moduleId));
 
+        int correctCount = 0;
+        if (quiz.getQuestions() != null && answers != null) {
+            for (var question : quiz.getQuestions()) {
+                Integer selectedAnswerId = answers.get(question.getId());
+
+                boolean isCorrect = question.getAnswers().stream()
+                        .anyMatch(a -> a.getId().equals(selectedAnswerId) && a.isCorrect());
+
+                if (isCorrect) {
+                    correctCount++;
+                }
+            }
+        }
+
         // Delete any stray/duplicate rows first, then insert exactly one
         quizCompletionRepository.deleteByUserAndQuiz(user, quiz);
-        quizCompletionRepository.save(new QuizCompletion(user, quiz));
+        quizCompletionRepository.flush();
+        quizCompletionRepository.save(new QuizCompletion(user, quiz, correctCount));
     }
 
     @Transactional

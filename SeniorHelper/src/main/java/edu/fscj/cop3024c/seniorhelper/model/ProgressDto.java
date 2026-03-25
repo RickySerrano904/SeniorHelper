@@ -65,12 +65,16 @@ public class ProgressDto {
         private Integer id;
         private String name;
         private boolean completed;
+        private Integer correctCount;
+        private Integer totalCount;
 
         public Quiz() {}
-        public Quiz(Integer id, String name, boolean completed) {
+        public Quiz(Integer id, String name, boolean completed, Integer correctCount, Integer totalCount) {
             this.id = id;
             this.name = name;
             this.completed = completed;
+            this.correctCount = correctCount;
+            this.totalCount = totalCount;
         }
 
         public Integer getId() { return id; }
@@ -81,5 +85,11 @@ public class ProgressDto {
 
         public boolean isCompleted() { return completed; }
         public void setCompleted(boolean completed) { this.completed = completed; }
+
+        public Integer getCorrectCount() { return correctCount; }
+        public void setCorrectCount(Integer correctCount) { this.correctCount = correctCount; }
+
+        public Integer getTotalCount() { return totalCount; }
+        public void setTotalCount(Integer totalCount) { this.totalCount = totalCount; }
     }
 }

@@ -50,8 +50,11 @@ export class ModuleComponent {
                                 };
                             });
 
-                            if (module.quiz) {
-                                module.quiz.completed = moduleProgress.quiz ? moduleProgress.quiz.completed : false;
+                            // Merge Quiz Progress Data
+                            if (module.quiz && moduleProgress.quiz) {
+                                module.quiz.completed = moduleProgress.quiz.completed;
+                                module.quiz.correctCount = moduleProgress.quiz.correctCount || 0;
+                                module.quiz.totalCount = moduleProgress.quiz.totalCount || 0;
                             }
                         }
 

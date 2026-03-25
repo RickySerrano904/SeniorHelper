@@ -68,7 +68,11 @@
       </div>
 
       <button class="btn primary" [routerLink]="['quiz']">
-        {{ module.quiz.completed ? 'Retake Practice Quiz' : 'Take Practice Quiz' }}
+        @if (module.quiz.completed) {
+          Retake Practice Quiz (Last Score: {{ module.quiz.correctCount }}/{{ module.quiz.totalCount }})
+        } @else {
+          Take Practice Quiz
+        }
       </button>
     </div>
   }

@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 import { Quiz } from '../../models/module.model';
 import { firstValueFrom, Observable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-quiz',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, FormsModule],
     templateUrl: './quiz.component.html',
     styleUrls: ['./quiz.component.css']
 })
@@ -16,6 +17,8 @@ import { firstValueFrom, Observable } from 'rxjs';
 export class QuizComponent {
     quiz$: Observable<Quiz>;
     moduleId: number;
+
+    selectedAnswers: { [key: number]: number } = {};
 
     constructor(
         private route: ActivatedRoute, 
@@ -33,7 +36,7 @@ export class QuizComponent {
             const quiz = await firstValueFrom(this.quiz$);
 
             if (quiz && quiz.id) {
-                await firstValueFrom(this.quizService.markAsComplete(this.moduleId, quiz.id));
+                await firstValueFrom(this.quizService.markAsComplete(this.moduleId, quiz.id, this.selectedAnswers));
                 console.log('Quiz marked as complete for quizId:', quiz.id);
             }
 
