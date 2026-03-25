@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Router, RouterLink } from '@angular/router';
@@ -21,8 +21,7 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
   onSubmit(form: NgForm) {
@@ -45,7 +44,6 @@ export class LoginComponent {
           this.authService.persistSession(resp.token, this.username.trim(), this.remember);
           this.successMessage = resp.message || 'Signed in successfully.';
           this.router.navigate(['/home']);
-          this.cdr.detectChanges();
         },
         error: (err) => {
           const msg =
@@ -53,7 +51,6 @@ export class LoginComponent {
             err?.error?.error ||
             'Login failed. Please check your credentials.';
           this.errorMessage = msg;
-          this.cdr.detectChanges();
         }
       });
   }

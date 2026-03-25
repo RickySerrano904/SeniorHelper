@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppointmentService } from '../../services/appointment.service';
 import { Appointment } from '../../models/appointment.model';
@@ -58,8 +58,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private appointmentService: AppointmentService,
-    private cdr: ChangeDetectorRef
+    private appointmentService: AppointmentService
   ) {
     this.appointmentForm = this.fb.group({
       title: ['', Validators.required], notes: [''], location: [''], start: ['', Validators.required], end: ['']
@@ -374,13 +373,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.events = this.mapAppointmentsToEvents(appointments);
         this.refreshHasAppointmentsState();
         this.appointmentsLoaded = true;
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Failed to load appointments', error);
         this.refreshHasAppointmentsState();
         this.appointmentsLoaded = true;
-        this.cdr.detectChanges();
       }
     });
   }

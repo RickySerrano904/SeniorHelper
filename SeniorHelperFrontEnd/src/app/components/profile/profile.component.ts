@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { timeout } from 'rxjs/operators';
@@ -24,8 +24,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -55,12 +54,10 @@ export class ProfileComponent implements OnInit {
           this.saving = false;
           this.authService.clearSession();
           this.router.navigate(['/login']);
-          this.cdr.detectChanges();
         },
         error: (err) => {
           this.saving = false;
           this.errorMessage = this.getErrorMessage(err, 'Could not save your settings. Please try again.');
-          this.cdr.detectChanges();
         }
       });
   }
@@ -80,7 +77,6 @@ export class ProfileComponent implements OnInit {
           this.firstName = profile.firstName;
           this.lastName = profile.lastName;
           this.email = profile.email;
-          this.cdr.detectChanges();
         },
         error: (err) => {
           this.loading = false;
@@ -90,7 +86,6 @@ export class ProfileComponent implements OnInit {
             this.authService.clearSession();
             this.router.navigate(['/login']);
           }
-          this.cdr.detectChanges();
         }
       });
   }
