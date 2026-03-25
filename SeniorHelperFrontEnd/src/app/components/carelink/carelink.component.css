@@ -10,6 +10,7 @@
   margin-bottom: 20px;
   justify-content: center;
   align-items: stretch;
+  background: var(--page-bg);
 }
 
 .back-btn {
@@ -57,7 +58,12 @@
   font-size: clamp(1.7rem, 2.1vw, 2.2rem);
   font-weight: 700;
   line-height: 1.15;
-  color: #111827;
+  color: var(--text-strong);
+}
+
+.connections-card .material-icons {
+  color: var(--accent);
+  margin-right: 12px;
 }
 
 .connection-grid {
@@ -94,7 +100,7 @@
   grid-template-columns: 58px minmax(0, 1fr);
 }
 
-.form {
+.create-connection form {
   margin-bottom: 18px;
   display: flex;
   flex-direction: column; /* Stacks children vertically */
@@ -106,57 +112,58 @@ label {
   margin-bottom: 10px;
   font-weight: 600;
   font-size: 14px;
+  color: var(--text-strong);
 }
 
 
-.form input {
+.create-connection input {
   align-items: center;
   height: 38px;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 2px solid #d7dde2;
+  border: 2px solid var(--input-border);
   background: var(--input-bg);
+  color: var(--text-strong);
+  caret-color: var(--text-strong);
   font-size: 14px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-input {
+.create-connection input:focus {
   outline: none;
-  border-color: #5f8f8b;
-  background-color: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  background-color: var(--card-bg);
 }
 
 
 .submit-btn {
-  width: 100%;
-  border: 0;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+  margin-top: 4px;
 }
 
 .delete-btn {
-  width: 100%;
-  border: 0;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   background: #d06a6a;
   color: #fff;
-  box-shadow: 0 8px 18px rgba(88, 126, 122, 0.28);
+  margin-top: 8px;
+}
+
+.delete-btn:hover {
+  background: #c96b6b;
 }
 
 .connection-item {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--input-border);
   margin-bottom: 10px;
   padding-bottom: 10px;
+}
+
+.create-card h3,
+.view-card h3 {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.create-card p,
+.view-card p {
+  color: var(--text-muted);
 }

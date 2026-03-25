@@ -34,7 +34,7 @@
           Last Name:
           <input type="text" [(ngModel)]="newLastName" name="lastName" required>
           </label>
-          <button type="submit" class="submit-btn">Submit</button>
+          <button type="submit" class="submit-btn sh-btn sh-btn--primary">Submit</button>
           </form>
       </div>
     </aside>
@@ -48,7 +48,7 @@
           <p><strong>{{ conn.caregiverName }}</strong></p>
           <p>{{ conn.role }}</p>
           <p>Connected since: {{ conn.connectedSince | date }}
-          <button class="delete-btn" (click)="deleteConnection(i)">Delete</button>
+          <button class="delete-btn sh-btn" (click)="deleteConnection(i)">Delete</button>
       </div>
       </aside>
   </section>
