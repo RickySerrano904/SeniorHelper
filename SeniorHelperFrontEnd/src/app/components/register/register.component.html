@@ -1,6 +1,6 @@
 <div class="page sh-page">
   <div class="page-content sh-page-content">
-    <main class="register-card sh-form-card" aria-label="Registration form">
+    <main class="register-card sh-form-card sh-form-card--compact" aria-label="Registration form">
       <header class="register-header sh-form-header">
         <h1>Senior Helper</h1>
         <p>Create your account</p>
@@ -76,6 +76,9 @@
 
         <button class="btn primary sh-btn sh-btn--primary" type="submit" [disabled]="loading">
           {{ loading ? 'Registering...' : 'Register' }}
+        </button>
+        <button class="btn secondary sh-btn sh-btn--secondary" type="button" routerLink="/login">
+          Back to Login
         </button>
 
         @if (errorMessage) {
