@@ -1,6 +1,5 @@
-.page-container {
-  justify-content: center;
-  background: var(--page-bg);
+.lesson-page-content {
+  gap: 24px;
 }
 
 .divider {

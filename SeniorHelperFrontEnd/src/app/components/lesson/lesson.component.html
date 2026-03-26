@@ -1,6 +1,7 @@
 @if (lesson$ | async; as lesson) {
 
-<div class="page-container">
+<div class="lesson-page sh-page-shell">
+  <div class="lesson-page-content sh-page-shell-content">
     <!-- Back Navigation -->
     <button class="back-link" [routerLink]="['/education', moduleId]">
       <span class="material-icons">arrow_back</span> Back to Module
@@ -54,6 +55,11 @@
     </footer>
     </div>
 </div>
+  </div>
 } @else {
-  <div class="loader">Fetching lesson details...</div>
+  <div class="lesson-page sh-page-shell">
+    <div class="lesson-page-content sh-page-shell-content">
+      <div class="loader">Fetching lesson details...</div>
+    </div>
+  </div>
 }

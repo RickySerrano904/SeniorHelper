@@ -1,6 +1,5 @@
-.page-container {
-  justify-content: center;
-  background: var(--page-bg);
+.quiz-page-content {
+  gap: 24px;
 }
 
 /* Card Styling */

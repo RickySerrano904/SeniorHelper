@@ -118,6 +118,21 @@ app-profile {
   flex-direction: column;
 }
 
+.sh-page-shell {
+  min-height: 100%;
+  background: var(--page-bg);
+  padding: 22px 24px;
+}
+
+.sh-page-shell-content {
+  width: min(1320px, 100%);
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .page-container {
   display: flex;
   flex-direction: column;
@@ -340,5 +355,11 @@ app-profile {
 @media (max-width: 520px) {
   .sh-form-card {
     padding: 28px 24px;
+  }
+}
+
+@media (max-width: 980px) {
+  .sh-page-shell {
+    padding: 16px;
   }
 }

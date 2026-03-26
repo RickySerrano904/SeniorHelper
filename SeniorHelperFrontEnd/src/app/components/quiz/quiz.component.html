@@ -1,5 +1,6 @@
 @if (quiz$ | async; as quiz) {
-  <div class="page-container">
+  <div class="quiz-page sh-page-shell">
+    <div class="quiz-page-content sh-page-shell-content">
     
     <!-- Back Navigation / Exit Quiz -->
     <button class="back-link" [routerLink]="['/education', moduleId]">
@@ -51,13 +52,16 @@
         Mark Complete & Continue
       </button>
     </div>
+    </div>
   </div>
 } @else {
   
   <!-- Loading state for when the Observable hasn't resolved -->
-  <div class="page-container">
-    <div class="module-header-card">
-      <h1 class="main-title">Loading Quiz...</h1>
+  <div class="quiz-page sh-page-shell">
+    <div class="quiz-page-content sh-page-shell-content">
+      <div class="module-header-card">
+        <h1 class="main-title">Loading Quiz...</h1>
+      </div>
     </div>
   </div>
 }
