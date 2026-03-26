@@ -21,15 +21,15 @@
         <form class="create-form" (ngSubmit)="createConnection()">
           <label>
             User ID
-            <input type="number" [(ngModel)]="newSeniorId" name="seniorId" required />
+            <input type="number" [(ngModel)]="newSeniorId" name="seniorId" placeholder="Placeholder" required />
           </label>
           <label>
             First Name
-            <input type="text" [(ngModel)]="newFirstName" name="firstName" required />
+            <input type="text" [(ngModel)]="newFirstName" name="firstName" placeholder="Placeholder" required />
           </label>
           <label>
             Last Name
-            <input type="text" [(ngModel)]="newLastName" name="lastName" required />
+            <input type="text" [(ngModel)]="newLastName" name="lastName" placeholder="Placeholder" required />
           </label>
           <button type="submit" class="submit-btn sh-btn sh-btn--primary">Submit</button>
         </form>
@@ -49,7 +49,9 @@
               {{ conn.role }} · Connected since {{ conn.connectedSince | date }}
             </p>
           </div>
-          <button type="button" class="delete-btn sh-btn" (click)="deleteConnection(i)">Delete</button>
+          <button class="delete-icon-btn" (click)="deleteConnection(i)">
+            <span class="material-icons">delete_outline</span>
+          </button>
         </div>
       </aside>
     </section>

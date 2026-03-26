@@ -126,6 +126,16 @@
 
 .submit-btn {
   margin-top: 6px;
+  width: 60%;
+  margin: 20px auto 0;
+  display: block;
+  padding: 12px;
+  background-color: #618b82;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .empty-state {
@@ -161,11 +171,11 @@
   font-size: 0.95rem;
 }
 
-.delete-btn.sh-btn {
-  width: auto;
-  min-width: 92px;
-  background: #d06a6a;
-  color: #fff;
+.delete-icon-btn {
+  background: none;
+  border: none;
+  color: #c08484;
+  cursor: pointer;
 }
 
 .delete-btn.sh-btn:hover {

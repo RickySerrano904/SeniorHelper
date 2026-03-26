@@ -25,7 +25,20 @@ export class LessonComponent {
 
     async markAsComplete() {
         const lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
+
+        // 1. Mark current lesson as complete, update progress bar
         await firstValueFrom(this.lessonService.markAsComplete(this.moduleId, lessonId));
-        this.router.navigate(['/education', this.moduleId]);
+
+        // 2. Get the list of lessons to see what is next, if any.
+        const lessons = await firstValueFrom(this.lessonService.getLessonsByModule(this.moduleId));
+        const currentIndex = lessons.findIndex(lesson => lesson.id === lessonId);
+        const nextLesson = lessons[currentIndex + 1];
+
+        if (nextLesson) {
+            console.log(`Moving from ${lessonId} to ${nextLesson.id}`);
+            this.router.navigate(['/education', this.moduleId, 'lessons', nextLesson.id]);
+        } else {
+            this.router.navigate(['/education', this.moduleId]);
+        }
     }
 }

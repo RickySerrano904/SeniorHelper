@@ -30,7 +30,8 @@
                 <div class="radio-container">
                   <input type="radio" 
                          [name]="'q' + question.id" 
-                         [value]="answer.id">
+                         [value]="answer.id"
+                         [(ngModel)]="selectedAnswers[question.id!]">
                   <span class="custom-radio"></span>
                 </div>
                

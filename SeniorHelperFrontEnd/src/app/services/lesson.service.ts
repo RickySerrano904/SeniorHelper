@@ -13,6 +13,10 @@ export class LessonService {
         return this.http.get<Lesson>(`${this.apiUrl}/${moduleId}/lessons/${lessonId}`);
     }
 
+    getLessonsByModule(moduleId: number): Observable<Lesson[]> {
+        return this.http.get<Lesson[]>(`${this.apiUrl}/${moduleId}/lessons`);
+    }
+
     markAsComplete(moduleId: number, lessonId: number): Observable<any> {
         return this.http.post(`${this.apiUrl}/${moduleId}/lessons/${lessonId}/complete`, {});
     }

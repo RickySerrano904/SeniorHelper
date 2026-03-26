@@ -27,13 +27,17 @@ public class QuizCompletion {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
+    @Column(name = "correct_count")
+    private Integer correctCount = 0;
+
     @Column(name = "completed_at", nullable = false, updatable = false)
     private Instant completedAt = Instant.now();
 
     public QuizCompletion() {}
-    public QuizCompletion(User user, Quiz quiz) {
+    public QuizCompletion(User user, Quiz quiz, Integer correctCount) {
         this.user = user;
         this.quiz = quiz;
+        this.correctCount = correctCount;
         this.completedAt = Instant.now();
     }
 
@@ -44,6 +48,9 @@ public class QuizCompletion {
 
     public Quiz getQuiz() { return quiz; }
     public void setQuiz(Quiz quiz) { this.quiz = quiz; }
+
+    public Integer getCorrectCount() { return correctCount; }
+    public void setCorrectCount(Integer correctCount) { this.correctCount = correctCount; }
 
     public Instant getCompletedAt() { return completedAt; }
     public void setCompletedAt(Instant completedAt) { this.completedAt = completedAt; }

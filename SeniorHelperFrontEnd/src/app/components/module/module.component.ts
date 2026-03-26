@@ -38,9 +38,9 @@ export class ModuleComponent {
                     map(({ module, progress }) => {
                         
                         // Find the specific module inside the progress report
-                        const moduleProgress = progress.modules.find((m: any) => m.moduleId === id);
+                        const moduleProgress = progress.modules.find((m: any) => m.id === id);
 
-                        // Merge the 'completed' status into our module object
+                        // Merge the 'completed' status into module object
                         if (moduleProgress) {
                             module.lessons = module.lessons.map(lesson => {
                                 const progLesson = moduleProgress.lessons.find((pl: any) => pl.id === lesson.id);
@@ -50,8 +50,11 @@ export class ModuleComponent {
                                 };
                             });
 
-                            if (module.quiz) {
-                                module.quiz.completed = moduleProgress.quiz ? moduleProgress.quiz.completed : false;
+                            // Merge Quiz Progress Data
+                            if (module.quiz && moduleProgress.quiz) {
+                                module.quiz.completed = moduleProgress.quiz.completed;
+                                module.quiz.correctCount = moduleProgress.quiz.correctCount || 0;
+                                module.quiz.totalCount = moduleProgress.quiz.totalCount || 0;
                             }
                         }
 

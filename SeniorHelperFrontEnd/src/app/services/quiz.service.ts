@@ -14,7 +14,7 @@ export class QuizService {
         return this.http.get<Quiz>(`${this.apiUrl}/${moduleId}/quiz`);
     }
 
-    markAsComplete(moduleId: number, quizId: number): Observable<void> {
-        return this.http.post<void>(`${this.apiUrl}/${moduleId}/quiz/${quizId}/complete`, {});
+    markAsComplete(moduleId: number, quizId: number, answers: any): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${moduleId}/quiz/${quizId}/complete`, answers);
     }
 }

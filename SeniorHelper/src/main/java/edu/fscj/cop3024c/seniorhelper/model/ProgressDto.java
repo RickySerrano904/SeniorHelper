@@ -15,20 +15,23 @@ public class ProgressDto {
 
     // Module ======================================
     public static class Module {
-        private Integer moduleId;
-        private String moduleTitle;
+        private Integer id;
+        private String title;
+        private String description;
         private List<Lesson> lessons;
-
         private Quiz quiz;
 
-        public Integer getModuleId() { return moduleId; }
-        public void setModuleId(Integer moduleId) { this.moduleId = moduleId; }
+        public Integer getId() { return id; }
+        public void setId(Integer id) { this.id = id; }
 
-        public String getModuleTitle() { return moduleTitle; }
-        public void setModuleTitle(String moduleTitle) { this.moduleTitle = moduleTitle; }
+        public String getTitle() { return title; }
+        public void setTitle(String title) { this.title = title; }
 
         public List<Lesson> getLessons() { return lessons; }
         public void setLessons(List<Lesson> lessons) { this.lessons = lessons; }
+
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
 
         public Quiz getQuiz() { return quiz; }
         public void setQuiz(Quiz quiz) { this.quiz = quiz; }
@@ -62,12 +65,16 @@ public class ProgressDto {
         private Integer id;
         private String name;
         private boolean completed;
+        private Integer correctCount;
+        private Integer totalCount;
 
         public Quiz() {}
-        public Quiz(Integer id, String name, boolean completed) {
+        public Quiz(Integer id, String name, boolean completed, Integer correctCount, Integer totalCount) {
             this.id = id;
             this.name = name;
             this.completed = completed;
+            this.correctCount = correctCount;
+            this.totalCount = totalCount;
         }
 
         public Integer getId() { return id; }
@@ -78,5 +85,11 @@ public class ProgressDto {
 
         public boolean isCompleted() { return completed; }
         public void setCompleted(boolean completed) { this.completed = completed; }
+
+        public Integer getCorrectCount() { return correctCount; }
+        public void setCorrectCount(Integer correctCount) { this.correctCount = correctCount; }
+
+        public Integer getTotalCount() { return totalCount; }
+        public void setTotalCount(Integer totalCount) { this.totalCount = totalCount; }
     }
 }

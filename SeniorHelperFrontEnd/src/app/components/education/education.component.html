@@ -1,5 +1,10 @@
 <div class="page">
   <div class="page-content">
+    <!-- Back Navigation -->
+    <button class="back-link" [routerLink]="['/home']">
+      <span class="material-icons">arrow_back</span> Back to Home
+    </button>
+
     <div class="edu-title-box">Learn to Stay Safe Online</div>
 
     <div class="modules-cards-container">
@@ -12,9 +17,10 @@
 
           <p class="module-description">{{ module.description }}</p>
 
-          <button 
-            class="btn primary sh-btn sh-btn--primary"
-            [routerLink]="['/education', module.id]">Start Learning</button>
+          <button class="btn primary" 
+          [routerLink]="['/education', module.id]">
+          {{ getButtonProgress(module) }}
+          </button>
         </div>
       }
     </div>
