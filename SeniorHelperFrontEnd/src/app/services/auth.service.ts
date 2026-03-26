@@ -21,6 +21,7 @@ export interface UpdateProfileRequest {
   email: string;
   firstName: string;
   lastName: string;
+  password?: string;
 }
 
 @Injectable({ providedIn: 'root' })

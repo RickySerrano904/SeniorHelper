@@ -102,7 +102,7 @@ app-footer {
 app-home,
 app-login,
 app-register,
-app-profile {
+app-settings {
   display: block;
   min-height: 100%;
 }
