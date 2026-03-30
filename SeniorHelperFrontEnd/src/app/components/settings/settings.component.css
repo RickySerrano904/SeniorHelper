@@ -8,7 +8,11 @@
 
 .settings-header .main-title {
   margin: 0;
-  font-size: clamp(1.65rem, 2.1vw, 2.1rem);
+  font-size: 38px;
+}
+
+.settings-title {
+  font-size: 38px !important;
 }
 
 .settings-header .description {

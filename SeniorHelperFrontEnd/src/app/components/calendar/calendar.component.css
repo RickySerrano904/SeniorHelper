@@ -34,9 +34,13 @@
   background: transparent;
   color: var(--text-strong);
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 38px;
   margin: 18px 0;
   cursor: pointer;
+}
+
+.calendar-title {
+  font-size: 38px !important;
 }
 
 .title-picker-button:hover {

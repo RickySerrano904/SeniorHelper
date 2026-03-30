@@ -32,7 +32,7 @@
 
 .card-copy h1 {
   margin: 0;
-  font-size: clamp(1.7rem, 2.1vw, 2.2rem);
+  font-size: 38px;
   font-weight: 700;
   line-height: 1.15;
   color: var(--text-strong);
@@ -168,7 +168,7 @@
   }
 
   .card-copy h1 {
-    font-size: 1.45rem;
+    font-size: 38px;
   }
 
 }
