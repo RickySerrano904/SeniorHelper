@@ -16,7 +16,7 @@
         <span class="material-icons">home</span>
       </a>
 
-      <a routerLink="/calendar" class="nav-icon" title="Add Appointment">
+      <a routerLink="/calendar" class="nav-icon" title="Calendar">
         <span class="material-icons">calendar_month</span>
       </a>
 
@@ -28,9 +28,19 @@
         <span class="material-icons">auto_stories</span>
       </a>
 
-      <a routerLink="/profile" class="nav-icon" title="Profile Settings">
+      <a routerLink="/settings" class="nav-icon" title="Settings">
         <span class="material-icons">manage_accounts</span>
       </a>
+
+      <button
+        type="button"
+        class="nav-icon"
+        (click)="toggleTheme()"
+        [attr.title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'"
+        [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        <span class="material-icons">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</span>
+      </button>
 
       <button class="nav-icon logout-button" (click)="clearToken()">Logout</button>
     </div>

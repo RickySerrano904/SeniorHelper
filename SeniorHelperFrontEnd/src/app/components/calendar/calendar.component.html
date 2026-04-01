@@ -1,13 +1,14 @@
-
-
-
 <div class="calendar-layout" (click)="closeContextMenu(); closeMonthYearPicker()">
+  <button class="back-btn calendar-back-btn" type="button" routerLink="/home">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Home</span>
+  </button>
 	<div class="calendar">
 		<header class="cal-header">
 			<button class="nav" (click)="prevMonth()">‹</button>
       <button
         type="button"
-        class="title-picker-button"
+        class="title-picker-button calendar-title"
         (click)="toggleMonthYearPicker($event)">
         {{ monthNames[displayMonth] }} {{ displayYear }}
       </button>

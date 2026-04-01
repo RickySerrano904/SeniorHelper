@@ -43,8 +43,8 @@ public class AuthService {
     @Value("${app.security.jwt.secret:dev-jwt-secret-change-me-please-dev-jwt-secret}")
     private String jwtSecret = "dev-jwt-secret-change-me-please-dev-jwt-secret";
 
-    @Value("${app.security.jwt.ttl-ms:3600000}")
-    private long tokenTtlMs = 60L * 60 * 1000; // 60m default
+    @Value("${app.security.jwt.ttl-ms:86400000}")
+    private long tokenTtlMs = 24L * 60 * 60 * 1000; // 24h default
 
     private volatile JwtEncoder jwtEncoder;
     private volatile JwtDecoder jwtDecoder;

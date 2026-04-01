@@ -1,0 +1,151 @@
+<div class="settings-page sh-page-shell">
+  <div class="settings-page-content sh-page-shell-content">
+    <button class="back-btn" type="button" routerLink="/home">
+      <span class="material-icons">arrow_back</span>
+      <span>Back to Home</span>
+    </button>
+
+    <header class="settings-header module-header-card">
+      <h1 class="main-title settings-title">Settings</h1>
+      <p class="description">Manage account details, general info, and security preferences.</p>
+    </header>
+
+    <div class="settings-layout">
+      <aside class="settings-nav-card content-card" aria-label="Settings sections">
+        <button
+          type="button"
+          class="settings-nav-btn"
+          [class.active]="activeSection === 'account'"
+          (click)="selectSection('account')"
+        >
+          Account
+        </button>
+        <button
+          type="button"
+          class="settings-nav-btn"
+          [class.active]="activeSection === 'security'"
+          (click)="selectSection('security')"
+        >
+          Security
+        </button>
+      </aside>
+
+      <main class="settings-panel content-card" aria-label="Settings panel">
+        @if (loading) {
+          <p class="status sh-status">Loading your settings...</p>
+        } @else if (activeSection === 'account') {
+          <header class="settings-section-header">
+            <h2 class="section-title">Account</h2>
+            <p class="description">Update your name, username, and email.</p>
+          </header>
+
+          <form class="settings-form sh-form" #accountForm="ngForm" (ngSubmit)="saveAccount(accountForm)">
+            <label class="field sh-field readonly-field">
+              <span>User ID:</span>
+              <input type="text" [value]="userId !== null ? '#' + userId : ''" readonly />
+            </label>
+
+            <label class="field sh-field readonly-field">
+              <span>Role:</span>
+              <input type="text" [value]="role" readonly />
+            </label>
+
+            <label class="field sh-field">
+              <span>Username:</span>
+              <input
+                type="text"
+                name="username"
+                [(ngModel)]="username"
+                autocomplete="username"
+                minlength="3"
+                maxlength="50"
+                required
+              />
+            </label>
+
+            <label class="field sh-field">
+              <span>First Name:</span>
+              <input
+                type="text"
+                name="firstName"
+                [(ngModel)]="firstName"
+                autocomplete="given-name"
+                required
+              />
+            </label>
+
+            <label class="field sh-field">
+              <span>Last Name:</span>
+              <input
+                type="text"
+                name="lastName"
+                [(ngModel)]="lastName"
+                autocomplete="family-name"
+                required
+              />
+            </label>
+
+            <label class="field sh-field">
+              <span>Email:</span>
+              <input
+                type="email"
+                name="email"
+                [(ngModel)]="email"
+                autocomplete="email"
+                required
+              />
+            </label>
+
+            <button class="btn primary sh-btn sh-btn--primary" type="submit" [disabled]="saving">
+              {{ saving ? 'Saving...' : 'Save Account Changes' }}
+            </button>
+          </form>
+        } @else {
+          <header class="settings-section-header">
+            <h2 class="section-title">Security</h2>
+            <p class="description">Change your password.</p>
+          </header>
+
+          <form class="settings-form sh-form" #securityForm="ngForm" (ngSubmit)="saveSecurity(securityForm)">
+            <label class="field sh-field">
+              <span>New Password:</span>
+              <input
+                type="password"
+                name="newPassword"
+                [(ngModel)]="newPassword"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              />
+            </label>
+
+            <label class="field sh-field">
+              <span>Confirm New Password:</span>
+              <input
+                type="password"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              />
+            </label>
+
+            <p class="password-note">You will be asked to sign in again after updating your password.</p>
+
+            <button class="btn primary sh-btn sh-btn--primary" type="submit" [disabled]="saving">
+              {{ saving ? 'Saving...' : 'Update Password' }}
+            </button>
+          </form>
+        }
+
+        @if (errorMessage) {
+          <p class="status error sh-status sh-status--error">{{ errorMessage }}</p>
+        }
+        @if (successMessage) {
+          <p class="status success sh-status sh-status--success">{{ successMessage }}</p>
+        }
+      </main>
+    </div>
+  </div>
+</div>

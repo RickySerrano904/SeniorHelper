@@ -21,6 +21,7 @@ export interface UpdateProfileRequest {
   email: string;
   firstName: string;
   lastName: string;
+  password?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -89,6 +90,20 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey) ?? sessionStorage.getItem(this.tokenKey);
   }
 
+  getValidToken(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    if (this.isTokenExpired(token)) {
+      this.clearSession();
+      return null;
+    }
+
+    return token;
+  }
+
   getUsername(): string | null {
     return localStorage.getItem(this.usernameKey) ?? sessionStorage.getItem(this.usernameKey);
   }
@@ -106,6 +121,42 @@ export class AuthService {
 
   // Route guards use this to decide access quickly.
   isAuthenticated(): boolean {
-    return Boolean(this.getToken());
+    return Boolean(this.getValidToken());
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const expiresAtMs = this.getTokenExpiryMs(token);
+    if (!expiresAtMs) {
+      return true;
+    }
+
+    return Date.now() >= expiresAtMs;
+  }
+
+  private getTokenExpiryMs(token: string): number | null {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
+
+    try {
+      const payloadJson = this.decodeBase64Url(parts[1]);
+      const payload = JSON.parse(payloadJson) as { exp?: unknown };
+
+      if (typeof payload.exp !== 'number') {
+        return null;
+      }
+
+      return payload.exp * 1000;
+    } catch {
+      return null;
+    }
+  }
+
+  private decodeBase64Url(value: string): string {
+    const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    const remainder = base64.length % 4;
+    const padding = remainder === 0 ? '' : '='.repeat(4 - remainder);
+    return atob(base64 + padding);
   }
 }

@@ -1,6 +1,7 @@
 @if (lesson$ | async; as lesson) {
 
-<div class="page-container">
+<div class="lesson-page sh-page-shell">
+  <div class="lesson-page-content sh-page-shell-content">
     <!-- Back Navigation -->
     <button class="back-link" [routerLink]="['/education', moduleId]">
       <span class="material-icons">arrow_back</span> Back to Module
@@ -45,15 +46,20 @@
     <footer class="lesson-footer">
 
     <!-- Links back to the specific Module view -->
-        <button class="btn primary" [routerLink]="['/education', moduleId]">
+        <button class="btn primary sh-btn sh-btn--primary" [routerLink]="['/education', moduleId]">
         Back to Module
         </button>
-        <button class="btn primary" (click)="markAsComplete()">
+        <button class="btn primary sh-btn sh-btn--primary" (click)="markAsComplete()">
         Mark Complete & Continue
         </button>
     </footer>
     </div>
 </div>
+  </div>
 } @else {
-  <div class="loader">Fetching lesson details...</div>
+  <div class="lesson-page sh-page-shell">
+    <div class="lesson-page-content sh-page-shell-content">
+      <div class="loader">Fetching lesson details...</div>
+    </div>
+  </div>
 }

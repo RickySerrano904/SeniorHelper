@@ -2,7 +2,8 @@
   <!-- Calculate progress once for the entire template -->
   @let progress = calculateProgress(module.lessons);
 
-  <div class="page-container">
+  <div class="module-page sh-page-shell">
+    <div class="module-page-content sh-page-shell-content">
     <!-- Back Navigation -->
     <button class="back-link" routerLink="/education">
       <span class="material-icons">arrow_back</span> Back to All Modules
@@ -76,5 +77,6 @@
       </button>
     </div>
   }
+    </div>
   </div>
 }

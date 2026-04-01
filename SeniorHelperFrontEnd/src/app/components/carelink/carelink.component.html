@@ -1,12 +1,10 @@
-<div class="carelink-page">
-  <div class="page-content">
-    <button class="back-btn" routerLink="/home">
-      <span class="material-icons">arrow_back</span>
-      <span>Back to Dashboard</span>
+<div class="carelink-page sh-page-shell">
+  <div class="page-content sh-page-shell-content">
+    <button class="back-link" [routerLink]="['/home']">
+      <span class="material-icons">arrow_back</span> Back to Home
     </button>
 
     <section class="connections-card">
-      <span class="material-icons card-icon">groups</span>
       <div class="card-copy">
         <h1>Connections</h1>
         <p>Manage who can help with your schedule.</p>
