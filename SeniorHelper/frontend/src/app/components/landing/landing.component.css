@@ -1,0 +1,98 @@
+.landing-page {
+  padding: 28px 20px 20px;
+}
+
+.landing-content {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.hero-card {
+  width: min(900px, 100%);
+  margin: 10vh auto 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 48px 42px;
+  box-shadow: 0 18px 40px rgba(25, 35, 44, 0.12), 0 2px 6px rgba(25, 35, 44, 0.08);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent-dark);
+}
+
+.hero-card h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.hero-copy {
+  margin: 14px 0 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 62ch;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 18px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-btn.primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.hero-btn.primary:hover {
+  background: var(--accent-dark);
+}
+
+.hero-btn.secondary {
+  background: var(--button-secondary-bg);
+  color: var(--text-strong);
+}
+
+.hero-btn.secondary:hover {
+  background: var(--button-secondary-hover);
+}
+
+@media (max-width: 720px) {
+  .landing-page {
+    padding: 14px 12px 16px;
+  }
+
+  .hero-card {
+    margin-top: 18px;
+    padding: 26px 20px;
+  }
+
+  .hero-copy {
+    font-size: 1rem;
+  }
+
+  .hero-btn {
+    width: 100%;
+  }
+}

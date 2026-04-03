@@ -40,4 +40,8 @@ export class NavbarComponent {
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }
+
+  isLandingPage(): boolean {
+    return this.router.url === '/' || this.router.url.startsWith('/?');
+  }
 }
