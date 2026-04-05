@@ -1,6 +1,10 @@
 export interface CareLinkModel {
-  userId: number;
-  caregiverName: string; // for display
-  role: string;          // e.g., "Caregiver" or "Family"
-  connectedSince: string; // ISO date string
+  id: number;
+  caregiverId: number;
+  caregiverUsername: string;
+  caregiverRole: string;
+  seniorId: number;
+  seniorUsername: string;
+  seniorRole: string;
+  connectedSince?: string; // ISO date string
 }

@@ -20,15 +20,15 @@
         <form class="create-form" (ngSubmit)="createConnection()">
           <label>
             User ID
-            <input type="number" [(ngModel)]="newSeniorId" name="seniorId" placeholder="Placeholder" required />
+            <input type="number" [(ngModel)]="newCaregiverId" name="caregiverId" placeholder="Enter User ID" required />
           </label>
           <label>
             First Name
-            <input type="text" [(ngModel)]="newFirstName" name="firstName" placeholder="Placeholder" required />
+            <input type="text" [(ngModel)]="newFirstName" name="firstName" placeholder="Enter First Name" required />
           </label>
           <label>
             Last Name
-            <input type="text" [(ngModel)]="newLastName" name="lastName" placeholder="Placeholder" required />
+            <input type="text" [(ngModel)]="newLastName" name="lastName" placeholder="Enter Last Name" required />
           </label>
           <button type="submit" class="submit-btn sh-btn sh-btn--primary">Submit</button>
         </form>
@@ -44,8 +44,8 @@
 
         <div *ngFor="let conn of connections; let i = index" class="connection-item">
           <div class="connection-main">
-            <p class="connection-name">{{ conn.caregiverName }}</p>
-            <p class="connection-meta">{{ conn.role }} · Connected since {{ conn.connectedSince | date }}</p>
+            <p class="connection-name">{{ conn.caregiverUsername }}</p>
+            <p class="connection-meta">{{ conn.caregiverRole }} · Connected since {{ conn.connectedSince | date }}</p>
           </div>
           <button class="delete-icon-btn" (click)="deleteConnection(conn)">
             <span class="material-icons">delete_outline</span>
