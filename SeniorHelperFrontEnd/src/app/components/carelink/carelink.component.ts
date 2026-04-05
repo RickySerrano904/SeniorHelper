@@ -2,76 +2,79 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
-// 1. Define the connection interface to ensure type safety
-interface CareLinkModel {
-  caregiverName: string;
-  role: string;
-  connectedSince: Date;
-}
+import { CareLinkService } from '../../services/carelink.service';
+import { AuthService } from '../../services/auth.service';
+import { CareLinkModel } from '../../models/carelink.model';
 
 @Component({
   selector: 'app-carelink',
   standalone: true,
-  // 2. Import CommonModule for *ngFor and FormsModule for [(ngModel)]
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './carelink.component.html',
   styleUrls: ['./carelink.component.css']
 })
 export class CarelinkComponent implements OnInit {
+  connections: CareLinkModel[] = [];
+  currentSeniorId: number | null = null;
 
-  // 3. Form variables to bind to the inputs
-  newSeniorId: number | null = null;
+  newCaregiverId: number | null = null;
   newFirstName: string = '';
   newLastName: string = '';
 
-  // 4. Initial mock data to populate the 'View Connections' grid
-  connections: CareLinkModel[] = [
-    { caregiverName: 'Nolan, Frank', role: 'Caregiver', connectedSince: new Date('2026-01-15') },
-    { caregiverName: 'Hernandez, Julia', role: 'Family', connectedSince: new Date('2026-02-05') },
-    { caregiverName: 'Watson, Eric', role: 'Family', connectedSince: new Date('2026-03-20') }
-  ];
-
-  constructor() { }
+  constructor(
+    private carelinkService: CareLinkService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-  const savedConnections = localStorage.getItem('my_connections');
-  if (savedConnections) {
-    // Convert the saved string back into a JavaScript array
-    this.connections = JSON.parse(savedConnections);
+    this.authService.getMyProfile().subscribe({
+      next: (profile) => {
+        this.currentSeniorId = profile.id;
+        this.loadConnections();
+      },
+      error: (err) => console.error('Could not load user profile', err)
+    });
+  }
+
+  loadConnections(): void {
+  if (this.currentSeniorId) {
+    this.carelinkService.getConnectionsBySenior(this.currentSeniorId)
+      .subscribe({
+        next: (data: CareLinkModel[]) => {
+          this.connections = data; 
+          },
+        error: (err) => console.error(err)
+      });
   }
 }
 
-  // 5. Logic to add a new connection to the right-hand grid
-  createConnection(): void {
-    if (this.newFirstName && this.newLastName && this.newSeniorId) {
-      const newConn: CareLinkModel = {
-        caregiverName: `${this.newFirstName} ${this.newLastName}`,
-        role: 'Caregiver', // Default role for new additions
-        connectedSince: new Date()
-      };
-      
-      this.connections.push(newConn);
-      this.saveToLocalStorage();
+createConnection(): void {
+  if (this.newCaregiverId && this.currentSeniorId) {
+    this.carelinkService.createConnection(this.newCaregiverId, this.currentSeniorId)
+      .subscribe({
+        next: (created: CareLinkModel) => {
+            this.connections.push(created);
+            this.resetForm();
+          },
+        error: (err) => console.error('Error creating connection', err)
+      });
+  }
+}
+
+  deleteConnection(conn: CareLinkModel): void {
+    if (this.currentSeniorId) {
+      this.carelinkService.deleteConnection(conn.caregiverId, this.currentSeniorId)
+        .subscribe({
+          next: () => {
+            this.connections = this.connections.filter(c => c.caregiverId !== conn.caregiverId);
+          },
+          error: (err) => console.error('Error deleting connection', err)
+        });
     }
   }
 
-  // 6. Logic to delete a connection using the index from *ngFor
-  deleteConnection(index: number): void {
-    if (index > -1) {
-      this.connections.splice(index, 1);
-      this.saveToLocalStorage();
-    }
-  }
-
- private saveToLocalStorage(): void {
-  // Save the array as a string so the browser can store it
-  localStorage.setItem('my_connections', JSON.stringify(this.connections));
-} 
-
-  // Helper to clear form after submission
   private resetForm(): void {
-    this.newSeniorId = null;
+    this.newCaregiverId = null;
     this.newFirstName = '';
     this.newLastName = '';
   }

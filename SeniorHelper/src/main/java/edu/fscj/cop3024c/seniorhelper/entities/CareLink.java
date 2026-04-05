@@ -1,6 +1,9 @@
 package edu.fscj.cop3024c.seniorhelper.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -21,6 +24,10 @@ public class CareLink {
     @JoinColumn(name = "senior_id", nullable = false)
     private User senior;
 
+    @CreationTimestamp
+    @Column(name = "connected_since", updatable = false)
+    private LocalDateTime connectedSince;
+
     // Getters / Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -30,4 +37,7 @@ public class CareLink {
 
     public User getSenior() { return senior; }
     public void setSenior(User senior) { this.senior = senior; }
+
+    public LocalDateTime getConnectedSince() { return connectedSince; }
+    public void setConnectedSince(LocalDateTime connectedSince) { this.connectedSince = connectedSince; }
 }

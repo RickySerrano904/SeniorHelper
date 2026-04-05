@@ -1,8 +1,10 @@
 export interface CareLinkModel {
+  id: number;
   caregiverId: number;
-  caregiverName: string;
+  caregiverUsername: string;
+  caregiverRole: string;
   seniorId: number;
-  seniorName: string;
-  role: string;
+  seniorUsername: string;
+  seniorRole: string;
   connectedSince: string;
 }
