@@ -6,5 +6,5 @@ export interface CareLinkModel {
   seniorId: number;
   seniorUsername: string;
   seniorRole: string;
-  connectedSince?: string; // ISO date string
+  connectedSince: string;
 }

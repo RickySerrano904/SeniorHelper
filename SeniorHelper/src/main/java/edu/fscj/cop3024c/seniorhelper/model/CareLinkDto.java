@@ -3,6 +3,7 @@ package edu.fscj.cop3024c.seniorhelper.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Schema(description = "Caregiver-to-Senior link")
 public class CareLinkDto {
@@ -33,11 +34,16 @@ public class CareLinkDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String seniorRole;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime connectedSince;
+
     public CareLinkDto() {}
 
     public CareLinkDto(Integer id,
                        Integer caregiverId, String caregiverUsername, String caregiverRole,
-                       Integer seniorId, String seniorUsername, String seniorRole) {
+                       Integer seniorId, String seniorUsername, String seniorRole,
+                       LocalDateTime connectedSince) {
         this.id = id;
         this.caregiverId = caregiverId;
         this.caregiverUsername = caregiverUsername;
@@ -45,6 +51,7 @@ public class CareLinkDto {
         this.seniorId = seniorId;
         this.seniorUsername = seniorUsername;
         this.seniorRole = seniorRole;
+        this.connectedSince = connectedSince;
     }
 
     // Getters / Setters
@@ -68,4 +75,7 @@ public class CareLinkDto {
 
     public String getSeniorRole() { return seniorRole; }
     public void setSeniorRole(String seniorRole) { this.seniorRole = seniorRole; }
+
+    public LocalDateTime getConnectedSince() { return connectedSince; }
+    public void setConnectedSince(LocalDateTime connectedSince) { this.connectedSince = connectedSince; }
 }

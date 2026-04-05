@@ -15,7 +15,7 @@ import { CareLinkModel } from '../../models/carelink.model';
 })
 export class CarelinkComponent implements OnInit {
   connections: CareLinkModel[] = [];
-  currentSeniorId: number | null = null; // No longer hardcoded
+  currentSeniorId: number | null = null;
 
   newCaregiverId: number | null = null;
   newFirstName: string = '';
@@ -27,7 +27,6 @@ export class CarelinkComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Dynamically get the profile from the server
     this.authService.getMyProfile().subscribe({
       next: (profile) => {
         this.currentSeniorId = profile.id;
@@ -42,29 +41,25 @@ export class CarelinkComponent implements OnInit {
     this.carelinkService.getConnectionsBySenior(this.currentSeniorId)
       .subscribe({
         next: (data: CareLinkModel[]) => {
-          // "Inject" a frontend-only date into each object
-          this.connections = data.map(conn => ({
-            ...conn,
-            connectedSince: new Date().toISOString() // Or any fallback date
-          }));
-        },
+          this.connections = data; 
+          },
         error: (err) => console.error(err)
       });
   }
 }
 
-  createConnection(): void {
-    if (this.newCaregiverId && this.currentSeniorId) {
-      this.carelinkService.createConnection(this.newCaregiverId, this.currentSeniorId)
-        .subscribe({
-          next: (created) => {
+createConnection(): void {
+  if (this.newCaregiverId && this.currentSeniorId) {
+    this.carelinkService.createConnection(this.newCaregiverId, this.currentSeniorId)
+      .subscribe({
+        next: (created: CareLinkModel) => {
             this.connections.push(created);
             this.resetForm();
           },
-          error: (err) => console.error('Error creating connection', err)
-        });
-    }
+        error: (err) => console.error('Error creating connection', err)
+      });
   }
+}
 
   deleteConnection(conn: CareLinkModel): void {
     if (this.currentSeniorId) {
