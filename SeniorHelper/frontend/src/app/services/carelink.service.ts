@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CareLinkModel } from '../models/carelink.model';
 
@@ -7,22 +7,35 @@ import { CareLinkModel } from '../models/carelink.model';
   providedIn: 'root',
 })
 export class CareLinkService {
-  private apiUrl = 'http://localhost:8080/api/carelink';
+  private apiUrl = 'http://localhost:8080/api/care-links';
 
   constructor(private http: HttpClient) {}
 
-  // View all connections
-  viewConnections(): Observable<CareLinkModel[]> {
-    return this.http.get<CareLinkModel[]>(`${this.apiUrl}/view`);
+  // Get all connections for a specific senior
+  getConnectionsBySenior(seniorId: number): Observable<CareLinkModel[]> {
+    const params = new HttpParams().set('seniorId', seniorId);
+    return this.http.get<CareLinkModel[]>(`${this.apiUrl}/by-senior`, {params})
   }
 
-  // Create a new connection
-  createConnection(caregiverId: number, seniorId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, { caregiverId, seniorId });
+  // Get all connections for a specific caregiver
+  getConnectionsByCaregiver(caregiverId: number): Observable<CareLinkModel[]> {
+    const params = new HttpParams().set('caregiverId', caregiverId);
+    return this.http.get<CareLinkModel[]>(`${this.apiUrl}/by-caregiver`, { params });
   }
 
-  // Delete a connection
-  deleteConnection(caregiverId: number, seniorId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/delete`, { caregiverId, seniorId });
+  // Create a new connection between a caregiver and a senior
+  createConnection(caregiverId: number, seniorId: number): Observable<CareLinkModel> {
+    const params = new HttpParams()
+      .set('caregiverId', caregiverId)
+      .set('seniorId', seniorId);
+      return this.http.post<CareLinkModel>(this.apiUrl, null, { params });
+  }
+
+  // Delete a connection between a caregiver and a senior
+  deleteConnection(caregiverId: number, seniorId: number): Observable<void> {
+    const params = new HttpParams()
+      .set('caregiverId', caregiverId)
+      .set('seniorId', seniorId);
+    return this.http.delete<void>(this.apiUrl, { params });
   }
 }
