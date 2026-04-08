@@ -1,0 +1,60 @@
+<nav class="navbar">
+  <div class="navbar-content">
+    <div class="navbar-brand">
+      <a [routerLink]="isLandingPage() ? '/' : '/home'" class="app-name">Senior Helper</a>
+    </div>
+
+    @if (isLandingPage()) {
+      <div class="landing-actions">
+        <button
+          type="button"
+          class="landing-theme-toggle"
+          (click)="toggleTheme()"
+          [attr.title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'"
+          [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        >
+          <span class="material-icons">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</span>
+        </button>
+        <a routerLink="/login" class="landing-auth-button">Sign In / Register</a>
+      </div>
+    } @else {
+      <button class="menu-toggle nav-icon" (click)="toggleMenu()">
+        <span class="material-icons">menu</span>
+      </button>
+
+      <div class="navbar-actions" [class.show]="isMenuOpen">
+        <a routerLink="/home" class="nav-icon" title="Home">
+          <span class="material-icons">home</span>
+        </a>
+
+        <a routerLink="/calendar" class="nav-icon" title="Calendar">
+          <span class="material-icons">calendar_month</span>
+        </a>
+
+        <a routerLink="/connections" class="nav-icon" title="Connections">
+          <span class="material-icons">groups</span>
+        </a>
+
+        <a routerLink="/education" class="nav-icon" title="Education">
+          <span class="material-icons">auto_stories</span>
+        </a>
+
+        <a routerLink="/settings" class="nav-icon" title="Settings">
+          <span class="material-icons">manage_accounts</span>
+        </a>
+
+        <button
+          type="button"
+          class="nav-icon"
+          (click)="toggleTheme()"
+          [attr.title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'"
+          [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        >
+          <span class="material-icons">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</span>
+        </button>
+
+        <button class="nav-icon logout-button" (click)="clearToken()">Logout</button>
+      </div>
+    }
+  </div>
+</nav>

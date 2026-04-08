@@ -1,10 +1,14 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 .navbar {
   background-color: var(--card-bg);
   border-bottom: 1px solid var(--card-border);
   padding: 16px 24px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .navbar-content {
@@ -17,6 +21,54 @@
 .navbar-brand {
   display: flex;
   align-items: center;
+}
+
+.landing-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-theme-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.landing-theme-toggle .material-icons {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.landing-theme-toggle:hover {
+  background: var(--accent-glow);
+  color: var(--accent-dark);
+}
+
+.landing-auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.landing-auth-button:hover {
+  background: var(--accent-dark);
 }
 
 .app-name {
@@ -117,6 +169,17 @@ button {
     border: none;
     outline: none;
     background: none;
+  }
+
+  .landing-auth-button {
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+
+  .landing-theme-toggle {
+    width: 40px;
+    height: 40px;
   }
 
   /* Hide Menu by default */

@@ -247,9 +247,9 @@ INSERT INTO lesson_completions (user_id, lesson_id, completed_at) VALUES
 -- =========================
 -- Quiz Completions
 -- =========================
-INSERT INTO quiz_completions (user_id, quiz_id, completed_at) VALUES
+INSERT INTO quiz_completions (user_id, quiz_id, correct_count,completed_at) VALUES
 -- John finishes Quiz 1 from Module 1
-(7, 1, CURRENT_TIMESTAMP);
+(7, 1, 0, CURRENT_TIMESTAMP);
 
 -- =========================
 -- Appointments
