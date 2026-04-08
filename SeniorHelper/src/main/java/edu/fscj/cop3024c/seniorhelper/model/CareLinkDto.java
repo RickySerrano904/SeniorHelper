@@ -1,6 +1,7 @@
 package edu.fscj.cop3024c.seniorhelper.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -36,6 +37,14 @@ public class CareLinkDto {
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String seniorFirstName;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String seniorLastName;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String seniorUsername;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -52,6 +61,7 @@ public class CareLinkDto {
                        Integer caregiverId, String caregiverUsername, String caregiverRole,
                        String caregiverFirstName, String caregiverLastName,
                        Integer seniorId, String seniorUsername, String seniorRole,
+                       String seniorFirstName, String seniorLastName,
                        LocalDateTime connectedSince) {
         this.id = id;
         this.caregiverId = caregiverId;
@@ -62,6 +72,8 @@ public class CareLinkDto {
         this.seniorId = seniorId;
         this.seniorUsername = seniorUsername;
         this.seniorRole = seniorRole;
+        this.seniorFirstName = seniorFirstName;
+        this.seniorLastName = seniorLastName;
         this.connectedSince = connectedSince;
     }
 
@@ -92,6 +104,9 @@ public class CareLinkDto {
 
     public String getSeniorRole() { return seniorRole; }
     public void setSeniorRole(String seniorRole) { this.seniorRole = seniorRole; }
+
+    public String getSeniorFirstName() { return seniorFirstName; }
+    public void setSeniorFirstName(String name) { this.seniorFirstName = name; }
 
     public LocalDateTime getConnectedSince() { return connectedSince; }
     public void setConnectedSince(LocalDateTime connectedSince) { this.connectedSince = connectedSince; }

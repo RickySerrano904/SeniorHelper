@@ -87,17 +87,36 @@ createConnection(): void {
   }
 }
 
-  deleteConnection(conn: CareLinkModel): void {
-    if (this.currentUserId) {
-      this.carelinkService.deleteConnection(conn.caregiverId, this.currentUserId)
-        .subscribe({
-          next: () => {
-            this.connections = this.connections.filter(c => c.caregiverId !== conn.caregiverId);
-          },
-          error: (err) => console.error('Error deleting connection', err)
-        });
-    }
+deleteConnection(conn: CareLinkModel): void {
+  if (this.currentUserId) {
+    const caregiverId = this.currentUserRole === 'CAREGIVER' ? this.currentUserId : conn.caregiverId;
+    const seniorId = this.currentUserRole === 'CAREGIVER' ? conn.seniorId : this.currentUserId;
+
+    this.carelinkService.deleteConnection(caregiverId, seniorId)
+      .subscribe({
+        next: () => {
+          this.connections = this.connections.filter(c =>
+            this.currentUserRole === 'CAREGIVER'
+              ? c.seniorId !== conn.seniorId
+              : c.caregiverId !== conn.caregiverId
+          );
+        },
+        error: (err) => console.error('Error deleting connection', err)
+      });
   }
+}
+
+  // deleteConnection(conn: CareLinkModel): void {
+  //   if (this.currentUserId) {
+  //     this.carelinkService.deleteConnection(conn.caregiverId, this.currentUserId)
+  //       .subscribe({
+  //         next: () => {
+  //           this.connections = this.connections.filter(c => c.caregiverId !== conn.caregiverId);
+  //         },
+  //         error: (err) => console.error('Error deleting connection', err)
+  //       });
+  //   }
+  // }
 
   private resetForm(): void {
     this.newCaregiverId = null;

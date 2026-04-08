@@ -8,5 +8,7 @@ export interface CareLinkModel {
   seniorId: number;
   seniorUsername: string;
   seniorRole: string;
+  seniorFirstName: string;
+  seniorLastName: string;
   connectedSince: string;
 }

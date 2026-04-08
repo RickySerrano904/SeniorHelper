@@ -63,8 +63,8 @@
         <div *ngFor="let conn of connections" class="connection-item">
           <div class="connection-main">
             <ng-container *ngIf="currentUserRole === 'CAREGIVER'">
-              <p class="connection-name">{{ conn.seniorUsername }}</p>
-              <p class="connection-meta">Connected since {{ conn.connectedSince | date }}</p>
+              <p class="connection-name">{{ conn.seniorFirstName }} {{ conn.seniorLastName }}</p>
+              <p class="connection-meta">@ {{ conn.seniorUsername }} · Connected since {{ conn.connectedSince | date }}</p>
             </ng-container>
             <ng-container *ngIf="currentUserRole === 'SENIOR'">
               <p class="connection-name">{{ conn.caregiverFirstName }} {{ conn.caregiverLastName }}</p>
