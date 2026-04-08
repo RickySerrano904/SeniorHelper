@@ -7,47 +7,73 @@
     <section class="connections-card">
       <div class="card-copy">
         <h1>Connections</h1>
-        <p>Manage who can help with your schedule.</p>
+        <p class="description">
+          Connections let caregivers access and help manage your schedule, appointments, and more. <br>
+          You can create connections with family members or professional caregivers to share important information and coordinate care.</p>
       </div>
     </section>
 
     <section class="connection-grid">
-      <!-- Create Connection Form -->
-      <aside class="create-card">
+      
+      <!-- Create Connection Form (Seniors only) -->
+      <aside class="create-card" *ngIf="currentUserRole === 'SENIOR'">
         <h3>Create Connection</h3>
-        <p>Connect with a new user by entering their information.</p>
+        <p class="description">
+          Enter a caregiver's User ID to link them to your account.<br>
+          Once connected, they'll be able to view and assist with your schedule.
+        </p>
 
         <form class="create-form" (ngSubmit)="createConnection()">
+          <div *ngIf="errorMessage" class="form-error">{{ errorMessage }}</div>
+          <div *ngIf="successMessage" class="form-success">{{ successMessage }}</div>
           <label>
             User ID
             <input type="number" [(ngModel)]="newCaregiverId" name="caregiverId" placeholder="Enter User ID" required />
-          </label>
-          <label>
-            First Name
-            <input type="text" [(ngModel)]="newFirstName" name="firstName" placeholder="Enter First Name" required />
-          </label>
-          <label>
-            Last Name
-            <input type="text" [(ngModel)]="newLastName" name="lastName" placeholder="Enter Last Name" required />
           </label>
           <button type="submit" class="submit-btn sh-btn sh-btn--primary">Submit</button>
         </form>
       </aside>
 
+      <!-- Caregiver Info Panel (shown instead of form for caregivers) -->
+      <aside class="create-card" *ngIf="currentUserRole === 'CAREGIVER'">
+        <h3>Your Role</h3>
+        <p class="description">
+          You are logged in as a caregiver. The seniors listed on the right have linked you to their account.
+          You can view and assist with their schedules once connected.
+        </p>
+      </aside>
+
       <!-- View Connections -->
       <aside class="view-card">
         <h3>Your Connections</h3>
+        <p class="description" *ngIf="currentUserRole === 'SENIOR'">
+          These are the caregivers currently linked to your account.<br>
+          To remove a caregiver, click the trash icon next to their name.
+        </p>
+        <p class="description" *ngIf="currentUserRole === 'CAREGIVER'">
+          These are the seniors who have linked you to their account.<br>
+          To remove a connection, click the trash icon next to their name.
+        </p>
 
         <div *ngIf="connections.length === 0" class="empty-state">
           No connections yet.
+          <span *ngIf="currentUserRole === 'SENIOR'">Add a caregiver using their User ID to get started!</span>
+          <span *ngIf="currentUserRole === 'CAREGIVER'">You have not been linked to any seniors yet.</span>
         </div>
 
-        <div *ngFor="let conn of connections; let i = index" class="connection-item">
+        <div *ngFor="let conn of connections" class="connection-item">
           <div class="connection-main">
-            <p class="connection-name">{{ conn.caregiverUsername }}</p>
-            <p class="connection-meta">{{ conn.caregiverRole }} · Connected since {{ conn.connectedSince | date }}</p>
+            <ng-container *ngIf="currentUserRole === 'CAREGIVER'">
+              <p class="connection-name">{{ conn.seniorFirstName }} {{ conn.seniorLastName }}</p>
+              <p class="connection-meta">@ {{ conn.seniorUsername }} · Connected since {{ conn.connectedSince | date }}</p>
+            </ng-container>
+            <ng-container *ngIf="currentUserRole === 'SENIOR'">
+              <p class="connection-name">{{ conn.caregiverFirstName }} {{ conn.caregiverLastName }}</p>
+              <p class="connection-meta">@ {{ conn.caregiverUsername }} · Connected since {{ conn.connectedSince | date }}</p>
+            </ng-container>
           </div>
-          <button class="delete-icon-btn" (click)="deleteConnection(conn)">
+
+          <button class="delete-icon-btn" (click)="deleteConnection(conn)" title="Remove connection">
             <span class="material-icons">delete_outline</span>
           </button>
         </div>
