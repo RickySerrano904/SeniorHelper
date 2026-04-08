@@ -15,11 +15,11 @@ import { CareLinkModel } from '../../models/carelink.model';
 })
 export class CarelinkComponent implements OnInit {
   connections: CareLinkModel[] = [];
-  currentSeniorId: number | null = null;
-
+  currentUserId: number | null = null;
+  currentUserRole: string | null = null;
   newCaregiverId: number | null = null;
-  newFirstName: string = '';
-  newLastName: string = '';
+  errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(
     private carelinkService: CareLinkService,
@@ -29,53 +29,84 @@ export class CarelinkComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getMyProfile().subscribe({
       next: (profile) => {
-        this.currentSeniorId = profile.id;
+        console.log('role', profile.role);
+        this.currentUserId = profile.id;
+        this.currentUserRole = profile.role;
         this.loadConnections();
       },
       error: (err) => console.error('Could not load user profile', err)
     });
   }
 
-  loadConnections(): void {
-  if (this.currentSeniorId) {
-    this.carelinkService.getConnectionsBySenior(this.currentSeniorId)
-      .subscribe({
-        next: (data: CareLinkModel[]) => {
-          this.connections = data; 
-          },
-        error: (err) => console.error(err)
-      });
-  }
-}
+    loadConnections(): void {
+    if (!this.currentUserId) return;
 
-createConnection(): void {
-  if (this.newCaregiverId && this.currentSeniorId) {
-    this.carelinkService.createConnection(this.newCaregiverId, this.currentSeniorId)
-      .subscribe({
-        next: (created: CareLinkModel) => {
-            this.connections.push(created);
-            this.resetForm();
-          },
-        error: (err) => console.error('Error creating connection', err)
-      });
-  }
-}
-
-  deleteConnection(conn: CareLinkModel): void {
-    if (this.currentSeniorId) {
-      this.carelinkService.deleteConnection(conn.caregiverId, this.currentSeniorId)
+    if (this.currentUserRole === 'CAREGIVER') {
+      this.carelinkService.getConnectionsByCaregiver(this.currentUserId)
         .subscribe({
-          next: () => {
-            this.connections = this.connections.filter(c => c.caregiverId !== conn.caregiverId);
-          },
-          error: (err) => console.error('Error deleting connection', err)
+          next: (data: CareLinkModel[]) => this.connections = data,
+          error: (err) => console.error(err)
+        });
+    } else {
+      this.carelinkService.getConnectionsBySenior(this.currentUserId)
+        .subscribe({
+          next: (data: CareLinkModel[]) => this.connections = data,
+          error: (err) => console.error(err)
         });
     }
   }
 
+createConnection(): void {
+  if (this.newCaregiverId && this.currentUserId) {
+    this.carelinkService.createConnection(this.newCaregiverId, this.currentUserId)
+      .subscribe({
+        next: (created: CareLinkModel) => {
+            this.connections.push(created);
+            this.successMessage = 'Connection created successfully!';
+            this.errorMessage = '';
+            this.resetForm();
+            setTimeout(() => this.successMessage = '', 3000);
+          },
+          error: (err) => {
+            if (err.status === 404) {
+              this.errorMessage = 'No user found with that ID. Please check and try again.';
+            } else if (err.status === 400) {
+              this.errorMessage = 'That user cannot be added as a caregiver.';
+            } else if (err.status === 409) {
+              this.errorMessage = 'That caregiver is already connected to your account.';
+            } else {
+              this.errorMessage = 'Something went wrong. Please try again.';
+            }
+            this.successMessage = '';
+            setTimeout(() => this.errorMessage = '', 3000);
+          }
+      });
+  } else {
+    this.errorMessage = 'Please enter a valid User ID to create a connection.';
+    setTimeout(() => this.errorMessage = '', 3000);
+  }
+}
+
+deleteConnection(conn: CareLinkModel): void {
+  if (this.currentUserId) {
+    const caregiverId = this.currentUserRole === 'CAREGIVER' ? this.currentUserId : conn.caregiverId;
+    const seniorId = this.currentUserRole === 'CAREGIVER' ? conn.seniorId : this.currentUserId;
+
+    this.carelinkService.deleteConnection(caregiverId, seniorId)
+      .subscribe({
+        next: () => {
+          this.connections = this.connections.filter(c =>
+            this.currentUserRole === 'CAREGIVER'
+              ? c.seniorId !== conn.seniorId
+              : c.caregiverId !== conn.caregiverId
+          );
+        },
+        error: (err) => console.error('Error deleting connection', err)
+      });
+  }
+}
+
   private resetForm(): void {
     this.newCaregiverId = null;
-    this.newFirstName = '';
-    this.newLastName = '';
   }
 }
