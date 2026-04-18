@@ -20,7 +20,13 @@
             </a>
           </div>
         </div>
-        <div class="hero-visual" aria-hidden="true"></div>
+        <div class="hero-visual" aria-hidden="true">
+          <img
+            src="images/hero/hero1.jpg"
+            alt="Caregiver assisting a senior with a computer"
+            style="width:100%; height:100%; object-fit:cover; border-radius:15px;"
+          />
+        </div>
       </div>
     </section>
 
@@ -31,9 +37,17 @@
 
       <div class="why-grid">
         <div class="walkthrough-panel" aria-label="Walkthrough preview">
-          <div class="walkthrough-play" aria-hidden="true"></div>
+          <video
+            class="walkthrough-video"
+            controls 
+            muted 
+            playsinLine
+          >
+            <source src="videos/walkthrough2.mp4" type="video/mp4" />
+          </video>
+          <!-- <div class="walkthrough-play" aria-hidden="true"></div>
           <p class="walkthrough-title">Watch a quick 2-minute walkthrough</p>
-          <p class="walkthrough-copy">No sign-in required. Simple and easy to follow.</p>
+          <p class="walkthrough-copy">No sign-in required. Simple and easy to follow.</p> -->
         </div>
 
         <div class="why-list">
@@ -112,7 +126,12 @@
         </article>
 
         <article class="team-member">
-          <div class="member-avatar" aria-hidden="true"></div>
+          <div class="member-avatar member-avatar--initials">DA</div>
+          <!-- <img
+            class="member-avatar"
+            src="images/team/dayne-allen-wright.jpg"
+            alt="Dayne Allen-Wright"
+          /> -->
           <div class="member-meta">
             <h3>Dayne Allen-Wright</h3>
             <p class="member-role">Full-Stack Developer</p>
@@ -121,7 +140,12 @@
         </article>
 
         <article class="team-member">
-          <div class="member-avatar" aria-hidden="true"></div>
+          <div class="member-avatar member-avatar--initials">TJ</div>
+          <!-- <img
+            class="member-avatar"
+            src="images/team/tamia-jenkins.jpg"
+            alt="Tamia Jenkins"
+          /> -->
           <div class="member-meta">
             <h3>Tamia Jenkins</h3>
             <p class="member-role">Full-Stack Developer</p>
