@@ -1,0 +1,24 @@
+.faq-container {
+  padding: 20px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  border-width: thick;
+  background-color: var(--card-bg);
+}
+
+.faq-item h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.inline-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin: 0 4px;
+  color: var(--accent);
+}

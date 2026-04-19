@@ -1,0 +1,7 @@
+<div class="faq-container">
+  <h1>Frequently Asked Questions</h1>
+  <div *ngFor="let faq of faqs" class="faq-item">
+    <h3>{{ faq.question }}</h3>
+    <p [innerHTML]="getFormattedAnswer(faq.answer)"></p>
+  </div>
+</div>
