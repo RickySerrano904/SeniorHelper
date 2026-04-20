@@ -10,6 +10,7 @@ import { CarelinkComponent } from './components/carelink/carelink.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { ReviewComponent } from './components/review/review.component';
 import { guestOnlyGuard, pendingChangesGuard, requireAuthChildGuard } from './components/guards/auth.guard';
 
 export const routes: Routes = [
@@ -28,7 +29,8 @@ export const routes: Routes = [
       { path: 'education/:moduleId', component: ModuleComponent },
       { path: 'education/:moduleId/lessons/:lessonId', component: LessonComponent },
       { path: 'education/:moduleId/quiz', component: QuizComponent },
-      { path: 'calendar', component: CalendarComponent }
+      { path: 'calendar', component: CalendarComponent },
+      { path: 'reviews', component: ReviewComponent }
     ]
   },
   { path: '**', redirectTo: '' }

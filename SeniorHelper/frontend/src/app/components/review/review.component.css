@@ -1,0 +1,185 @@
+.carelink-page {
+  min-height: 100%;
+  background: var(--page-bg);
+  padding: 22px 24px;
+}
+
+.page-content {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  gap: 18px;
+}
+
+.back-btn {
+  width: fit-content;
+  gap: 8px;
+}
+
+.connections-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px 18px;
+}
+
+.card-icon {
+  color: var(--accent);
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+}
+
+.card-copy h1 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.card-copy p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+.connection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.create-card,
+.view-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100%;
+  padding: 18px;
+}
+
+.create-card h3,
+.view-card h3 {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.create-card p,
+.view-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.create-form {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-strong);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.create-form input {
+  height: 38px;
+  padding: 10px 14px;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-strong);
+  caret-color: var(--text-strong);
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.create-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  background: var(--card-bg);
+}
+
+.submit-btn {
+  width: min(240px, 60%);
+  margin: 20px auto 0;
+  padding: 12px;
+  border-radius: 25px;
+}
+
+.empty-state {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-muted);
+}
+
+.form-error {
+  color: #c96b6b;
+  font-size: 16px;
+}
+
+.form-success {
+  color: #6faf8e;
+  font-size: 16px;
+}
+
+.connection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.connection-main {
+  min-width: 0;
+}
+
+.connection-name {
+  margin: 0;
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.connection-meta {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.delete-icon-btn {
+  background: none;
+  border: none;
+  color: #c08484;
+  cursor: pointer;
+}
+
+@media (max-width: 980px) {
+  .carelink-page {
+    padding: 16px;
+  }
+
+  .connection-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .connections-card {
+    padding: 16px;
+  }
+
+  .card-copy h1 {
+    font-size: 38px;
+  }
+
+}
