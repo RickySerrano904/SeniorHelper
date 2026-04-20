@@ -7,8 +7,10 @@
   background-color: var(--card-bg);
   border-top: 1px solid var(--card-border);
   padding: 24px;
-  text-align: center;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer p {
@@ -17,4 +19,23 @@
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.faq-link {
+  cursor: pointer;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transform: scale(2);
+}
+
+.faq-link:hover {
+  color: var(--accent-dark);
+}
+
+.faq-link.active {
+  color: green;
 }
