@@ -28,6 +28,14 @@
         >
           Security
         </button>
+        <button
+          type="button"
+          class="settings-nav-btn"
+          [class.active]="activeSection === 'notifications'"
+          (click)="selectSection('notifications')"
+        >
+          Notifications
+        </button>
       </aside>
 
       <main class="settings-panel content-card" aria-label="Settings panel">
@@ -100,7 +108,7 @@
               {{ saving ? 'Saving...' : 'Save Account Changes' }}
             </button>
           </form>
-        } @else {
+        } @else if (activeSection === 'security') {
           <header class="settings-section-header">
             <h2 class="section-title">Security</h2>
             <p class="description">Change your password.</p>
@@ -137,6 +145,100 @@
               {{ saving ? 'Saving...' : 'Update Password' }}
             </button>
           </form>
+        } @else {
+          <header class="settings-section-header">
+            <h2 class="section-title">Customize Notifications</h2>
+            <p class="description">Choose how long before each appointment a reminder notification should be pushed.</p>
+          </header>
+
+          <div class="notifications-config content-card">
+            <label class="field sh-field notifications-toggle-row">
+              <span>Automatic Notifications:</span>
+              <input
+                type="checkbox"
+                [ngModel]="notificationsEnabled"
+                (ngModelChange)="toggleNotificationsEnabled($event)"
+                name="notificationsEnabled"
+              />
+            </label>
+
+            <label class="field sh-field">
+              <span>Reminder Lead Time:</span>
+              <div class="notification-time-parts">
+                <input
+                  type="number"
+                  [(ngModel)]="notificationLeadDays"
+                  name="notificationLeadDays"
+                  min="0"
+                  max="999"
+                  step="1"
+                  [disabled]="!notificationsEnabled || notifying"
+                />
+                <span class="notification-time-label">Days</span>
+
+                <input
+                  type="number"
+                  [(ngModel)]="notificationLeadHours"
+                  name="notificationLeadHours"
+                  min="0"
+                  max="999"
+                  step="1"
+                  [disabled]="!notificationsEnabled || notifying"
+                />
+                <span class="notification-time-label">Hours</span>
+
+                <input
+                  type="number"
+                  [(ngModel)]="notificationLeadMinutes"
+                  name="notificationLeadMinutes"
+                  min="0"
+                  max="999"
+                  step="1"
+                  [disabled]="!notificationsEnabled || notifying"
+                />
+                <span class="notification-time-label">Minutes</span>
+              </div>
+            </label>
+
+            <button
+              class="btn secondary sh-btn"
+              type="button"
+              (click)="saveReminderPreferences()"
+              [disabled]="notifying"
+            >
+              Save Reminder Settings
+            </button>
+          </div>
+
+          <div class="notifications-actions">
+            <button
+              class="btn secondary sh-btn"
+              type="button"
+              (click)="requestNotificationPermission()"
+              [disabled]="notifying"
+            >
+              Allow Notifications
+            </button>
+
+            <button
+              class="btn primary sh-btn sh-btn--primary"
+              type="button"
+              (click)="pushUpcomingAppointmentsNotification()"
+              [disabled]="notifying"
+            >
+              {{ notifying ? 'Sending...' : 'Send Upcoming Appointments Notification' }}
+            </button>
+          </div>
+
+          @if (notificationStatus) {
+            <p class="status sh-status">{{ notificationStatus }}</p>
+          }
+
+          @if (!notificationsSupported) {
+            <p class="status sh-status sh-status--error">
+              Notifications are not supported in this browser.
+            </p>
+          }
         }
 
         @if (errorMessage) {

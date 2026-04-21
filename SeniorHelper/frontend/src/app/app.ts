@@ -4,6 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NotificationReminderService } from './services/notification-reminder.service';
 import { ThemeService } from './services/theme.service';
 
 @Component({
@@ -19,9 +20,11 @@ export class App {
 
   constructor(
     private router: Router,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private notificationReminderService: NotificationReminderService
   ) {
     this.themeService.initTheme();
+    this.notificationReminderService.init();
   }
 
   isNotLoginPage(): boolean {

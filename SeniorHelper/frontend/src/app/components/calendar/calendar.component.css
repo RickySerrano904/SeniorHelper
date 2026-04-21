@@ -114,6 +114,8 @@
 .calendar-actions {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 12px;
   margin: 0 0 20px;
 }
 
@@ -132,6 +134,31 @@
   background: var(--accent-glow);
 }
 
+.toggle-delete-btn {
+  padding: 10px 18px;
+  border: 1px solid #b91c1c;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle-delete-btn:hover {
+  background: #fecaca;
+}
+
+.toggle-delete-btn.active {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.calendar-layout.delete-mode-enabled .day,
+.calendar-layout.delete-mode-enabled .event-title {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cline x1='5' y1='5' x2='19' y2='19' stroke='%23b91c1c' stroke-width='2.6' stroke-linecap='round'/%3E%3Cline x1='19' y1='5' x2='5' y2='19' stroke='%23b91c1c' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, crosshair;
+}
+
 .weekday-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -146,7 +173,7 @@
 
 .cal-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-auto-rows: minmax(80px, 1fr);
   gap: 0;
   flex: 1;
@@ -154,6 +181,8 @@
 
 .day {
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   padding: 12px 8px;
   position: relative;
   border: none;
@@ -204,12 +233,18 @@
   margin-top: 6px;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 2px;
   max-height: 64px;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
 .event-title {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   font-size: 1.2rem;
   color: var(--text-muted);
   line-height: 1.2;
@@ -356,6 +391,23 @@
   background: var(--card-bg);
   color: var(--text-strong);
   font-size: 14px;
+}
+
+.specific-reminder-block {
+  margin: 8px 0 10px;
+  padding: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+}
+
+.specific-reminder-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  font-size: 0.85rem;
 }
 
 .button-row {

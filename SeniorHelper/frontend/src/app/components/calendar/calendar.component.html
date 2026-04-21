@@ -1,4 +1,7 @@
-<div class="calendar-layout" (click)="closeContextMenu(); closeMonthYearPicker()">
+<div
+  class="calendar-layout"
+  [class.delete-mode-enabled]="isDeleteModeEnabled"
+  (click)="closeContextMenu(); closeMonthYearPicker()">
   <button class="back-btn calendar-back-btn" type="button" routerLink="/home">
     <span class="material-icons">arrow_back</span>
     <span>Back to Home</span>
@@ -14,17 +17,22 @@
       </button>
 			<button class="nav" (click)="nextMonth()">›</button>
 
-      <div class="month-year-picker" *ngIf="isMonthYearPickerOpen" (click)="onMonthYearSelectionClick($event)">
+      @if (isMonthYearPickerOpen) {
+      <div class="month-year-picker" (click)="onMonthYearSelectionClick($event)">
         <label>
           Month
           <select [(ngModel)]="pickerMonth" [ngModelOptions]="{ standalone: true }">
-            <option *ngFor="let monthName of monthNames; let idx = index" [ngValue]="idx">{{ monthName }}</option>
+            @for (monthName of monthNames; track monthName; let idx = $index) {
+            <option [ngValue]="idx">{{ monthName }}</option>
+            }
           </select>
         </label>
         <label>
           Year
           <select [(ngModel)]="pickerYear" [ngModelOptions]="{ standalone: true }">
-            <option *ngFor="let year of yearOptions" [ngValue]="year">{{ year }}</option>
+            @for (year of yearOptions; track year) {
+            <option [ngValue]="year">{{ year }}</option>
+            }
           </select>
         </label>
         <div class="picker-actions">
@@ -32,46 +40,76 @@
           <button type="button" class="picker-btn picker-btn-cancel" (click)="closeMonthYearPicker()">Cancel</button>
         </div>
       </div>
+      }
 		</header>
 
     <div class="calendar-actions">
       <button type="button" class="add-appointment-btn" (click)="openAddAppointmentFromButton()">
-        Add New Appointment
+        New Appointment
+      </button>
+      <button
+        type="button"
+        class="toggle-delete-btn"
+        [class.active]="isDeleteModeEnabled"
+        [attr.aria-pressed]="isDeleteModeEnabled"
+        (click)="toggleDeleteMode()">
+        {{ isDeleteModeEnabled ? 'Exit Delete Mode' : 'Delete Appointment' }}
       </button>
     </div>
 
     <div class="weekday-row">
-      <div class="weekday" *ngFor="let wd of weekDays">{{ wd }}</div>
+      @for (wd of weekDays; track wd) {
+      <div class="weekday">{{ wd }}</div>
+      }
     </div>
 
 		<div class="cal-grid">
-      <ng-container *ngFor="let week of weeks">
-        <div class="day" *ngFor="let day of week" [class.outside]="!day.inMonth" [class.holiday]="getHolidayName(day)" [class.has-events]="hasEvents(day)" (click)="openAddAppointment($event, day)" (contextmenu)="openDayMenu($event, day)">
+      @for (week of weeks; track $index) {
+        @for (day of week; track day.iso) {
+        <div class="day" [class.outside]="!day.inMonth" [class.holiday]="getHolidayName(day)" [class.has-events]="hasEvents(day)" (click)="openAddAppointment($event, day)" (contextmenu)="openDayMenu($event, day)">
 					<div class="day-num">{{ day.date.getDate() }}</div>
-          <div class="today-badge" *ngIf="isToday(day)">Today</div>
-          <div class="holiday-badge" *ngIf="getHolidayName(day)">
+          @if (isToday(day)) {
+          <div class="today-badge">Today</div>
+          }
+          @if (getHolidayName(day)) {
+          <div class="holiday-badge">
             {{ getHolidayName(day) }}
           </div>
-          <div class="event-list" *ngIf="events[day.iso] && events[day.iso].length > 0">
-            <div class="event-title" *ngFor="let appointment of events[day.iso]" (click)="openEditFromTitle($event, appointment)" (contextmenu)="openAppointmentMenu($event, day, appointment)">{{ appointment.title }}</div>
+          }
+          @if (events[day.iso] && events[day.iso].length > 0) {
+          <div class="event-list">
+            @for (appointment of events[day.iso]; track appointment.id ?? appointment.title) {
+            <div class="event-title" (click)="openEditFromTitle($event, appointment)" (contextmenu)="openAppointmentMenu($event, day, appointment)">{{ appointment.title }}</div>
+            }
           </div>
+				  }
 				</div>
-			</ng-container>
+			  }
+			}
 		</div>
 
-    <div class="month-empty" *ngIf="appointmentsLoaded && !hasAppointmentsThisMonth">
+    @if (appointmentsLoaded && !hasAppointmentsThisMonth) {
+    <div class="month-empty">
       No appointments this month.
     </div>
+	  }
 	</div>
 </div>
 
-<div class="appointment-context-menu" *ngIf="contextMenuVisible" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
+@if (contextMenuVisible) {
+<div class="appointment-context-menu" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
   <button type="button" class="context-item" (click)="openAddFromMenu()">Add Appointment</button>
-  <button type="button" class="context-item" *ngIf="contextMenuAppointment" (click)="openEditFromMenu()">Edit Appointment</button>
-  <button type="button" class="context-item danger" *ngIf="contextMenuAppointment" (click)="deleteFromMenu()">Delete Appointment</button>
+  @if (contextMenuAppointment) {
+  <button type="button" class="context-item" (click)="openEditFromMenu()">Edit Appointment</button>
+  }
+  @if (contextMenuAppointment) {
+  <button type="button" class="context-item danger" (click)="deleteFromMenu()">Delete Appointment</button>
+  }
 </div>
+}
 
-<div class="appointment-modal-backdrop" *ngIf="isAddAppointmentOpen" (click)="cancel()">
+@if (isAddAppointmentOpen) {
+<div class="appointment-modal-backdrop" (click)="cancel()">
   <div class="appointment-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h2>{{ editingAppointmentId ? 'Edit Appointment' : 'Add New Appointment' }}</h2>
@@ -84,9 +122,11 @@
         Title
         <input type="text" formControlName="title" />
       </label>
-      <div class="form-error" *ngIf="appointmentForm.get('title')?.touched && appointmentForm.get('title')?.invalid">
+      @if (appointmentForm.get('title')?.touched && appointmentForm.get('title')?.invalid) {
+      <div class="form-error">
         Title is required.
       </div>
+      }
 
       <label>
         Notes
@@ -102,18 +142,45 @@
         Start
         <input type="datetime-local" formControlName="start" />
       </label>
-      <div class="form-error" *ngIf="appointmentForm.get('start')?.touched && appointmentForm.get('start')?.invalid">
+      @if (appointmentForm.get('start')?.touched && appointmentForm.get('start')?.invalid) {
+      <div class="form-error">
         Start date/time is required.
       </div>
+      }
 
       <label>
         End (optional)
         <input type="datetime-local" formControlName="end" />
       </label>
 
-      <div class="form-error" *ngIf="appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start">
+      <div class="specific-reminder-block">
+        <label class="specific-reminder-toggle">
+          <input
+            type="checkbox"
+            [ngModel]="useSpecificReminderTime"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onSpecificReminderToggle($event)"
+          />
+          Set specific reminder
+        </label>
+
+        @if (useSpecificReminderTime) {
+        <label>
+          Reminder Time
+          <input
+            type="datetime-local"
+            [(ngModel)]="specificReminderTime"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </label>
+        }
+      </div>
+
+      @if (appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start) {
+      <div class="form-error">
         End date/time must be after start date/time.
       </div>
+      }
 
       <div class="button-row">
         <button type="button" class="form-btn btn-cancel" (click)="cancel()">
@@ -124,15 +191,22 @@
           Submit
         </button>
 
-        <span class="submit-loading" *ngIf="isSubmitting" aria-live="polite">
+        @if (isSubmitting) {
+        <span class="submit-loading" aria-live="polite">
           <span class="loading-spinner" aria-hidden="true"></span>
           Saving...
         </span>
+        }
       </div>
 
-      <div class="form-error" *ngIf="submitError">{{ submitError }}</div>
-      <div class="form-success" *ngIf="submitSuccess">{{ submitSuccess }}</div>
+      @if (submitError) {
+      <div class="form-error">{{ submitError }}</div>
+      }
+      @if (submitSuccess) {
+      <div class="form-success">{{ submitSuccess }}</div>
+      }
     </form>
   </div>
 </div>
+}
 

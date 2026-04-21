@@ -86,6 +86,46 @@
   color: var(--text-muted);
 }
 
+.notifications-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.notifications-config {
+  margin-bottom: 14px;
+  padding: 16px;
+}
+
+.notifications-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notifications-toggle-row input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
+
+.notification-time-parts {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.notification-time-parts input[type='number'] {
+  width: 92px;
+}
+
+.notification-time-label {
+  min-width: 58px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
 .settings-panel .sh-status {
   margin-top: 14px;
 }
@@ -103,5 +143,9 @@
   .settings-nav-btn {
     flex: 1;
     text-align: center;
+  }
+
+  .notifications-actions .sh-btn {
+    width: 100%;
   }
 }

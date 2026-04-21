@@ -1,0 +1,328 @@
+import { Injectable } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { timeout } from 'rxjs/operators';
+import { Appointment } from '../models/appointment.model';
+import { AppointmentService } from './appointment.service';
+import { AuthService } from './auth.service';
+
+export interface NotificationReminderPreferences {
+  enabled: boolean;
+  leadMinutes: number;
+}
+
+@Injectable({ providedIn: 'root' })
+export class NotificationReminderService {
+  private readonly requestTimeoutMs = 10000;
+  private readonly reminderPollIntervalMs = 60 * 1000;
+  private readonly defaultReminderLeadMinutes = 30;
+  private readonly maxReminderLeadMinutes = (999 * 24 * 60) + (999 * 60) + 999;
+  private readonly notificationsSupported = typeof window !== 'undefined' && 'Notification' in window;
+  private initialized = false;
+  private currentUserId: number | null = null;
+  private reminderIntervalId: ReturnType<typeof setInterval> | null = null;
+  private reminderCheckInProgress = false;
+  private profileLookupInProgress = false;
+
+  constructor(
+    private readonly authService: AuthService,
+    private readonly appointmentService: AppointmentService,
+    private readonly router: Router
+  ) {}
+
+  init(): void {
+    if (this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => this.syncWithSession());
+
+    this.syncWithSession();
+  }
+
+  loadPreferences(userId: number | null): NotificationReminderPreferences {
+    const storedEnabled = this.readPreference(userId, 'enabled');
+    const storedLeadMinutes = Number(this.readPreference(userId, 'leadMinutes'));
+
+    return {
+      enabled: storedEnabled === 'true',
+      leadMinutes: this.isValidLeadMinutes(storedLeadMinutes)
+        ? storedLeadMinutes
+        : this.defaultReminderLeadMinutes
+    };
+  }
+
+  savePreferences(userId: number | null, preferences: NotificationReminderPreferences): void {
+    if (userId === null) {
+      return;
+    }
+
+    this.persistPreference(userId, 'enabled', String(preferences.enabled));
+    this.persistPreference(userId, 'leadMinutes', String(preferences.leadMinutes));
+  }
+
+  getAppointmentReminderOverride(userId: number | null, appointmentId: number | null | undefined): string | null {
+    if (userId === null || appointmentId == null) {
+      return null;
+    }
+
+    const overrides = this.readAppointmentOverrides(userId);
+    return overrides[String(appointmentId)] ?? null;
+  }
+
+  setAppointmentReminderOverride(userId: number | null, appointmentId: number | null | undefined, reminderAt: string | null): void {
+    if (userId === null || appointmentId == null) {
+      return;
+    }
+
+    const overrides = this.readAppointmentOverrides(userId);
+    const key = String(appointmentId);
+
+    if (!reminderAt || !reminderAt.trim()) {
+      delete overrides[key];
+    } else {
+      overrides[key] = reminderAt.trim();
+    }
+
+    this.persistPreference(userId, 'appointmentOverrides', JSON.stringify(overrides));
+  }
+
+  refreshForUser(userId: number | null): void {
+    this.currentUserId = userId;
+
+    if (userId === null || !this.authService.isAuthenticated()) {
+      this.stop();
+      return;
+    }
+
+    this.startReminderPolling();
+  }
+
+  private syncWithSession(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.stop();
+      return;
+    }
+
+    if (this.currentUserId !== null) {
+      this.startReminderPolling();
+      return;
+    }
+
+    if (this.profileLookupInProgress) {
+      return;
+    }
+
+    this.profileLookupInProgress = true;
+
+    this.authService.getMyProfile().pipe(timeout(this.requestTimeoutMs)).subscribe({
+      next: (profile) => {
+        this.profileLookupInProgress = false;
+        this.currentUserId = profile.id;
+        this.startReminderPolling();
+      },
+      error: () => {
+        this.profileLookupInProgress = false;
+      }
+    });
+  }
+
+  private startReminderPolling(): void {
+    this.clearReminderInterval();
+
+    if (
+      this.currentUserId === null ||
+      !this.notificationsSupported ||
+      Notification.permission !== 'granted'
+    ) {
+      return;
+    }
+
+    const preferences = this.loadPreferences(this.currentUserId);
+    if (!preferences.enabled || !this.isValidLeadMinutes(preferences.leadMinutes)) {
+      return;
+    }
+
+    void this.checkAppointmentReminders();
+    this.reminderIntervalId = setInterval(() => {
+      void this.checkAppointmentReminders();
+    }, this.reminderPollIntervalMs);
+  }
+
+  private async checkAppointmentReminders(): Promise<void> {
+    if (
+      this.reminderCheckInProgress ||
+      this.currentUserId === null ||
+      !this.notificationsSupported ||
+      Notification.permission !== 'granted'
+    ) {
+      return;
+    }
+
+    const preferences = this.loadPreferences(this.currentUserId);
+    if (!preferences.enabled || !this.isValidLeadMinutes(preferences.leadMinutes)) {
+      return;
+    }
+
+    this.reminderCheckInProgress = true;
+
+    try {
+      const appointments = await firstValueFrom(
+        this.appointmentService.getMyAppointments().pipe(timeout(this.requestTimeoutMs))
+      );
+      const nowMs = Date.now();
+      const appointmentOverrides = this.readAppointmentOverrides(this.currentUserId);
+      const notifiedKeys = this.readNotifiedReminderKeys(this.currentUserId);
+      const nextNotifiedKeys = new Set<string>();
+
+      for (const appointment of appointments ?? []) {
+        if (!appointment.start) {
+          continue;
+        }
+
+        const appointmentStartMs = new Date(appointment.start).getTime();
+        if (Number.isNaN(appointmentStartMs) || appointmentStartMs <= nowMs) {
+          continue;
+        }
+
+        const overrideReminderAt = appointment.id != null ? appointmentOverrides[String(appointment.id)] : undefined;
+        const overrideReminderAtMs = overrideReminderAt ? new Date(overrideReminderAt).getTime() : NaN;
+        const hasOverride = Number.isFinite(overrideReminderAtMs);
+        const reminderAtMs = hasOverride
+          ? overrideReminderAtMs
+          : appointmentStartMs - preferences.leadMinutes * 60 * 1000;
+        const reminderKey = hasOverride
+          ? this.buildReminderOverrideKey(appointment, overrideReminderAt as string)
+          : this.buildReminderKey(appointment, preferences.leadMinutes);
+
+        if (reminderAtMs > appointmentStartMs) {
+          continue;
+        }
+
+        if (notifiedKeys.has(reminderKey)) {
+          nextNotifiedKeys.add(reminderKey);
+          continue;
+        }
+
+        if (reminderAtMs <= nowMs) {
+          const title = (appointment.title || 'Appointment').trim();
+          const startTime = new Date(appointmentStartMs).toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: '2-digit'
+          });
+
+          new Notification('Upcoming appointment', {
+            body: `${title} starts at ${startTime}`
+          });
+          nextNotifiedKeys.add(reminderKey);
+        }
+      }
+
+      this.persistNotifiedReminderKeys(this.currentUserId, nextNotifiedKeys);
+    } catch {
+      // Ignore background reminder fetch errors.
+    } finally {
+      this.reminderCheckInProgress = false;
+    }
+  }
+
+  private stop(): void {
+    this.currentUserId = null;
+    this.clearReminderInterval();
+  }
+
+  private clearReminderInterval(): void {
+    if (this.reminderIntervalId !== null) {
+      clearInterval(this.reminderIntervalId);
+      this.reminderIntervalId = null;
+    }
+  }
+
+  private isValidLeadMinutes(value: number): boolean {
+    return Number.isFinite(value) && Number.isInteger(value) && value >= 0 && value <= this.maxReminderLeadMinutes;
+  }
+
+  private notificationPrefKey(userId: number | null, suffix: string): string {
+    const userPart = userId ?? 'anonymous';
+    return `settings.notifications.${userPart}.${suffix}`;
+  }
+
+  private persistPreference(userId: number | null, suffix: string, value: string): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(this.notificationPrefKey(userId, suffix), value);
+  }
+
+  private readPreference(userId: number | null, suffix: string): string | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    return window.localStorage.getItem(this.notificationPrefKey(userId, suffix));
+  }
+
+  private readAppointmentOverrides(userId: number | null): Record<string, string> {
+    const raw = this.readPreference(userId, 'appointmentOverrides');
+    if (!raw) {
+      return {};
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return {};
+      }
+
+      const overrides: Record<string, string> = {};
+      for (const [key, value] of Object.entries(parsed)) {
+        if (typeof value === 'string' && value.trim().length > 0) {
+          overrides[key] = value;
+        }
+      }
+
+      return overrides;
+    } catch {
+      return {};
+    }
+  }
+
+  private buildReminderKey(appointment: Appointment, leadMinutes: number): string {
+    const idPart = appointment.id ?? 'na';
+    const startPart = appointment.start ?? 'na';
+    return `${idPart}|${startPart}|${leadMinutes}`;
+  }
+
+  private buildReminderOverrideKey(appointment: Appointment, reminderAt: string): string {
+    const idPart = appointment.id ?? 'na';
+    const startPart = appointment.start ?? 'na';
+    return `${idPart}|${startPart}|override|${reminderAt}`;
+  }
+
+  private readNotifiedReminderKeys(userId: number | null): Set<string> {
+    const raw = this.readPreference(userId, 'notifiedReminderKeys');
+    if (!raw) {
+      return new Set<string>();
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) {
+        return new Set<string>();
+      }
+
+      return new Set<string>(parsed.filter((value) => typeof value === 'string'));
+    } catch {
+      return new Set<string>();
+    }
+  }
+
+  private persistNotifiedReminderKeys(userId: number | null, keys: Set<string>): void {
+    this.persistPreference(userId, 'notifiedReminderKeys', JSON.stringify(Array.from(keys)));
+  }
+}
