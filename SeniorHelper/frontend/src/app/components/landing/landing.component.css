@@ -107,11 +107,19 @@
   transform: translateY(-1px);
 }
 
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15;
+}
+
 .hero-visual {
   border-radius: 15px;
   background: rgba(103, 155, 150, 0.28);
   border: 1px solid rgba(103, 155, 150, 0.28);
   min-height: 300px;
+  object-fit: cover;
 }
 
 .team-card {
@@ -163,7 +171,8 @@
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 1px solid rgba(103, 155, 150, 0.35);
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
   background: rgba(103, 155, 150, 0.22);
   color: var(--accent-dark);
   display: flex;
@@ -172,6 +181,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   flex-shrink: 0;
+  object-fit: cover;
 }
 
 .member-meta h3 {
@@ -238,50 +248,18 @@
 }
 
 .walkthrough-panel {
-  min-height: 420px;
+  min-height: auto; 
   border-radius: 12px;
   border: 1px solid rgba(103, 155, 150, 0.28);
-  background: rgba(103, 155, 150, 0.28);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 28px 22px;
+  padding: 20px;
+  background: var(--card-bg);
 }
 
-.walkthrough-play {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.walkthrough-play::before {
-  content: '';
-  margin-left: 4px;
-  width: 0;
-  height: 0;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid transparent;
-  border-left: 20px solid #ffffff;
-}
-
-.walkthrough-title {
-  margin: 26px 0 0;
-  color: var(--text-strong);
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-.walkthrough-copy {
-  margin: 8px 0 0;
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  line-height: 1.4;
+.walkthrough-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
 }
 
 .why-list h3 {
@@ -458,26 +436,6 @@
   .walkthrough-panel {
     min-height: 240px;
     padding: 20px 14px;
-  }
-
-  .walkthrough-play {
-    width: 62px;
-    height: 62px;
-  }
-
-  .walkthrough-play::before {
-    border-top-width: 10px;
-    border-bottom-width: 10px;
-    border-left-width: 16px;
-  }
-
-  .walkthrough-title {
-    margin-top: 16px;
-    font-size: 0.95rem;
-  }
-
-  .walkthrough-copy {
-    font-size: 0.84rem;
   }
 
   .why-list h3 {
