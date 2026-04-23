@@ -31,12 +31,23 @@ public class CareLinkController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("@permissionChecker.hasPermission(principal, #seniorId)")
-    public CareLinkDto create(
+    public CareLinkDto createRequest(
             @RequestParam @NotNull @Positive Integer caregiverId,
             @RequestParam @NotNull @Positive Integer seniorId
     ) {
-        CareLink saved = service.link(caregiverId, seniorId);
-        logger.info("Linked caregiver {} to senior {}", caregiverId, seniorId);
+        CareLink saved = service.requestLink(caregiverId, seniorId);
+        logger.info("Created care link request for caregiver {} and senior {}", caregiverId, seniorId);
+        return CareLinkMapper.toDto(saved);
+    }
+
+    @PostMapping("/approve")
+    @PreAuthorize("hasRole('ADMIN') or principal.id == #caregiverId")
+    public CareLinkDto approve(
+            @RequestParam @NotNull @Positive Integer caregiverId,
+            @RequestParam @NotNull @Positive Integer seniorId
+    ) {
+        CareLink saved = service.approve(caregiverId, seniorId);
+        logger.info("Approved care link between caregiver {} and senior {}", caregiverId, seniorId);
         return CareLinkMapper.toDto(saved);
     }
 
@@ -44,7 +55,7 @@ public class CareLinkController {
     // The senior, and anyone who has permission for that senior, can delete a carelink
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@permissionChecker.hasPermission(principal, #seniorId)")
+    @PreAuthorize("hasRole('ADMIN') or principal.id == #caregiverId or @permissionChecker.hasPermission(principal, #seniorId)")
     public void delete(
             @RequestParam @NotNull @Positive Integer caregiverId,
             @RequestParam @NotNull @Positive Integer seniorId
@@ -64,6 +75,16 @@ public class CareLinkController {
                 .map(CareLinkMapper::toDto)
                 .toList();
     }
+
+        @GetMapping("/pending/by-caregiver")
+        @PreAuthorize("hasRole('ADMIN') or principal.id == #caregiverId")
+        public List<CareLinkDto> pendingByCaregiver(
+            @RequestParam @NotNull @Positive Integer caregiverId
+        ) {
+        return service.pendingForCaregiver(caregiverId).stream()
+            .map(CareLinkMapper::toDto)
+            .toList();
+        }
 
     // ---------- List caregivers assigned to a senior ----------
     // The senior, and anyone who has permission for that senior, can delete a carelink

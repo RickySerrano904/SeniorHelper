@@ -23,12 +23,24 @@ export class CareLinkService {
     return this.http.get<CareLinkModel[]>(`${this.apiUrl}/by-caregiver`, { params });
   }
 
+  getPendingRequestsByCaregiver(caregiverId: number): Observable<CareLinkModel[]> {
+    const params = new HttpParams().set('caregiverId', caregiverId);
+    return this.http.get<CareLinkModel[]>(`${this.apiUrl}/pending/by-caregiver`, { params });
+  }
+
   // Create a new connection between a caregiver and a senior
   createConnection(caregiverId: number, seniorId: number): Observable<CareLinkModel> {
     const params = new HttpParams()
       .set('caregiverId', caregiverId)
       .set('seniorId', seniorId);
       return this.http.post<CareLinkModel>(this.apiUrl, null, { params });
+  }
+
+  approveConnection(caregiverId: number, seniorId: number): Observable<CareLinkModel> {
+    const params = new HttpParams()
+      .set('caregiverId', caregiverId)
+      .set('seniorId', seniorId);
+    return this.http.post<CareLinkModel>(`${this.apiUrl}/approve`, null, { params });
   }
 
   // Delete a connection between a caregiver and a senior

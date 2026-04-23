@@ -2,6 +2,7 @@ package edu.fscj.cop3024c.seniorhelper.service;
 
 import edu.fscj.cop3024c.seniorhelper.entities.CareLink;
 import edu.fscj.cop3024c.seniorhelper.entities.User;
+import edu.fscj.cop3024c.seniorhelper.enums.CareLinkStatus;
 import edu.fscj.cop3024c.seniorhelper.enums.Role;
 import edu.fscj.cop3024c.seniorhelper.repository.CareLinkRepository;
 import edu.fscj.cop3024c.seniorhelper.repository.UserRepository;
@@ -31,7 +32,7 @@ public class CareLinkService {
     }
 
     @Transactional
-    public CareLink link(Integer caregiverId, Integer seniorId) {
+    public CareLink requestLink(Integer caregiverId, Integer seniorId) {
         if (links.existsByCaregiver_IdAndSenior_Id(caregiverId, seniorId)) {
             throw new EntityExistsException("Link already exists for caregiverId=" + caregiverId + " seniorId=" + seniorId);
         }
@@ -55,15 +56,31 @@ public class CareLinkService {
         CareLink link = new CareLink();
         link.setCaregiver(caregiver);
         link.setSenior(senior);
+        link.setStatus(CareLinkStatus.PENDING);
+        return links.save(link);
+    }
+
+    @Transactional
+    public CareLink approve(Integer caregiverId, Integer seniorId) {
+        CareLink link = links.findByCaregiver_IdAndSenior_Id(caregiverId, seniorId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Link not found for caregiverId=" + caregiverId + " seniorId=" + seniorId
+                ));
+
+        link.setStatus(CareLinkStatus.ACCEPTED);
         return links.save(link);
     }
 
     public List<CareLink> forCaregiver(Integer caregiverId) {
-        return links.findAllByCaregiver_Id(caregiverId);
+        return links.findAllByCaregiver_IdAndStatus(caregiverId, CareLinkStatus.ACCEPTED);
+    }
+
+    public List<CareLink> pendingForCaregiver(Integer caregiverId) {
+        return links.findAllByCaregiver_IdAndStatus(caregiverId, CareLinkStatus.PENDING);
     }
 
     public List<CareLink> forSenior(Integer seniorId) {
-        return links.findAllBySenior_Id(seniorId);
+        return links.findAllBySenior_IdAndStatus(seniorId, CareLinkStatus.ACCEPTED);
     }
 
     @Transactional

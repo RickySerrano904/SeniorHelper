@@ -1,5 +1,6 @@
 package edu.fscj.cop3024c.seniorhelper.entities;
 
+import edu.fscj.cop3024c.seniorhelper.enums.CareLinkStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,6 +25,10 @@ public class CareLink {
     @JoinColumn(name = "senior_id", nullable = false)
     private User senior;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CareLinkStatus status = CareLinkStatus.PENDING;
+
     @CreationTimestamp
     @Column(name = "connected_since", updatable = false)
     private LocalDateTime connectedSince;
@@ -37,6 +42,9 @@ public class CareLink {
 
     public User getSenior() { return senior; }
     public void setSenior(User senior) { this.senior = senior; }
+
+    public CareLinkStatus getStatus() { return status; }
+    public void setStatus(CareLinkStatus status) { this.status = status; }
 
     public LocalDateTime getConnectedSince() { return connectedSince; }
     public void setConnectedSince(LocalDateTime connectedSince) { this.connectedSince = connectedSince; }

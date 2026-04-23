@@ -1,9 +1,9 @@
 package edu.fscj.cop3024c.seniorhelper.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Schema(description = "Caregiver-to-Senior link")
@@ -55,6 +55,10 @@ public class CareLinkDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime connectedSince;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String status;
+
     public CareLinkDto() {}
 
     public CareLinkDto(Integer id,
@@ -62,7 +66,8 @@ public class CareLinkDto {
                        String caregiverFirstName, String caregiverLastName,
                        Integer seniorId, String seniorUsername, String seniorRole,
                        String seniorFirstName, String seniorLastName,
-                       LocalDateTime connectedSince) {
+                       LocalDateTime connectedSince,
+                       String status) {
         this.id = id;
         this.caregiverId = caregiverId;
         this.caregiverUsername = caregiverUsername;
@@ -75,6 +80,7 @@ public class CareLinkDto {
         this.seniorFirstName = seniorFirstName;
         this.seniorLastName = seniorLastName;
         this.connectedSince = connectedSince;
+        this.status = status;
     }
 
     // Getters / Setters
@@ -108,6 +114,12 @@ public class CareLinkDto {
     public String getSeniorFirstName() { return seniorFirstName; }
     public void setSeniorFirstName(String name) { this.seniorFirstName = name; }
 
+    public String getSeniorLastName() { return seniorLastName; }
+    public void setSeniorLastName(String name) { this.seniorLastName = name; }
+
     public LocalDateTime getConnectedSince() { return connectedSince; }
     public void setConnectedSince(LocalDateTime connectedSince) { this.connectedSince = connectedSince; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

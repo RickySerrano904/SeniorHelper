@@ -20,7 +20,8 @@ public final class CareLinkMapper {
                 senior != null && senior.getRole() != null ? senior.getRole().name() : null,
                 senior != null ? senior.getFirstName() : null,
                 senior != null ? senior.getLastName() : null,
-                link.getConnectedSince()
+                link.getConnectedSince(),
+                link.getStatus() != null ? link.getStatus().name() : null
         );
     }
 }

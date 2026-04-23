@@ -11,4 +11,5 @@ export interface CareLinkModel {
   seniorFirstName: string;
   seniorLastName: string;
   connectedSince: string;
+  status: 'PENDING' | 'ACCEPTED';
 }

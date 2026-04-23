@@ -48,6 +48,10 @@ export class AuthService {
     return this.http.get<UserProfileResponse>(`${this.usersApiUrl}/me`);
   }
 
+  getSeniors(): Observable<UserProfileResponse[]> {
+    return this.http.get<UserProfileResponse[]>(`${this.usersApiUrl}/seniors`);
+  }
+
   updateMyProfile(id: number, request: UpdateProfileRequest): Observable<UserProfileResponse> {
     return this.http.put<UserProfileResponse>(`${this.usersApiUrl}/${id}`, request);
   }

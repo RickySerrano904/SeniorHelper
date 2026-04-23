@@ -15,32 +15,71 @@
 
     <section class="connection-grid">
       
-      <!-- Create Connection Form (Seniors only) -->
-      <aside class="create-card" *ngIf="currentUserRole === 'SENIOR'">
-        <h3>Create Connection</h3>
-        <p class="description">
-          Enter a caregiver's User ID to link them to your account.<br>
-          Once connected, they'll be able to view and assist with your schedule.
+      <!-- Create Connection Form (Seniors + Admins) -->
+      <aside class="create-card" *ngIf="currentUserRole === 'SENIOR' || currentUserRole === 'ADMIN'">
+        <h3>{{ currentUserRole === 'ADMIN' ? 'Manage Senior Connections' : 'Request Connection' }}</h3>
+        <p class="description" *ngIf="currentUserRole === 'SENIOR'">
+          Enter a caregiver's User ID to send them a connection request.<br>
+          They will appear in your active connections only after they approve it.
+        </p>
+        <p class="description" *ngIf="currentUserRole === 'ADMIN'">
+          Select a senior and add or remove caregiver connections on their behalf.
         </p>
 
         <form class="create-form" (ngSubmit)="createConnection()">
           <div *ngIf="errorMessage" class="form-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="form-success">{{ successMessage }}</div>
+          <label *ngIf="currentUserRole === 'ADMIN'">
+            Senior
+            <select [(ngModel)]="selectedSeniorId" name="seniorId" (ngModelChange)="onSeniorSelectionChange($event)">
+              <option [ngValue]="null" disabled>Select a senior</option>
+              <option *ngFor="let senior of seniors" [ngValue]="senior.id">
+                {{ senior.firstName }} {{ senior.lastName }} (@{{ senior.username }})
+              </option>
+            </select>
+          </label>
           <label>
-            User ID
+            Caregiver User ID
             <input type="number" [(ngModel)]="newCaregiverId" name="caregiverId" placeholder="Enter User ID" required />
           </label>
-          <button type="submit" class="submit-btn sh-btn sh-btn--primary">Submit</button>
+          <button type="submit" class="submit-btn sh-btn sh-btn--primary">
+            {{ currentUserRole === 'ADMIN' ? 'Add Connection' : 'Send Request' }}
+          </button>
         </form>
+
+        <div *ngIf="currentUserRole === 'ADMIN' && seniors.length === 0" class="empty-state">
+          No seniors found to manage.
+        </div>
       </aside>
 
       <!-- Caregiver Info Panel (shown instead of form for caregivers) -->
       <aside class="create-card" *ngIf="currentUserRole === 'CAREGIVER'">
         <h3>Your Role</h3>
         <p class="description">
-          You are logged in as a caregiver. The seniors listed on the right have linked you to their account.
-          You can view and assist with their schedules once connected.
+          You are logged in as a caregiver. Seniors must send a request before they become active connections.
+          Approve a request below to grant access.
         </p>
+
+        <div class="pending-panel">
+          <h4>Pending Requests</h4>
+          <p class="description">Approve or decline requests before they become active connections.</p>
+
+          <div *ngIf="pendingRequests.length === 0" class="empty-state">
+            No pending requests right now.
+          </div>
+
+          <div *ngFor="let request of pendingRequests" class="connection-item pending-item">
+            <div class="connection-main">
+              <p class="connection-name">{{ request.seniorFirstName }} {{ request.seniorLastName }}</p>
+              <p class="connection-meta">@ {{ request.seniorUsername }} · Requested {{ request.connectedSince | date }}</p>
+            </div>
+
+            <div class="pending-actions">
+              <button type="button" class="sh-btn sh-btn--primary action-btn" (click)="approveRequest(request)">Approve</button>
+              <button type="button" class="action-btn action-btn--ghost" (click)="declineRequest(request)">Decline</button>
+            </div>
+          </div>
+        </div>
       </aside>
 
       <!-- View Connections -->
@@ -50,6 +89,10 @@
           These are the caregivers currently linked to your account.<br>
           To remove a caregiver, click the trash icon next to their name.
         </p>
+        <p class="description" *ngIf="currentUserRole === 'ADMIN'">
+          These are the caregivers currently linked to the selected senior.<br>
+          Remove a caregiver using the trash icon.
+        </p>
         <p class="description" *ngIf="currentUserRole === 'CAREGIVER'">
           These are the seniors who have linked you to their account.<br>
           To remove a connection, click the trash icon next to their name.
@@ -57,7 +100,8 @@
 
         <div *ngIf="connections.length === 0" class="empty-state">
           No connections yet.
-          <span *ngIf="currentUserRole === 'SENIOR'">Add a caregiver using their User ID to get started!</span>
+          <span *ngIf="currentUserRole === 'SENIOR'">Send a caregiver request using their User ID to get started.</span>
+          <span *ngIf="currentUserRole === 'ADMIN'">Select a senior and add a caregiver to create a connection.</span>
           <span *ngIf="currentUserRole === 'CAREGIVER'">You have not been linked to any seniors yet.</span>
         </div>
 
@@ -67,7 +111,7 @@
               <p class="connection-name">{{ conn.seniorFirstName }} {{ conn.seniorLastName }}</p>
               <p class="connection-meta">@ {{ conn.seniorUsername }} · Connected since {{ conn.connectedSince | date }}</p>
             </ng-container>
-            <ng-container *ngIf="currentUserRole === 'SENIOR'">
+            <ng-container *ngIf="currentUserRole === 'SENIOR' || currentUserRole === 'ADMIN'">
               <p class="connection-name">{{ conn.caregiverFirstName }} {{ conn.caregiverLastName }}</p>
               <p class="connection-meta">@ {{ conn.caregiverUsername }} · Connected since {{ conn.connectedSince | date }}</p>
             </ng-container>

@@ -38,8 +38,18 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(`${this.apiUrl}/me`);
   }
 
+  getAppointmentsBySenior(seniorId: number): Observable<Appointment[]> {
+    const params = new HttpParams().set('seniorId', seniorId);
+    return this.http.get<Appointment[]>(this.apiUrl, { params });
+  }
+
   createMyAppointment(body: CreateAppointmentRequest): Observable<Appointment> {
     return this.http.post<Appointment>(`${this.apiUrl}/me`, body);
+  }
+
+  createAppointmentForSenior(seniorId: number, body: CreateAppointmentRequest): Observable<Appointment> {
+    const params = new HttpParams().set('seniorId', seniorId);
+    return this.http.post<Appointment>(this.apiUrl, body, { params });
   }
 
   updateAppointment(appointmentId: number, seniorId: number, body: CreateAppointmentRequest): Observable<Appointment> {

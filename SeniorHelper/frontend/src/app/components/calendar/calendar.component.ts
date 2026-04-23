@@ -6,11 +6,20 @@ import { RouterLink } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
 import { Appointment } from '../../models/appointment.model';
 import { NotificationReminderService } from '../../services/notification-reminder.service';
+import { AuthService } from '../../services/auth.service';
+import { CareLinkService } from '../../services/carelink.service';
+import { CareLinkModel } from '../../models/carelink.model';
 
 interface DayCell {
   date: Date;
   inMonth: boolean;
   iso: string;
+}
+
+interface ManagedSenior {
+  id: number;
+  fullName: string;
+  username: string;
 }
 
 @Component({
@@ -44,7 +53,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
   isAddAppointmentOpen = false;
   selectedDateLabel = '';
   currentUserId: number | null = null;
+  currentUserRole: string | null = null;
   editingAppointmentId: number | null = null;
+  managedSeniors: ManagedSenior[] = [];
+  selectedSeniorId: number | null = null;
   contextMenuVisible = false;
   contextMenuX = 0;
   contextMenuY = 0;
@@ -64,7 +76,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
-    private notificationReminderService: NotificationReminderService
+    private notificationReminderService: NotificationReminderService,
+    private authService: AuthService,
+    private careLinkService: CareLinkService
   ) {
     this.appointmentForm = this.fb.group({
       title: ['', Validators.required], notes: [''], location: [''], start: ['', Validators.required], end: ['']
@@ -72,18 +86,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appointmentService.getMyUserId().subscribe({
-      next: (userId) => {
-        this.currentUserId = userId;
-      },
-      error: () => {
-        this.currentUserId = null;
-      }
-    });
-    this.loadAppointments();
     this.holidays = this.generateHolidaysForYear(this.displayYear);
     this.syncPickerToDisplayDate();
     this.buildCalendar();
+
+    this.authService.getMyProfile().subscribe({
+      next: (profile) => {
+        this.currentUserId = profile.id;
+        this.currentUserRole = profile.role;
+        this.initializeSeniorContext();
+      },
+      error: () => {
+        this.currentUserId = null;
+        this.currentUserRole = null;
+        this.selectedSeniorId = null;
+        this.loadAppointments();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -237,6 +256,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private openAddAppointmentForDate(date: Date) {
+    if (this.currentUserRole === 'CAREGIVER' && this.selectedSeniorId == null) {
+      this.submitError = 'Select a linked senior before creating an appointment.';
+      return;
+    }
+
     this.closeContextMenu();
     this.editingAppointmentId = null;
     const startLocal = this.toDateTimeLocal(date, 9, 0);
@@ -365,13 +389,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private deleteAppointmentById(appointmentId: number | null | undefined) {
-    if (this.currentUserId == null || appointmentId == null) {
-      this.submitError = 'Could not determine current user for delete.';
+    if (this.selectedSeniorId == null || appointmentId == null) {
+      this.submitError = 'Could not determine which senior to use for delete.';
       return;
     }
 
     this.isSubmitting = true;
-    this.appointmentService.deleteAppointment(appointmentId, this.currentUserId).subscribe({
+    this.appointmentService.deleteAppointment(appointmentId, this.selectedSeniorId).subscribe({
       next: () => {
         for (const day of Object.keys(this.events)) {
           this.events[day] = (this.events[day] || []).filter((appointment) => appointment.id !== appointmentId);
@@ -403,7 +427,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private loadAppointments() {
-    this.appointmentService.getMyAppointments().subscribe({
+    if (this.selectedSeniorId == null) {
+      this.events = {};
+      this.refreshHasAppointmentsState();
+      this.appointmentsLoaded = true;
+      return;
+    }
+
+    this.appointmentService.getAppointmentsBySenior(this.selectedSeniorId).subscribe({
       next: (appointments) => {
         this.events = this.mapAppointmentsToEvents(appointments);
         this.refreshHasAppointmentsState();
@@ -413,6 +444,56 @@ export class CalendarComponent implements OnInit, OnDestroy {
         console.error('Failed to load appointments', error);
         this.refreshHasAppointmentsState();
         this.appointmentsLoaded = true;
+      }
+    });
+  }
+
+  onSeniorSelectionChange(value: string): void {
+    const seniorId = Number(value);
+    this.selectedSeniorId = Number.isNaN(seniorId) ? null : seniorId;
+    this.submitError = '';
+    this.submitSuccess = '';
+    this.closeContextMenu();
+    this.loadAppointments();
+  }
+
+  private initializeSeniorContext(): void {
+    if (this.currentUserId == null) {
+      this.selectedSeniorId = null;
+      this.loadAppointments();
+      return;
+    }
+
+    if (this.currentUserRole !== 'CAREGIVER') {
+      this.selectedSeniorId = this.currentUserId;
+      this.loadAppointments();
+      return;
+    }
+
+    this.careLinkService.getConnectionsByCaregiver(this.currentUserId).subscribe({
+      next: (links: CareLinkModel[]) => {
+        const uniqueBySeniorId = new Map<number, ManagedSenior>();
+
+        for (const link of links) {
+          if (uniqueBySeniorId.has(link.seniorId)) {
+            continue;
+          }
+
+          uniqueBySeniorId.set(link.seniorId, {
+            id: link.seniorId,
+            fullName: `${link.seniorFirstName} ${link.seniorLastName}`.trim(),
+            username: link.seniorUsername
+          });
+        }
+
+        this.managedSeniors = Array.from(uniqueBySeniorId.values());
+        this.selectedSeniorId = this.managedSeniors.length > 0 ? this.managedSeniors[0].id : null;
+        this.loadAppointments();
+      },
+      error: () => {
+        this.managedSeniors = [];
+        this.selectedSeniorId = null;
+        this.loadAppointments();
       }
     });
   }
@@ -477,8 +558,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
       end: end ? (end.length === 16 ? `${end}:00` : end) : undefined
     };
 
-    if (this.currentUserId == null) {
-      this.submitError = 'Could not determine current user.';
+    if (this.selectedSeniorId == null) {
+      this.submitError = 'Could not determine which senior to use for this appointment.';
       return;
     }
 
@@ -498,12 +579,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
 
     this.isSubmitting = true;
+    const seniorId = this.selectedSeniorId;
     const request$ = this.editingAppointmentId == null
-      ? this.appointmentService.createMyAppointment(payload)
-      : this.appointmentService.updateAppointment(this.editingAppointmentId, this.currentUserId, payload);
+      ? this.appointmentService.createAppointmentForSenior(seniorId, payload)
+      : this.appointmentService.updateAppointment(this.editingAppointmentId, seniorId, payload);
 
     request$.subscribe({
       next: (created) => {
+        if (this.currentUserId == null) {
+          this.submitError = 'Could not determine current user for reminders.';
+          this.isSubmitting = false;
+          return;
+        }
+
         this.notificationReminderService.setAppointmentReminderOverride(
           this.currentUserId,
           created.id,

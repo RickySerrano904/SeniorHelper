@@ -44,7 +44,24 @@
 		</header>
 
     <div class="calendar-actions">
-      <button type="button" class="add-appointment-btn" (click)="openAddAppointmentFromButton()">
+      @if (currentUserRole === 'CAREGIVER') {
+      <label class="senior-select-label">
+        Senior
+        <select
+          [ngModel]="selectedSeniorId"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="onSeniorSelectionChange($event)">
+          @for (senior of managedSeniors; track senior.id) {
+          <option [ngValue]="senior.id">{{ senior.fullName }} (@{{ senior.username }})</option>
+          }
+        </select>
+      </label>
+      }
+      <button
+        type="button"
+        class="add-appointment-btn"
+        (click)="openAddAppointmentFromButton()"
+        [disabled]="currentUserRole === 'CAREGIVER' && !selectedSeniorId">
         New Appointment
       </button>
       <button
@@ -52,10 +69,17 @@
         class="toggle-delete-btn"
         [class.active]="isDeleteModeEnabled"
         [attr.aria-pressed]="isDeleteModeEnabled"
+        [disabled]="currentUserRole === 'CAREGIVER' && !selectedSeniorId"
         (click)="toggleDeleteMode()">
         {{ isDeleteModeEnabled ? 'Exit Delete Mode' : 'Delete Appointment' }}
       </button>
     </div>
+
+    @if (currentUserRole === 'CAREGIVER' && managedSeniors.length === 0) {
+    <div class="month-empty">
+      No linked seniors found. Accept a connection request first to manage appointments.
+    </div>
+    }
 
     <div class="weekday-row">
       @for (wd of weekDays; track wd) {

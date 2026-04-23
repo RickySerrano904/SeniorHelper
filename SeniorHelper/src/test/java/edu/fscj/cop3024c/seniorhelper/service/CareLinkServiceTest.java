@@ -2,6 +2,7 @@ package edu.fscj.cop3024c.seniorhelper.service;
 
 import edu.fscj.cop3024c.seniorhelper.entities.CareLink;
 import edu.fscj.cop3024c.seniorhelper.entities.User;
+import edu.fscj.cop3024c.seniorhelper.enums.CareLinkStatus;
 import edu.fscj.cop3024c.seniorhelper.enums.Role;
 import edu.fscj.cop3024c.seniorhelper.repository.CareLinkRepository;
 import edu.fscj.cop3024c.seniorhelper.repository.UserRepository;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -34,7 +36,7 @@ public class CareLinkServiceTest {
 
 
     @Test
-    void link_ShouldCreateCareLinkEntity() {
+    void requestLink_ShouldCreatePendingCareLinkEntity() {
         User caregiver = new User();
         caregiver.setId(1);
         caregiver.setRole(Role.CAREGIVER);
@@ -51,49 +53,92 @@ public class CareLinkServiceTest {
         saved.setId(10);
         saved.setCaregiver(caregiver);
         saved.setSenior(senior);
+        saved.setStatus(CareLinkStatus.PENDING);
 
         when(careLinkRepository.save(any(CareLink.class))).thenReturn(saved);
 
-        CareLink result = careLinkService.link(1,2);
+        CareLink result = careLinkService.requestLink(1,2);
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(10);
         assertThat(result.getCaregiver()).isEqualTo(caregiver);
         assertThat(result.getSenior()).isEqualTo(senior);
+        assertThat(result.getStatus()).isEqualTo(CareLinkStatus.PENDING);
 
-        verify(careLinkRepository).save(any(CareLink.class));
+        verify(careLinkRepository).save(argThat(link ->
+                link.getCaregiver() == caregiver
+                        && link.getSenior() == senior
+                        && link.getStatus() == CareLinkStatus.PENDING
+        ));
     }
 
     @Test
-    void link_ShouldThrow_WhenCareLinkExists() {
+    void requestLink_ShouldThrow_WhenCareLinkExists() {
         when(careLinkRepository.existsByCaregiver_IdAndSenior_Id(1,2)).thenReturn(true);
 
-        assertThatThrownBy(() -> careLinkService.link(1,2)).isInstanceOf(EntityExistsException.class);
+        assertThatThrownBy(() -> careLinkService.requestLink(1,2)).isInstanceOf(EntityExistsException.class);
+    }
+
+    @Test
+    void approve_ShouldMarkPendingLinkAsAccepted() {
+        User caregiver = new User();
+        caregiver.setId(1);
+        caregiver.setRole(Role.CAREGIVER);
+
+        User senior = new User();
+        senior.setId(2);
+        senior.setRole(Role.SENIOR);
+
+        CareLink pending = new CareLink();
+        pending.setId(10);
+        pending.setCaregiver(caregiver);
+        pending.setSenior(senior);
+        pending.setStatus(CareLinkStatus.PENDING);
+
+        when(careLinkRepository.findByCaregiver_IdAndSenior_Id(1, 2)).thenReturn(Optional.of(pending));
+        when(careLinkRepository.save(any(CareLink.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CareLink result = careLinkService.approve(1, 2);
+
+        assertThat(result.getStatus()).isEqualTo(CareLinkStatus.ACCEPTED);
+        verify(careLinkRepository).save(pending);
     }
 
 
     @Test
     void forCaregiver_ShouldReturnList() {
         CareLink link = new CareLink();
-        when(careLinkRepository.findAllByCaregiver_Id(5)).thenReturn(List.of(link));
+        when(careLinkRepository.findAllByCaregiver_IdAndStatus(5, CareLinkStatus.ACCEPTED)).thenReturn(List.of(link));
 
         List<CareLink> result = careLinkService.forCaregiver(5);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isEqualTo(link);
-        verify(careLinkRepository).findAllByCaregiver_Id(5);
+        verify(careLinkRepository).findAllByCaregiver_IdAndStatus(5, CareLinkStatus.ACCEPTED);
+    }
+
+    @Test
+    void pendingForCaregiver_ShouldReturnPendingList() {
+        CareLink link = new CareLink();
+        when(careLinkRepository.findAllByCaregiver_IdAndStatus(5, CareLinkStatus.PENDING)).thenReturn(List.of(link));
+
+        List<CareLink> result = careLinkService.pendingForCaregiver(5);
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isEqualTo(link);
+        verify(careLinkRepository).findAllByCaregiver_IdAndStatus(5, CareLinkStatus.PENDING);
     }
 
     @Test
     void forSenior_ShouldReturnList() {
         CareLink link = new CareLink();
-        when(careLinkRepository.findAllBySenior_Id(8)).thenReturn(List.of(link));
+        when(careLinkRepository.findAllBySenior_IdAndStatus(8, CareLinkStatus.ACCEPTED)).thenReturn(List.of(link));
 
         List<CareLink> result = careLinkService.forSenior(8);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isEqualTo(link);
-        verify(careLinkRepository).findAllBySenior_Id(8);
+        verify(careLinkRepository).findAllBySenior_IdAndStatus(8, CareLinkStatus.ACCEPTED);
     }
 
     @Test
