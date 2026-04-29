@@ -1,7 +1,7 @@
 <footer class="footer">
   <p>&copy; 2026 Florida State College at Jacksonville. All Rights Reserved.</p>
 
-  <a routerLink="/faq" routerLinkActive="active" class="faq-link" title="FAQ">
+  <a *ngIf="showFaq" routerLink="/faq" routerLinkActive="active" class="faq-link" title="FAQ">
     <span class="material-icons">help</span>
   </a>
 </footer>
