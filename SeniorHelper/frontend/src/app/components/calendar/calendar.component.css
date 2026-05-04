@@ -169,35 +169,9 @@
   background: var(--accent-glow);
 }
 
-.toggle-delete-btn {
-  padding: 10px 18px;
-  border: 1px solid #b91c1c;
-  border-radius: 8px;
-  background: #fee2e2;
-  color: #991b1b;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.toggle-delete-btn:hover {
-  background: #fecaca;
-}
-
-.toggle-delete-btn.active {
-  background: #b91c1c;
-  color: #fff;
-}
-
-.add-appointment-btn:disabled,
-.toggle-delete-btn:disabled {
+.add-appointment-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-}
-
-.calendar-layout.delete-mode-enabled .day,
-.calendar-layout.delete-mode-enabled .event-title {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cline x1='5' y1='5' x2='19' y2='19' stroke='%23b91c1c' stroke-width='2.6' stroke-linecap='round'/%3E%3Cline x1='19' y1='5' x2='5' y2='19' stroke='%23b91c1c' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, crosshair;
 }
 
 .weekday-row {
@@ -474,6 +448,20 @@
 
 .btn-cancel:hover {
   background: #c96b6b;
+}
+
+.btn-delete {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background: #991b1b;
+}
+
+.btn-delete:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
 }
 
 .btn-submit {

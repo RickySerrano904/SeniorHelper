@@ -70,7 +70,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   pickerMonth = this.displayMonth;
   pickerYear = this.displayYear;
   yearOptions = this.buildYearOptions();
-  isDeleteModeEnabled = false;
   private successMessageTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
@@ -231,18 +230,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   openAddAppointment(event: MouseEvent, day: DayCell) {
-    if (this.isDeleteModeEnabled) {
-      return;
-    }
     event.preventDefault();
     this.openAddAppointmentForDate(day.date);
-  }
-
-  toggleDeleteMode() {
-    this.isDeleteModeEnabled = !this.isDeleteModeEnabled;
-    this.closeContextMenu();
-    this.submitError = '';
-    this.submitSuccess = '';
   }
 
   openAddAppointmentFromButton() {
@@ -337,11 +326,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.isDeleteModeEnabled) {
-      this.deleteAppointmentById(appointment.id);
-      return;
-    }
-
     this.openEditForAppointment(appointment);
   }
 
@@ -388,6 +372,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.closeContextMenu();
   }
 
+  deleteEditingAppointment() {
+    this.deleteAppointmentById(this.editingAppointmentId);
+  }
+
   private deleteAppointmentById(appointmentId: number | null | undefined) {
     if (this.selectedSeniorId == null || appointmentId == null) {
       this.submitError = 'Could not determine which senior to use for delete.';
@@ -397,6 +385,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.appointmentService.deleteAppointment(appointmentId, this.selectedSeniorId).subscribe({
       next: () => {
+        if (this.currentUserId != null) {
+          this.notificationReminderService.setAppointmentReminderOverride(this.currentUserId, appointmentId, null);
+          this.notificationReminderService.refreshForUser(this.currentUserId);
+        }
         for (const day of Object.keys(this.events)) {
           this.events[day] = (this.events[day] || []).filter((appointment) => appointment.id !== appointmentId);
         }
@@ -404,6 +396,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.loadAppointments();
         this.submitSuccess = 'Appointment deleted successfully.';
         this.startSuccessMessageTimer();
+        if (this.editingAppointmentId === appointmentId) {
+          this.appointmentForm.reset();
+          this.editingAppointmentId = null;
+          this.useSpecificReminderTime = false;
+          this.specificReminderTime = '';
+          this.selectedDateLabel = '';
+          this.isAddAppointmentOpen = false;
+        }
         this.isSubmitting = false;
       },
       error: (error) => {

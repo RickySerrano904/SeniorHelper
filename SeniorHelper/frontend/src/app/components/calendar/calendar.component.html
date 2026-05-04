@@ -1,6 +1,5 @@
 <div
   class="calendar-layout"
-  [class.delete-mode-enabled]="isDeleteModeEnabled"
   (click)="closeContextMenu(); closeMonthYearPicker()">
   <button class="back-btn calendar-back-btn" type="button" routerLink="/home">
     <span class="material-icons">arrow_back</span>
@@ -63,15 +62,6 @@
         (click)="openAddAppointmentFromButton()"
         [disabled]="currentUserRole === 'CAREGIVER' && !selectedSeniorId">
         New Appointment
-      </button>
-      <button
-        type="button"
-        class="toggle-delete-btn"
-        [class.active]="isDeleteModeEnabled"
-        [attr.aria-pressed]="isDeleteModeEnabled"
-        [disabled]="currentUserRole === 'CAREGIVER' && !selectedSeniorId"
-        (click)="toggleDeleteMode()">
-        {{ isDeleteModeEnabled ? 'Exit Delete Mode' : 'Delete Appointment' }}
       </button>
     </div>
 
@@ -210,6 +200,16 @@
         <button type="button" class="form-btn btn-cancel" (click)="cancel()">
           Cancel
         </button>
+
+        @if (editingAppointmentId) {
+        <button
+          type="button"
+          class="form-btn btn-delete"
+          [disabled]="isSubmitting"
+          (click)="deleteEditingAppointment()">
+          Delete Appointment
+        </button>
+        }
 
         <button type="submit" class="form-btn btn-submit" [disabled]="appointmentForm.invalid || isSubmitting || (appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start)">
           Submit
