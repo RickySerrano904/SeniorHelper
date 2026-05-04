@@ -6,6 +6,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotificationReminderService } from './services/notification-reminder.service';
 import { ThemeService } from './services/theme.service';
+import {
+  InAppNotificationService,
+  InAppNotificationTone
+} from './services/in-app-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +25,8 @@ export class App {
   constructor(
     private router: Router,
     private themeService: ThemeService,
-    private notificationReminderService: NotificationReminderService
+    private notificationReminderService: NotificationReminderService,
+    public inAppNotifications: InAppNotificationService
   ) {
     this.themeService.initTheme();
     this.notificationReminderService.init();
@@ -35,5 +40,18 @@ export class App {
   isCalendarPage(): boolean {
     const url = this.router.url;
     return url === '/calendar' || url.startsWith('/calendar?') || url.startsWith('/calendar/');
+  }
+
+  notificationIcon(tone: InAppNotificationTone): string {
+    switch (tone) {
+      case 'success':
+        return 'check_circle';
+      case 'warning':
+        return 'warning';
+      case 'error':
+        return 'error';
+      default:
+        return 'notifications';
+    }
   }
 }

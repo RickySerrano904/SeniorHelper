@@ -1,4 +1,26 @@
 <app-navbar *ngIf="isNotLoginPage()"></app-navbar>
+<div class="in-app-notification-region" aria-live="polite" aria-atomic="false">
+  @for (notification of inAppNotifications.notifications$ | async; track notification.id) {
+    <section class="in-app-notification" [ngClass]="'tone-' + notification.tone">
+      <div class="in-app-notification-icon" aria-hidden="true">
+        <span class="material-icons">{{ notificationIcon(notification.tone) }}</span>
+      </div>
+      <div class="in-app-notification-body">
+        <h2>{{ notification.title }}</h2>
+        @if (notification.message) {
+          <p>{{ notification.message }}</p>
+        }
+      </div>
+      <button
+        type="button"
+        class="in-app-notification-close"
+        aria-label="Dismiss notification"
+        (click)="inAppNotifications.dismiss(notification.id)">
+        <span class="material-icons">close</span>
+      </button>
+    </section>
+  }
+</div>
 <main class="app-shell-content">
   <router-outlet />
 </main>

@@ -6,6 +6,7 @@ import { timeout } from 'rxjs/operators';
 import { Appointment } from '../models/appointment.model';
 import { AppointmentService } from './appointment.service';
 import { AuthService } from './auth.service';
+import { InAppNotificationService } from './in-app-notification.service';
 
 export interface NotificationReminderPreferences {
   enabled: boolean;
@@ -18,7 +19,6 @@ export class NotificationReminderService {
   private readonly reminderPollIntervalMs = 60 * 1000;
   private readonly defaultReminderLeadMinutes = 30;
   private readonly maxReminderLeadMinutes = (999 * 24 * 60) + (999 * 60) + 999;
-  private readonly notificationsSupported = typeof window !== 'undefined' && 'Notification' in window;
   private initialized = false;
   private currentUserId: number | null = null;
   private reminderIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -28,7 +28,8 @@ export class NotificationReminderService {
   constructor(
     private readonly authService: AuthService,
     private readonly appointmentService: AppointmentService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly inAppNotifications: InAppNotificationService
   ) {}
 
   init(): void {
@@ -108,11 +109,7 @@ export class NotificationReminderService {
   private startReminderPolling(): void {
     this.clearReminderInterval();
 
-    if (
-      this.currentUserId === null ||
-      !this.notificationsSupported ||
-      Notification.permission !== 'granted'
-    ) {
+    if (this.currentUserId === null) {
       return;
     }
 
@@ -128,12 +125,7 @@ export class NotificationReminderService {
   }
 
   private async checkAppointmentReminders(): Promise<void> {
-    if (
-      this.reminderCheckInProgress ||
-      this.currentUserId === null ||
-      !this.notificationsSupported ||
-      Notification.permission !== 'granted'
-    ) {
+    if (this.reminderCheckInProgress || this.currentUserId === null) {
       return;
     }
 
@@ -181,8 +173,11 @@ export class NotificationReminderService {
             minute: '2-digit'
           });
 
-          new Notification('Upcoming appointment', {
-            body: `${title} starts at ${startTime}`
+          this.inAppNotifications.show({
+            title: 'Upcoming appointment',
+            message: `${title} starts at ${startTime}`,
+            tone: 'info',
+            timeoutMs: 10000
           });
           nextNotifiedKeys.add(reminderKey);
         }

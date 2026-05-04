@@ -7,6 +7,7 @@ import { Appointment } from '../../models/appointment.model';
 import { AppointmentService } from '../../services/appointment.service';
 import { AuthService, UpdateProfileRequest } from '../../services/auth.service';
 import { NotificationReminderService } from '../../services/notification-reminder.service';
+import { InAppNotificationService } from '../../services/in-app-notification.service';
 
 type SettingsSection = 'account' | 'security' | 'notifications';
 
@@ -41,12 +42,12 @@ export class SettingsComponent implements OnInit {
   notificationLeadDays = 0;
   notificationLeadHours = 0;
   notificationLeadMinutes = this.defaultReminderLeadMinutes;
-  readonly notificationsSupported = typeof window !== 'undefined' && 'Notification' in window;
 
   constructor(
     private authService: AuthService,
     private appointmentService: AppointmentService,
     private notificationReminderService: NotificationReminderService,
+    private inAppNotifications: InAppNotificationService,
     private router: Router
   ) {}
 
@@ -87,48 +88,12 @@ export class SettingsComponent implements OnInit {
     this.saveReminderPreferences();
   }
 
-  async requestNotificationPermission(): Promise<void> {
-    this.notificationStatus = '';
-
-    if (!this.notificationsSupported) {
-      this.notificationStatus = 'This browser does not support notifications.';
-      return;
-    }
-
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        this.notificationStatus = 'Notification permission granted.';
-        return;
-      }
-
-      if (permission === 'denied') {
-        this.notificationStatus = 'Notification permission denied. Please allow notifications in your browser settings.';
-        return;
-      }
-
-      this.notificationStatus = 'Notification permission request was dismissed.';
-    } catch {
-      this.notificationStatus = 'Could not request notification permission.';
-    }
-  }
-
   async pushUpcomingAppointmentsNotification(): Promise<void> {
     await this.sendUpcomingAppointmentsNotification();
   }
 
   private async sendUpcomingAppointmentsNotification(): Promise<void> {
     this.notificationStatus = '';
-
-    if (!this.notificationsSupported) {
-      this.notificationStatus = 'This browser does not support notifications.';
-      return;
-    }
-
-    if (Notification.permission !== 'granted') {
-      this.notificationStatus = 'Please allow notification permission first.';
-      return;
-    }
 
     this.notifying = true;
 
@@ -139,11 +104,16 @@ export class SettingsComponent implements OnInit {
       const upcoming = this.getUpcomingWeekAppointments(appointments ?? []);
       const body = this.buildNotificationBody(upcoming);
 
-      new Notification('Upcoming appointments this week', { body });
+      this.inAppNotifications.show({
+        title: 'Upcoming appointments this week',
+        message: body,
+        tone: upcoming.length === 0 ? 'info' : 'success',
+        timeoutMs: 10000
+      });
       this.notificationStatus =
         upcoming.length === 0
-          ? 'Notification sent. No appointments are scheduled in the next 7 days.'
-          : `Notification sent for ${upcoming.length} upcoming appointment${upcoming.length === 1 ? '' : 's'}.`;
+          ? 'Preview shown. No appointments are scheduled in the next 7 days.'
+          : `Preview shown for ${upcoming.length} upcoming appointment${upcoming.length === 1 ? '' : 's'}.`;
     } catch (err) {
       this.notificationStatus = this.getErrorMessage(
         err,

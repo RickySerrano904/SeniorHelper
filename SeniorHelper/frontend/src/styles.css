@@ -98,6 +98,98 @@ app-footer {
   flex-shrink: 0;
 }
 
+.in-app-notification-region {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: min(380px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3000;
+  pointer-events: none;
+}
+
+.in-app-notification {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+  pointer-events: auto;
+}
+
+.in-app-notification.tone-success {
+  border-left-color: #6FAF8E;
+}
+
+.in-app-notification.tone-warning {
+  border-left-color: #d69f3a;
+}
+
+.in-app-notification.tone-error {
+  border-left-color: #C96B6B;
+}
+
+.in-app-notification-icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.in-app-notification.tone-success .in-app-notification-icon {
+  color: #4f946f;
+}
+
+.in-app-notification.tone-warning .in-app-notification-icon {
+  color: #b7791f;
+}
+
+.in-app-notification.tone-error .in-app-notification-icon {
+  color: #C96B6B;
+}
+
+.in-app-notification-body h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.in-app-notification-body p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.35;
+  white-space: pre-line;
+}
+
+.in-app-notification-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.in-app-notification-close:hover {
+  background: var(--input-bg);
+  color: var(--text-strong);
+}
+
+.in-app-notification-close .material-icons {
+  font-size: 18px;
+}
+
 /* Shared component layout primitives */
 app-home,
 app-landing,
@@ -356,6 +448,13 @@ app-settings {
 @media (max-width: 520px) {
   .sh-form-card {
     padding: 28px 24px;
+  }
+
+  .in-app-notification-region {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
   }
 }
 
