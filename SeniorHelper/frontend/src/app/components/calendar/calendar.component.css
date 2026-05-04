@@ -408,23 +408,6 @@
   font-size: 14px;
 }
 
-.specific-reminder-block {
-  margin: 8px 0 10px;
-  padding: 10px;
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  background: var(--input-bg);
-}
-
-.specific-reminder-toggle {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 0;
-  font-size: 0.85rem;
-}
-
 .button-row {
   display: flex;
   justify-content: flex-end;

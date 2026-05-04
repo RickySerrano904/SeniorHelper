@@ -167,29 +167,6 @@
         <input type="datetime-local" formControlName="end" />
       </label>
 
-      <div class="specific-reminder-block">
-        <label class="specific-reminder-toggle">
-          <input
-            type="checkbox"
-            [ngModel]="useSpecificReminderTime"
-            [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="onSpecificReminderToggle($event)"
-          />
-          Set specific reminder
-        </label>
-
-        @if (useSpecificReminderTime) {
-        <label>
-          Reminder Time
-          <input
-            type="datetime-local"
-            [(ngModel)]="specificReminderTime"
-            [ngModelOptions]="{ standalone: true }"
-          />
-        </label>
-        }
-      </div>
-
       @if (appointmentForm.value.end && appointmentForm.value.start && appointmentForm.value.end < appointmentForm.value.start) {
       <div class="form-error">
         End date/time must be after start date/time.

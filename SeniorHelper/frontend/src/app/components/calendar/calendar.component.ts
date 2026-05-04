@@ -64,8 +64,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   contextMenuAppointment: Appointment | null = null;
   hasAppointmentsThisMonth = false;
   appointmentsLoaded = false;
-  useSpecificReminderTime = false;
-  specificReminderTime = '';
   isMonthYearPickerOpen = false;
   pickerMonth = this.displayMonth;
   pickerYear = this.displayYear;
@@ -263,8 +261,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
     this.submitError = '';
     this.submitSuccess = '';
-    this.useSpecificReminderTime = false;
-    this.specificReminderTime = '';
     this.appointmentForm.reset({
       title: '',
       notes: '',
@@ -345,12 +341,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.editingAppointmentId = appointment.id;
     this.submitError = '';
     this.submitSuccess = '';
-    const reminderOverride = this.notificationReminderService.getAppointmentReminderOverride(
-      this.currentUserId,
-      appointment.id
-    );
-    this.useSpecificReminderTime = Boolean(reminderOverride);
-    this.specificReminderTime = this.toDateTimeLocalValue(reminderOverride);
     this.appointmentForm.reset({
       title: appointment.title,
       notes: appointment.notes ?? '',
@@ -386,7 +376,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.appointmentService.deleteAppointment(appointmentId, this.selectedSeniorId).subscribe({
       next: () => {
         if (this.currentUserId != null) {
-          this.notificationReminderService.setAppointmentReminderOverride(this.currentUserId, appointmentId, null);
           this.notificationReminderService.refreshForUser(this.currentUserId);
         }
         for (const day of Object.keys(this.events)) {
@@ -399,8 +388,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
         if (this.editingAppointmentId === appointmentId) {
           this.appointmentForm.reset();
           this.editingAppointmentId = null;
-          this.useSpecificReminderTime = false;
-          this.specificReminderTime = '';
           this.selectedDateLabel = '';
           this.isAddAppointmentOpen = false;
         }
@@ -563,21 +550,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.useSpecificReminderTime) {
-      const reminderMs = new Date(this.specificReminderTime).getTime();
-      const startMs = new Date(payload.start).getTime();
-
-      if (!this.specificReminderTime || Number.isNaN(reminderMs)) {
-        this.submitError = 'Please choose a valid specific reminder date and time.';
-        return;
-      }
-
-      if (Number.isNaN(startMs) || reminderMs > startMs) {
-        this.submitError = 'Specific reminder time must be before the appointment start time.';
-        return;
-      }
-    }
-
     this.isSubmitting = true;
     const seniorId = this.selectedSeniorId;
     const request$ = this.editingAppointmentId == null
@@ -586,18 +558,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     request$.subscribe({
       next: (created) => {
-        if (this.currentUserId == null) {
-          this.submitError = 'Could not determine current user for reminders.';
-          this.isSubmitting = false;
-          return;
+        if (this.currentUserId != null) {
+          this.notificationReminderService.refreshForUser(this.currentUserId);
         }
-
-        this.notificationReminderService.setAppointmentReminderOverride(
-          this.currentUserId,
-          created.id,
-          this.useSpecificReminderTime ? this.specificReminderTime : null
-        );
-        this.notificationReminderService.refreshForUser(this.currentUserId);
 
         const createdDate = this.extractDateKey(created.start) ?? this.extractDateKey(start);
         if (!createdDate) {
@@ -636,8 +599,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
           : 'Appointment updated successfully.';
         this.startSuccessMessageTimer();
         this.editingAppointmentId = null;
-        this.useSpecificReminderTime = false;
-        this.specificReminderTime = '';
         this.isAddAppointmentOpen = false;
         this.appointmentForm.reset();
         this.isSubmitting = false;
@@ -656,8 +617,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.submitError = '';
     this.submitSuccess = '';
     this.editingAppointmentId = null;
-    this.useSpecificReminderTime = false;
-    this.specificReminderTime = '';
     this.selectedDateLabel = '';
     this.isAddAppointmentOpen = false;
     this.closeContextMenu();
@@ -665,52 +624,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
       clearTimeout(this.successMessageTimeoutId);
       this.successMessageTimeoutId = null;
     }
-  }
-
-  onSpecificReminderToggle(enabled: boolean): void {
-    this.useSpecificReminderTime = enabled;
-
-    if (!enabled) {
-      this.specificReminderTime = '';
-      return;
-    }
-
-    if (!this.specificReminderTime) {
-      this.specificReminderTime = this.getDefaultSpecificReminderTime();
-    }
-  }
-
-  private getDefaultSpecificReminderTime(): string {
-    const startValue = this.appointmentForm.get('start')?.value as string | null;
-    if (!startValue) {
-      return '';
-    }
-
-    const startDate = new Date(startValue);
-    if (Number.isNaN(startDate.getTime())) {
-      return '';
-    }
-
-    const reminderDate = new Date(startDate.getTime() - (10 * 60 * 1000));
-    return this.toDateTimeLocalValue(reminderDate.toISOString());
-  }
-
-  private toDateTimeLocalValue(value: string | null): string {
-    if (!value) {
-      return '';
-    }
-
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) {
-      return '';
-    }
-
-    const year = parsed.getFullYear();
-    const month = String(parsed.getMonth() + 1).padStart(2, '0');
-    const day = String(parsed.getDate()).padStart(2, '0');
-    const hours = String(parsed.getHours()).padStart(2, '0');
-    const minutes = String(parsed.getMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   private toDateTimeLocal(date: Date, hour: number, minute: number) {

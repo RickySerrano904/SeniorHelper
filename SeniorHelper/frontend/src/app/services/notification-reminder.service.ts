@@ -65,32 +65,6 @@ export class NotificationReminderService {
     this.persistPreference(userId, 'leadMinutes', String(preferences.leadMinutes));
   }
 
-  getAppointmentReminderOverride(userId: number | null, appointmentId: number | null | undefined): string | null {
-    if (userId === null || appointmentId == null) {
-      return null;
-    }
-
-    const overrides = this.readAppointmentOverrides(userId);
-    return overrides[String(appointmentId)] ?? null;
-  }
-
-  setAppointmentReminderOverride(userId: number | null, appointmentId: number | null | undefined, reminderAt: string | null): void {
-    if (userId === null || appointmentId == null) {
-      return;
-    }
-
-    const overrides = this.readAppointmentOverrides(userId);
-    const key = String(appointmentId);
-
-    if (!reminderAt || !reminderAt.trim()) {
-      delete overrides[key];
-    } else {
-      overrides[key] = reminderAt.trim();
-    }
-
-    this.persistPreference(userId, 'appointmentOverrides', JSON.stringify(overrides));
-  }
-
   refreshForUser(userId: number | null): void {
     this.currentUserId = userId;
 
@@ -175,7 +149,6 @@ export class NotificationReminderService {
         this.appointmentService.getMyAppointments().pipe(timeout(this.requestTimeoutMs))
       );
       const nowMs = Date.now();
-      const appointmentOverrides = this.readAppointmentOverrides(this.currentUserId);
       const notifiedKeys = this.readNotifiedReminderKeys(this.currentUserId);
       const nextNotifiedKeys = new Set<string>();
 
@@ -189,15 +162,8 @@ export class NotificationReminderService {
           continue;
         }
 
-        const overrideReminderAt = appointment.id != null ? appointmentOverrides[String(appointment.id)] : undefined;
-        const overrideReminderAtMs = overrideReminderAt ? new Date(overrideReminderAt).getTime() : NaN;
-        const hasOverride = Number.isFinite(overrideReminderAtMs);
-        const reminderAtMs = hasOverride
-          ? overrideReminderAtMs
-          : appointmentStartMs - preferences.leadMinutes * 60 * 1000;
-        const reminderKey = hasOverride
-          ? this.buildReminderOverrideKey(appointment, overrideReminderAt as string)
-          : this.buildReminderKey(appointment, preferences.leadMinutes);
+        const reminderAtMs = appointmentStartMs - preferences.leadMinutes * 60 * 1000;
+        const reminderKey = this.buildReminderKey(appointment, preferences.leadMinutes);
 
         if (reminderAtMs > appointmentStartMs) {
           continue;
@@ -267,41 +233,10 @@ export class NotificationReminderService {
     return window.localStorage.getItem(this.notificationPrefKey(userId, suffix));
   }
 
-  private readAppointmentOverrides(userId: number | null): Record<string, string> {
-    const raw = this.readPreference(userId, 'appointmentOverrides');
-    if (!raw) {
-      return {};
-    }
-
-    try {
-      const parsed = JSON.parse(raw) as unknown;
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-        return {};
-      }
-
-      const overrides: Record<string, string> = {};
-      for (const [key, value] of Object.entries(parsed)) {
-        if (typeof value === 'string' && value.trim().length > 0) {
-          overrides[key] = value;
-        }
-      }
-
-      return overrides;
-    } catch {
-      return {};
-    }
-  }
-
   private buildReminderKey(appointment: Appointment, leadMinutes: number): string {
     const idPart = appointment.id ?? 'na';
     const startPart = appointment.start ?? 'na';
     return `${idPart}|${startPart}|${leadMinutes}`;
-  }
-
-  private buildReminderOverrideKey(appointment: Appointment, reminderAt: string): string {
-    const idPart = appointment.id ?? 'na';
-    const startPart = appointment.start ?? 'na';
-    return `${idPart}|${startPart}|override|${reminderAt}`;
   }
 
   private readNotifiedReminderKeys(userId: number | null): Set<string> {
