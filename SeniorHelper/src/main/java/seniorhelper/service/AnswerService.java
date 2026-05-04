@@ -78,7 +78,7 @@ public class AnswerService {
     }
 
     private Answer verifyAnswer(Integer moduleId, Integer questionId, Integer answerId) {
-        Question question = verifyQuestionBelongsToModuleQuiz(moduleId, questionId);
+        verifyQuestionBelongsToModuleQuiz(moduleId, questionId);
 
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new NotFoundException("Answer not found with ID: " + answerId));

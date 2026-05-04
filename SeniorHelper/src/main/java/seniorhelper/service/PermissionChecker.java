@@ -4,17 +4,14 @@ import seniorhelper.entities.User;
 import seniorhelper.enums.CareLinkStatus;
 import seniorhelper.enums.Role;
 import seniorhelper.repository.CareLinkRepository;
-import seniorhelper.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionChecker {
 
-    private final UserRepository users;
     private final CareLinkRepository links;
 
-    public PermissionChecker(UserRepository users, CareLinkRepository links) {
-        this.users = users;
+    public PermissionChecker(CareLinkRepository links) {
         this.links = links;
     }
 

@@ -3,7 +3,6 @@ package seniorhelper.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 

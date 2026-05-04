@@ -31,14 +31,22 @@ public class CareLinkRepositoryInMemoryTest {
         User caregiver = new User();
         caregiver.setUsername("CaregiverName");
         caregiver.setRole(Role.CAREGIVER);
+        entityManager.persist(caregiver);
 
         User senior = new User();
         senior.setUsername("SeniorName");
         senior.setRole(Role.SENIOR);
+        entityManager.persist(senior);
 
         CareLink careLink = new CareLink();
         careLink.setCaregiver(caregiver);
         careLink.setSenior(senior);
+
+        CareLink saved = careLinkRepository.save(careLink);
+
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCaregiver().getUsername()).isEqualTo("CaregiverName");
+        assertThat(saved.getSenior().getUsername()).isEqualTo("SeniorName");
     }
 
     @Test
@@ -47,14 +55,24 @@ public class CareLinkRepositoryInMemoryTest {
         User caregiver = new User();
         caregiver.setUsername("Caregiver1");
         caregiver.setRole(Role.CAREGIVER);
+        entityManager.persist(caregiver);
 
         User senior = new User();
         senior.setUsername("Senior1");
         senior.setRole(Role.SENIOR);
+        entityManager.persist(senior);
 
         CareLink careLink = new CareLink();
         careLink.setCaregiver(caregiver);
         careLink.setSenior(senior);
+
+        CareLink saved = entityManager.persistFlushFind(careLink);
+
+        Optional<CareLink> found = careLinkRepository.findById(saved.getId());
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getCaregiver().getUsername()).isEqualTo("Caregiver1");
+        assertThat(found.get().getSenior().getUsername()).isEqualTo("Senior1");
     }
 
 }
