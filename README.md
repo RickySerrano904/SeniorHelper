@@ -29,7 +29,7 @@ Best for development. This enables live reload for frontend changes.
 
 Start the backend:
 
-1. In your IDE, open `SeniorHelper/src/main/java/edu/fscj/cop3024c/seniorhelper/SeniorHelperApplication.java`.
+1. In your IDE, open `SeniorHelper/src/main/java/seniorhelper/SeniorHelperApplication.java`.
 2. Click Run.
 
 Start the frontend:

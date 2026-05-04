@@ -8,7 +8,7 @@
         <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>edu.fscj.cop3024c</groupId>
+    <groupId>seniorhelper</groupId>
     <artifactId>SeniorHelper</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SeniorHelper</name>
