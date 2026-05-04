@@ -25,7 +25,8 @@
 .cal-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
   position: relative;
 }
 
@@ -101,14 +102,38 @@
 }
 
 .nav {
-  width: 52px;
-  height: 52px;
-  background: transparent;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
   color: var(--accent);
   border: 1px solid var(--input-border);
-  border-radius: 6px;
-  font-size: 3rem;
+  border-radius: 50%;
+  font-size: 0;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.nav:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.cal-header > .nav::before {
+  font-family: 'Material Icons';
+  font-size: 28px;
+  line-height: 1;
+}
+
+.cal-header > .nav:first-of-type::before {
+  content: 'chevron_left';
+}
+
+.cal-header > .nav:last-of-type::before {
+  content: 'chevron_right';
 }
 
 .calendar-actions {
