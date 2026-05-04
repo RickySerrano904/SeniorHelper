@@ -1,9 +1,10 @@
 # SeniorHelper
 
-SeniorHelper is a full-stack web application designed for older adults and caregivers to stay organized, connected, and safer online. It combines practical care coordination features (shared appointments and caregiver links) with cybersecurity education (guided lessons, quizzes, and progress tracking) in a simple, high-legibility interface.
-
+SeniorHelper is a full-stack web application designed for older adults and caregivers to stay organized, connected, and safer online. It combines practical care coordination features (shared appointments and caregiver links) with cybersecurity education (guided lessons, quizzes, and progress tracking) in a simple, high-legibility interface.<br><br>
 ![App Screenshot](./public/seniorhelper-screenshot-01.jpg)
+*Landing Page Screenshot*<br><br> 
 ![App Screenshot](./public/seniorhelper-screenshot-02.jpg)
+*Main Dashboard Screenshot*<br><br> 
 
 ## Architecture and Stack
 
