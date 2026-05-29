@@ -4,29 +4,29 @@ Senior Helper is a full-stack web application designed for older adults and care
 
 ## Screenshots
 
-| Landing Page: Dark Mode | Landing Page: Light Mode |
+| Landing Page: Light Mode | Landing Page: Dark Mode |
 | --- | --- |
-| ![Senior Helper landing page in dark mode](public/readme-screenshots/seniorhelper-screenshot-01.png) | ![Senior Helper landing page in light mode](public/readme-screenshots/seniorhelper-screenshot-02.png) |
+| ![Senior Helper landing page in light mode](public/readme-screenshots/seniorhelper-light-01.png) | ![Senior Helper landing page in dark mode](public/readme-screenshots/seniorhelper-light-02.png) |
 
-| Feature Overview | Team Section |
+| Team Section | Dashboard |
 | --- | --- |
-| ![Senior Helper feature overview with calendar, caregiver, education, and accessibility highlights](public/readme-screenshots/seniorhelper-screenshot-03.png) | ![Senior Helper team section listing project contributors](public/readme-screenshots/seniorhelper-screenshot-04.png) |
+| ![Senior Helper team section listing project contributors](public/readme-screenshots/seniorhelper-light-03.png) | ![Senior Helper dashboard with quick links and upcoming appointments](public/readme-screenshots/seniorhelper-light-04.png) |
 
-| Dashboard | Add Appointment |
+| Add Appointment | Education Modules |
 | --- | --- |
-| ![Senior Helper dashboard with quick links and upcoming appointments](public/readme-screenshots/seniorhelper-screenshot-05.png) | ![Senior Helper add appointment modal on the calendar](public/readme-screenshots/seniorhelper-screenshot-06.png) |
+| ![Senior Helper add appointment modal on the calendar](public/readme-screenshots/seniorhelper-light-05.png) | ![Senior Helper online safety education module catalog](public/readme-screenshots/seniorhelper-light-06.png) |
 
-| Calendar | Education Modules |
+| Module Progress | Module Quiz |
 | --- | --- |
-| ![Senior Helper monthly calendar view](public/readme-screenshots/seniorhelper-screenshot-07.png) | ![Senior Helper online safety education module catalog](public/readme-screenshots/seniorhelper-screenshot-08.png) |
+| ![Senior Helper module page showing lesson progress](public/readme-screenshots/seniorhelper-light-07.png) | ![Senior Helper quiz for the spotting fake messages module](public/readme-screenshots/seniorhelper-light-08.png) |
 
-| Module Progress | Lesson Content |
+| Quiz Completion | Settings |
 | --- | --- |
-| ![Senior Helper module page showing lesson progress](public/readme-screenshots/seniorhelper-screenshot-09.png) | ![Senior Helper online safety lesson content](public/readme-screenshots/seniorhelper-screenshot-10.png) |
+| ![Senior Helper completed module quiz section with latest score](public/readme-screenshots/seniorhelper-light-09.png) | ![Senior Helper security settings tab](public/readme-screenshots/seniorhelper-light-10.png) |
 
-| Settings | Sign In |
+| Sign In | Register |
 | --- | --- |
-| ![Senior Helper security settings tab](public/readme-screenshots/seniorhelper-screenshot-11.png) | ![Senior Helper sign in form](public/readme-screenshots/seniorhelper-screenshot-12.png) |
+| ![Senior Helper sign in form](public/readme-screenshots/seniorhelper-light-11.png) | ![Senior Helper account registration form](public/readme-screenshots/seniorhelper-light-12.png) |
 
 ## Core Features
 
