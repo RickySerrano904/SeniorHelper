@@ -6,29 +6,29 @@ INSERT INTO users (username, email, first_name, last_name, password_hash, role) 
 --password for all users is: 'password'
 
 --id: 1
-('BaudelaireAdmin', 'baudelaire.admin@seniorhelper.local', 'Baudelaire', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('BaudelaireAdmin', 'baudelaire.admin@seniorhelper.local', 'Baudelaire', 'Admin', '$2a$10$ZuRr4HUrBV4mBT8ixOgZLuOFkpnRmkPr.3nBIBiS087xa35GEKRTu', 'ADMIN'),
 --id: 2
-('DayneAdmin', 'dayne.admin@seniorhelper.local', 'Dayne', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('DayneAdmin', 'dayne.admin@seniorhelper.local', 'Dayne', 'Admin', '$2a$10$Dlbr2ox.R06tK26bp..doe.UPlsix/zH/4enMAe4AI4epYibY4HJS', 'ADMIN'),
 --id: 3
-('DeweyAdmin', 'dewey.admin@seniorhelper.local', 'Dewey', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('DeweyAdmin', 'dewey.admin@seniorhelper.local', 'Dewey', 'Admin', '$2a$10$yAgveWH/YX1BI8NwlW2UtuLM1jP2sjhdDXH31s5IuaQfh6dGIbnvy', 'ADMIN'),
 --id: 4
-('TamiaAdmin', 'tamia.admin@seniorhelper.local', 'Tamia', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('TamiaAdmin', 'tamia.admin@seniorhelper.local', 'Tamia', 'Admin', '$2a$10$ICWeHyAIlJxk1G7KQ80elukKVVulsVFYgiqm3Ks0wAUvmzCW.eXTG', 'ADMIN'),
 --id: 5
-('LaurenAdmin', 'lauren.admin@seniorhelper.local', 'Lauren', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('LaurenAdmin', 'lauren.admin@seniorhelper.local', 'Lauren', 'Admin', '$2a$10$m0aVMWfk8FsISMFWzK62T.MyI19U/dQLZjGoBbiAan7YKqDqIroPy', 'ADMIN'),
 --id: 6
-('RickyAdmin', 'ricky.admin@seniorhelper.local', 'Ricky', 'Admin', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'ADMIN'),
+('RickyAdmin', 'ricky.admin@seniorhelper.local', 'Ricky', 'Admin', '$2a$10$MyRYHtL.IumaG1GPckdBAufe68qU/.cJhJXGUmzfjumj8d6KUBzvS', 'ADMIN'),
 --id: 7
-('JohnSenior', 'john.senior@seniorhelper.local', 'John', 'Senior', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'SENIOR'),
+('JohnSenior', 'john.senior@seniorhelper.local', 'John', 'Senior', '$2a$10$vxeL.f6skNFito6DUd4zVejuAELg6f7btXvYynltf/GwI0SqFHtee', 'SENIOR'),
 --id: 8
-('GertrudeSenior', 'gertrude.senior@seniorhelper.local', 'Gertrude', 'Senior', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'SENIOR'),
+('GertrudeSenior', 'gertrude.senior@seniorhelper.local', 'Gertrude', 'Senior', '$2a$10$bACXIgu2ob865IBfICGDz.Vb.mJwrABjZ/DtenoIz1MWUc.to9HP6', 'SENIOR'),
 --id: 9
-('TimSenior', 'tim.senior@seniorhelper.local', 'Tim', 'Senior', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'SENIOR'),
+('TimSenior', 'tim.senior@seniorhelper.local', 'Tim', 'Senior', '$2a$10$CpFVUiNfpE/MDlXU2bxwbedWBt2ig5VeXd0XhEWo9oUxKghyd0eMG', 'SENIOR'),
 --id: 10
-('DorothyCaregiver', 'dorothy.caregiver@seniorhelper.local', 'Dorothy', 'Caregiver', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'CAREGIVER'),
+('DorothyCaregiver', 'dorothy.caregiver@seniorhelper.local', 'Dorothy', 'Caregiver', '$2a$10$Abjv8FfR3sWwd3VijHzaWOc7t47GJHIreHJKtogqOS3WeaAhfGCN6', 'CAREGIVER'),
 --id: 11
-('FrankCaregiver', 'frank.caregiver@seniorhelper.local', 'Frank', 'Caregiver', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'CAREGIVER'),
+('FrankCaregiver', 'frank.caregiver@seniorhelper.local', 'Frank', 'Caregiver', '$2a$10$X.gh3XT0GCrEqA7jSUZa.OnNsrhHmgJRBB15onWakDrNytoSQ7Hfm', 'CAREGIVER'),
 --id: 12
-('BeatriceCaregiver', 'beatrice.caregiver@seniorhelper.local', 'Beatrice', 'Caregiver', '$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e', 'CAREGIVER');
+('BeatriceCaregiver', 'beatrice.caregiver@seniorhelper.local', 'Beatrice', 'Caregiver', '$2a$10$/JC8UYopBoMPV2d.sEGGE.A/5Fwk7caRomUM2Dnal46kVDOJTtnsy', 'CAREGIVER');
 
 -- =========================
 -- Modules (6 - Updated to mimic Figma UI Prototype)

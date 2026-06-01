@@ -58,6 +58,15 @@ SeniorHelper is a Spring Boot backend with an Angular frontend. The project can 
 
 The default backend configuration expects PostgreSQL at `localhost:5432`, database `seniorhelper_db`, username `postgres`, and password `postgres`.
 
+Local development can use the built-in development JWT secret. When running with the `prod` or `production` Spring profile, the app will fail startup unless a real JWT secret is provided through configuration or the `APP_SECURITY_JWT_SECRET` environment variable.
+
+Example PowerShell setup for a production-profile run:
+
+```powershell
+$env:APP_SECURITY_JWT_SECRET = "replace-with-a-long-random-secret"
+$env:SPRING_PROFILES_ACTIVE = "prod"
+```
+
 ### Option 1: Run Frontend and Backend Separately
 
 Best for development. This enables live reload for frontend changes.

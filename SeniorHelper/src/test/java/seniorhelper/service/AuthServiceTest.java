@@ -1,7 +1,10 @@
 package seniorhelper.service;
+import seniorhelper.entities.RevokedToken;
 import seniorhelper.entities.User;
 import seniorhelper.model.LoginRequest;
 import seniorhelper.model.LoginResponse;
+import seniorhelper.repository.RevokedTokenRepository;
+import seniorhelper.repository.UserTokenRevocationRepository;
 import seniorhelper.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -22,10 +28,16 @@ import static org.mockito.Mockito.*;
 class AuthServiceTest {
 
     private static final String SEEDED_PASSWORD_HASH =
-            "$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e";
+            "$2a$10$vxeL.f6skNFito6DUd4zVejuAELg6f7btXvYynltf/GwI0SqFHtee";
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RevokedTokenRepository revokedTokenRepository;
+
+    @Mock
+    private UserTokenRevocationRepository userTokenRevocationRepository;
 
     private AuthService authService;
     private PasswordEncoder passwordEncoder;
@@ -33,7 +45,22 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         passwordEncoder = new BCryptPasswordEncoder();
-        authService = new AuthService(userRepository, passwordEncoder);
+        Set<String> revokedJtis = new HashSet<>();
+        lenient().when(revokedTokenRepository.save(any(RevokedToken.class)))
+                .thenAnswer(invocation -> {
+                    RevokedToken revokedToken = invocation.getArgument(0);
+                    revokedJtis.add(revokedToken.getJti());
+                    return revokedToken;
+                });
+        lenient().when(revokedTokenRepository.existsByJtiAndExpiresAtAfter(anyString(), any()))
+                .thenAnswer(invocation -> revokedJtis.contains(invocation.getArgument(0)));
+        lenient().when(userTokenRevocationRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
+        authService = new AuthService(
+                userRepository,
+                passwordEncoder,
+                revokedTokenRepository,
+                userTokenRevocationRepository);
     }
 
     // ---------------------------------------------------------
