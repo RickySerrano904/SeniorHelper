@@ -67,6 +67,12 @@ $env:APP_SECURITY_JWT_SECRET = "replace-with-a-long-random-secret"
 $env:SPRING_PROFILES_ACTIVE = "prod"
 ```
 
+Swagger/OpenAPI is public only when the `dev` Spring profile is active. To use Swagger locally without authentication, start the backend with:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE = "dev"
+```
+
 ### Option 1: Run Frontend and Backend Separately
 
 Best for development. This enables live reload for frontend changes.
