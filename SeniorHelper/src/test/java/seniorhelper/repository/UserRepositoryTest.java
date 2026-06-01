@@ -15,6 +15,9 @@ import static org.assertj.core.api.Assertions.*;
 @ActiveProfiles("test")
 class UserRepositoryTest {
 
+    private static final String PASSWORD_HASH =
+            "$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -23,6 +26,7 @@ class UserRepositoryTest {
         User u = new User();
         u.setUsername("testuser");
         u.setRole(Role.SENIOR);
+        u.setPasswordHash(PASSWORD_HASH);
 
         User saved = userRepository.save(u);
 
@@ -39,10 +43,12 @@ class UserRepositoryTest {
         User u1 = new User();
         u1.setUsername("user1");
         u1.setRole(Role.SENIOR);
+        u1.setPasswordHash(PASSWORD_HASH);
 
         User u2 = new User();
         u2.setUsername("user2");
         u2.setRole(Role.CAREGIVER);
+        u2.setPasswordHash(PASSWORD_HASH);
 
         userRepository.save(u1);
         userRepository.save(u2);

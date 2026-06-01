@@ -19,6 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
 public class CareLinkRepositoryInMemoryTest {
 
+    private static final String PASSWORD_HASH =
+            "$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e";
+
     @Autowired
     private TestEntityManager entityManager;
 
@@ -31,11 +34,13 @@ public class CareLinkRepositoryInMemoryTest {
         User caregiver = new User();
         caregiver.setUsername("CaregiverName");
         caregiver.setRole(Role.CAREGIVER);
+        caregiver.setPasswordHash(PASSWORD_HASH);
         entityManager.persist(caregiver);
 
         User senior = new User();
         senior.setUsername("SeniorName");
         senior.setRole(Role.SENIOR);
+        senior.setPasswordHash(PASSWORD_HASH);
         entityManager.persist(senior);
 
         CareLink careLink = new CareLink();
@@ -55,11 +60,13 @@ public class CareLinkRepositoryInMemoryTest {
         User caregiver = new User();
         caregiver.setUsername("Caregiver1");
         caregiver.setRole(Role.CAREGIVER);
+        caregiver.setPasswordHash(PASSWORD_HASH);
         entityManager.persist(caregiver);
 
         User senior = new User();
         senior.setUsername("Senior1");
         senior.setRole(Role.SENIOR);
+        senior.setPasswordHash(PASSWORD_HASH);
         entityManager.persist(senior);
 
         CareLink careLink = new CareLink();

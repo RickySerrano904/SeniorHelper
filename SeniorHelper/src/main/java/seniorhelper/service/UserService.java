@@ -5,18 +5,13 @@ import seniorhelper.model.RegisterRequest;
 import seniorhelper.entities.User;
 import seniorhelper.error.NotFoundException;
 import seniorhelper.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.security.SecureRandom;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import seniorhelper.enums.Role;
 import java.util.Locale;
 
@@ -24,9 +19,11 @@ import java.util.Locale;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ===== CRUD Methods with DTO conversion =====
@@ -113,10 +110,7 @@ public class UserService {
             user.setRole(Role.SENIOR);
         }
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            String salt = generateSalt();
-            String hash = hashPassword(dto.getPassword(), salt);
-            user.setSalt(salt);
-            user.setHash(hash);
+            user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         }
         return userRepository.save(user);
     }
@@ -139,10 +133,7 @@ public class UserService {
             }
         }
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-            String salt = generateSalt();
-            String hash = hashPassword(userDetails.getPassword(), salt);
-            existingUser.setSalt(salt);
-            existingUser.setHash(hash);
+            existingUser.setPasswordHash(passwordEncoder.encode(userDetails.getPassword()));
         }
         User updatedUser = userRepository.save(existingUser);
         return convertToDTO(updatedUser);
@@ -169,29 +160,5 @@ public class UserService {
 
     private String trimOrNull(String value) {
         return (value == null || value.isBlank()) ? null : value.trim();
-    }
-
-    // ===== Password hashing (PBKDF2WithHmacSHA1) =====
-    private static final int ITERATIONS = 65536;
-    private static final int KEY_LENGTH = 256; // bits
-    private static final int SALT_LEN_BYTES = 32;
-
-    public static String generateSalt() {
-        byte[] salt = new byte[SALT_LEN_BYTES];
-        new SecureRandom().nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
-    }
-
-    public static String hashPassword(String password, String base64Salt) {
-        try {
-            char[] chars = password.toCharArray();
-            byte[] salt = Base64.getDecoder().decode(base64Salt);
-            PBEKeySpec spec = new PBEKeySpec(chars, salt, ITERATIONS, KEY_LENGTH);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = skf.generateSecret(spec).getEncoded();
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException("Password hashing failed", e);
-        }
     }
 }

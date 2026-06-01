@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +34,7 @@ import java.time.Instant;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // token JTI -> exp epoch-seconds (revoked until token naturally expires)
     private final Map<String, Long> revokedJtiExp = new ConcurrentHashMap<>();
@@ -49,8 +51,9 @@ public class AuthService {
     private volatile JwtEncoder jwtEncoder;
     private volatile JwtDecoder jwtDecoder;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Login
@@ -63,13 +66,10 @@ public class AuthService {
         }
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
-        if (user.getSalt() == null || user.getHash() == null) {
-            // User exists but hasn't been migrated to salted+hashed password
+        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Account not password-enabled");
         }
-        // Hash incoming password with stored salt and compare
-        String computedHash = UserService.hashPassword(password, user.getSalt());
-        if (!computedHash.equals(user.getHash())) {
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
         // Issue JWT token

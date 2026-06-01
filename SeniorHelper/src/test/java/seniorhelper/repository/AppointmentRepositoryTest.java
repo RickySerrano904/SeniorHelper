@@ -35,8 +35,7 @@ public class AppointmentRepositoryTest {
         User dummyUser = new User();
         dummyUser.setUsername("dummyUser");
         dummyUser.setRole(Role.SENIOR);
-        dummyUser.setSalt("dummySalt");
-        dummyUser.setHash("dummyHash");
+        dummyUser.setPasswordHash("$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e");
         dummyUser = entityManager.persist(dummyUser);
 
         Appointment newAppointment = new Appointment();
