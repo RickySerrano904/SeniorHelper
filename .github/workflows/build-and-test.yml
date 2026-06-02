@@ -53,11 +53,18 @@ jobs:
             --spring.jpa.database-platform=org.hibernate.dialect.H2Dialect \
             > springboot.log 2>&1 &
           echo $! > springboot.pid
-          sleep 20
-          if ! kill -0 "$(cat springboot.pid)" 2>/dev/null; then
-            cat springboot.log
-            exit 1
-          fi
+          for i in {1..30}; do
+            if curl --fail --silent --show-error http://localhost:8080/actuator/health; then
+              exit 0
+            fi
+            if ! kill -0 "$(cat springboot.pid)" >/dev/null; then
+              cat springboot.log
+              exit 1
+            fi
+            sleep 2
+          done
+          cat springboot.log
+          exit 1
         timeout-minutes: 5
 
       - name: Shutdown Spring Boot Application
