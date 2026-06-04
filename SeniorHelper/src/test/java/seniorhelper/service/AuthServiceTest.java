@@ -1,29 +1,67 @@
 package seniorhelper.service;
+import seniorhelper.entities.RevokedToken;
 import seniorhelper.entities.User;
 import seniorhelper.model.LoginRequest;
 import seniorhelper.model.LoginResponse;
+import seniorhelper.repository.RevokedTokenRepository;
+import seniorhelper.repository.UserTokenRevocationRepository;
 import seniorhelper.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
+    private static final String SEEDED_PASSWORD_HASH =
+            "$2a$10$vxeL.f6skNFito6DUd4zVejuAELg6f7btXvYynltf/GwI0SqFHtee";
+
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Mock
+    private RevokedTokenRepository revokedTokenRepository;
+
+    @Mock
+    private UserTokenRevocationRepository userTokenRevocationRepository;
+
     private AuthService authService;
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        passwordEncoder = new BCryptPasswordEncoder();
+        Set<String> revokedJtis = new HashSet<>();
+        lenient().when(revokedTokenRepository.save(any(RevokedToken.class)))
+                .thenAnswer(invocation -> {
+                    RevokedToken revokedToken = invocation.getArgument(0);
+                    revokedJtis.add(revokedToken.getJti());
+                    return revokedToken;
+                });
+        lenient().when(revokedTokenRepository.existsByJtiAndExpiresAtAfter(anyString(), any()))
+                .thenAnswer(invocation -> revokedJtis.contains(invocation.getArgument(0)));
+        lenient().when(userTokenRevocationRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
+        authService = new AuthService(
+                userRepository,
+                passwordEncoder,
+                revokedTokenRepository,
+                userTokenRevocationRepository);
+    }
 
     // ---------------------------------------------------------
     // login() - happy path
@@ -34,14 +72,9 @@ class AuthServiceTest {
         String username = "john";
         String rawPassword = "password123";
 
-        // Generate a valid salt and hash using the real UserService logic
-        String salt = UserService.generateSalt();
-        String hash = UserService.hashPassword(rawPassword, salt);
-
         User user = new User();
         user.setUsername(username);
-        user.setSalt(salt);
-        user.setHash(hash);
+        user.setPasswordHash(passwordEncoder.encode(rawPassword));
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
@@ -113,14 +146,9 @@ class AuthServiceTest {
         // Given
         String username = "john";
 
-        // Create a proper salt + hash for a *different* password
-        String salt = UserService.generateSalt();
-        String correctHash = UserService.hashPassword("correctPassword", salt);
-
         User user = new User();
         user.setUsername(username);
-        user.setSalt(salt);
-        user.setHash(correctHash);
+        user.setPasswordHash(passwordEncoder.encode("correctPassword"));
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
@@ -135,6 +163,22 @@ class AuthServiceTest {
         assertThat(ex.getReason()).contains("Invalid credentials");
     }
 
+    @Test
+    void login_ShouldAcceptSeededBCryptPasswordHash() {
+        String username = "JohnSenior";
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPasswordHash(SEEDED_PASSWORD_HASH);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+
+        LoginResponse resp = authService.login(new LoginRequest(username, "password"));
+
+        assertThat(resp.getToken()).isNotBlank();
+        assertThat(resp.getMessage()).contains(username + " logged on successfully");
+    }
+
     // ---------------------------------------------------------
     // logout() - removes token
     // ---------------------------------------------------------
@@ -143,13 +187,9 @@ class AuthServiceTest {
         String username = "john";
         String rawPassword = "password123";
 
-        String salt = UserService.generateSalt();
-        String hash = UserService.hashPassword(rawPassword, salt);
-
         User user = new User();
         user.setUsername(username);
-        user.setSalt(salt);
-        user.setHash(hash);
+        user.setPasswordHash(passwordEncoder.encode(rawPassword));
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 

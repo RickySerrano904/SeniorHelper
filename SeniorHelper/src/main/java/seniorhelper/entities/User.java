@@ -33,12 +33,8 @@ public class User {
     private Role role;
 
     @JsonIgnore
-    @Column(name = "salt")
-    private String salt;
-
-    @JsonIgnore
-    @Column(name = "hash")
-    private String hash;
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
     @OneToMany(mappedBy = "caregiver", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
@@ -77,11 +73,8 @@ public class User {
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public String getSalt() { return salt; }
-    public void setSalt(String salt) { this.salt = salt; }
-
-    public String getHash() { return hash; }
-    public void setHash(String hash) { this.hash = hash; }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }

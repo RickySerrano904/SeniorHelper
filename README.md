@@ -56,7 +56,25 @@ Senior Helper is a full-stack web application designed for older adults and care
 
 SeniorHelper is a Spring Boot backend with an Angular frontend. The project can be run in two common ways depending on whether you are actively developing the frontend or testing the packaged application.
 
-The default backend configuration expects PostgreSQL at `localhost:5432`, database `seniorhelper_db`, username `postgres`, and password `postgres`.
+The backend defaults to the `dev` Spring profile when no profile is specified. The dev profile expects PostgreSQL at `localhost:5432`, database `seniorhelper_db`, username `postgres`, and password `postgres`. It also recreates the schema, loads `data.sql`, enables SQL logging, and uses a development-only JWT secret.
+
+When running with the `prod` or `production` Spring profile, the app expects database settings and a real JWT secret from environment variables. The production profile validates the schema, disables SQL seed data, and does not use the development secret.
+
+Example PowerShell setup for a production-profile run:
+
+```powershell
+$env:SPRING_DATASOURCE_URL = "jdbc:postgresql://localhost:5432/seniorhelper_db"
+$env:SPRING_DATASOURCE_USERNAME = "replace-with-db-user"
+$env:SPRING_DATASOURCE_PASSWORD = "replace-with-db-password"
+$env:APP_SECURITY_JWT_SECRET = "replace-with-a-long-random-secret"
+$env:SPRING_PROFILES_ACTIVE = "prod"
+```
+
+Swagger/OpenAPI is public only when the `dev` Spring profile is active. The app uses `dev` automatically when no profile is set; to be explicit, start the backend with:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE = "dev"
+```
 
 ### Option 1: Run Frontend and Backend Separately
 

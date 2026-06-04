@@ -6,12 +6,14 @@ import seniorhelper.error.NotFoundException;
 import seniorhelper.model.RegisterRequest;
 import seniorhelper.model.UserDto;
 import seniorhelper.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
@@ -28,8 +30,14 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        passwordEncoder = new BCryptPasswordEncoder();
+        userService = new UserService(userRepository, passwordEncoder);
+    }
 
     // ---------- findAll ----------
 
@@ -155,6 +163,7 @@ class UserServiceTest {
 
         assertThat(saved.getUsername()).isEqualTo("caregiver1");
         assertThat(saved.getRole()).isEqualTo(Role.CAREGIVER);
+        assertThat(passwordEncoder.matches("pass", saved.getPasswordHash())).isTrue();
     }
 
     @Test

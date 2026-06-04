@@ -1,34 +1,34 @@
 -- =========================
 -- Users (seniors, caregiver, admin)
 -- =========================
-INSERT INTO users (username, email, first_name, last_name, salt, hash, role) VALUES
+INSERT INTO users (username, email, first_name, last_name, password_hash, role) VALUES
 
 --password for all users is: 'password'
 
 --id: 1
-('BaudelaireAdmin', 'baudelaire.admin@seniorhelper.local', 'Baudelaire', 'Admin', 'ydJ2wCfF1UyFUIGB+zPujU49znvnSephWCSUpKgsVX4=', 'yb0nfYHSbJ3M2xVVjCpXW1LYbvUDtPqdeQB9g4NTVE4=', 'ADMIN'),
+('BaudelaireAdmin', 'baudelaire.admin@seniorhelper.local', 'Baudelaire', 'Admin', '$2a$10$ZuRr4HUrBV4mBT8ixOgZLuOFkpnRmkPr.3nBIBiS087xa35GEKRTu', 'ADMIN'),
 --id: 2
-('DayneAdmin', 'dayne.admin@seniorhelper.local', 'Dayne', 'Admin', '3npCHXX42Y7SwcDxniJBvM3x6nQ+8a0TonWKuw6nCsk=', 'zqaprzPMJDP6zMyGvYcCJrx5QP1gCj0pNj1MqhhQg9g=', 'ADMIN'),
+('DayneAdmin', 'dayne.admin@seniorhelper.local', 'Dayne', 'Admin', '$2a$10$Dlbr2ox.R06tK26bp..doe.UPlsix/zH/4enMAe4AI4epYibY4HJS', 'ADMIN'),
 --id: 3
-('DeweyAdmin', 'dewey.admin@seniorhelper.local', 'Dewey', 'Admin', 'Wpd/YLoxqy+7sMTp0QnSx4ebOi53HFB2v4P7Mc8h8l4=', 'H/yX0mjIhX8idPV7/q5BgiOHEZ1HCD7q2QJya0NWsVg=', 'ADMIN'),
+('DeweyAdmin', 'dewey.admin@seniorhelper.local', 'Dewey', 'Admin', '$2a$10$yAgveWH/YX1BI8NwlW2UtuLM1jP2sjhdDXH31s5IuaQfh6dGIbnvy', 'ADMIN'),
 --id: 4
-('TamiaAdmin', 'tamia.admin@seniorhelper.local', 'Tamia', 'Admin', 'd9kXezXEkjF0/t8AEycRy+gnhkXWBpE0LbqxSCrdsh4=', 'goSlUKo5izH/FqxjkpjErm8SP9zGHwUyF5t8B4REoGQ=', 'ADMIN'),
+('TamiaAdmin', 'tamia.admin@seniorhelper.local', 'Tamia', 'Admin', '$2a$10$ICWeHyAIlJxk1G7KQ80elukKVVulsVFYgiqm3Ks0wAUvmzCW.eXTG', 'ADMIN'),
 --id: 5
-('LaurenAdmin', 'lauren.admin@seniorhelper.local', 'Lauren', 'Admin', 'R88ML2dHsCSeMGThU1TB0dBEi8HJsZPJQCYjubCKThA=', 'SHTkxE6sw7GCCcRzyLqApYyKpxc7uYK+p1wr57/A0IQ=', 'ADMIN'),
+('LaurenAdmin', 'lauren.admin@seniorhelper.local', 'Lauren', 'Admin', '$2a$10$m0aVMWfk8FsISMFWzK62T.MyI19U/dQLZjGoBbiAan7YKqDqIroPy', 'ADMIN'),
 --id: 6
-('RickyAdmin', 'ricky.admin@seniorhelper.local', 'Ricky', 'Admin', 'LHEMYdL7wXX1n/Te0MtZMIwaWB62tYX5vut3k7hrzyY=', 'XmjrUwL0Si9aqZYF0l+sRAhJCZiBEkWxDUdJsVrErgo=', 'ADMIN'),
+('RickyAdmin', 'ricky.admin@seniorhelper.local', 'Ricky', 'Admin', '$2a$10$MyRYHtL.IumaG1GPckdBAufe68qU/.cJhJXGUmzfjumj8d6KUBzvS', 'ADMIN'),
 --id: 7
-('JohnSenior', 'john.senior@seniorhelper.local', 'John', 'Senior', 'xLIMpTWxayc83HWei6vBMoMlg2mYFhOBM/+/SY/kcYI=', '+Df1zgqiCFlAyTdoBHyqCXiib9RPLH6P8uUQb4WGs24=', 'SENIOR'),
+('JohnSenior', 'john.senior@seniorhelper.local', 'John', 'Senior', '$2a$10$vxeL.f6skNFito6DUd4zVejuAELg6f7btXvYynltf/GwI0SqFHtee', 'SENIOR'),
 --id: 8
-('GertrudeSenior', 'gertrude.senior@seniorhelper.local', 'Gertrude', 'Senior', 'AgnahNewZ4qEU0MRqJChpZPMgSzQtl4PdlC7jy7qRBs=', 'YV8Uq0hZTlisg2RITbSk+uNXSD6LZ1oPRt4N1X5RdR4=', 'SENIOR'),
+('GertrudeSenior', 'gertrude.senior@seniorhelper.local', 'Gertrude', 'Senior', '$2a$10$bACXIgu2ob865IBfICGDz.Vb.mJwrABjZ/DtenoIz1MWUc.to9HP6', 'SENIOR'),
 --id: 9
-('TimSenior', 'tim.senior@seniorhelper.local', 'Tim', 'Senior', 'BMAVSc+jeTNzsFHcfhnUHeTjhgNZy6klGULmK1lFYn4=', 'rRNk/0Tq5JB1bN6mRvKNxRqyMZe4zjofZMJXOMOlLTc=', 'SENIOR'),
+('TimSenior', 'tim.senior@seniorhelper.local', 'Tim', 'Senior', '$2a$10$CpFVUiNfpE/MDlXU2bxwbedWBt2ig5VeXd0XhEWo9oUxKghyd0eMG', 'SENIOR'),
 --id: 10
-('DorothyCaregiver', 'dorothy.caregiver@seniorhelper.local', 'Dorothy', 'Caregiver', 'pkP4b5lTxL8HPqHu5MZVOZaJOeczVXvLZx0TidkEa6U=', 'ThiZ3KUEaaHhCArXkZjZtSUeFUu+7hQPOdoQjM+yvYo=', 'CAREGIVER'),
+('DorothyCaregiver', 'dorothy.caregiver@seniorhelper.local', 'Dorothy', 'Caregiver', '$2a$10$Abjv8FfR3sWwd3VijHzaWOc7t47GJHIreHJKtogqOS3WeaAhfGCN6', 'CAREGIVER'),
 --id: 11
-('FrankCaregiver', 'frank.caregiver@seniorhelper.local', 'Frank', 'Caregiver', 'YoFzz6jZVqaFQlKPnyf0AfH4K35ETFyC3J5eOeViG/w=', 'EONSwvav5XgS3BMzENg+RzH1WvO2oYGrN1z+PjRDzc4=', 'CAREGIVER'),
+('FrankCaregiver', 'frank.caregiver@seniorhelper.local', 'Frank', 'Caregiver', '$2a$10$X.gh3XT0GCrEqA7jSUZa.OnNsrhHmgJRBB15onWakDrNytoSQ7Hfm', 'CAREGIVER'),
 --id: 12
-('BeatriceCaregiver', 'beatrice.caregiver@seniorhelper.local', 'Beatrice', 'Caregiver', 'GMdYfTLRVfSAPyPZmuAHSoCENAzIGeLsyzv3JOyzujw=', 'gRdPpzCQrGBJVIG2j8uMefVDLqs6k9M0VUYSM/xTVyg=', 'CAREGIVER');
+('BeatriceCaregiver', 'beatrice.caregiver@seniorhelper.local', 'Beatrice', 'Caregiver', '$2a$10$/JC8UYopBoMPV2d.sEGGE.A/5Fwk7caRomUM2Dnal46kVDOJTtnsy', 'CAREGIVER');
 
 -- =========================
 -- Modules (6 - Updated to mimic Figma UI Prototype)

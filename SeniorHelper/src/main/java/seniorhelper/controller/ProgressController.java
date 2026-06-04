@@ -5,8 +5,6 @@ import seniorhelper.model.ProgressDto;
 import seniorhelper.service.ProgressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
-import org.slf4j.profiler.TimeInstrument;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,18 +35,11 @@ public class ProgressController {
     @GetMapping("/progress/seniors/{seniorId}")
     public ResponseEntity<ProgressDto> progressForSenior(@PathVariable Integer seniorId,
                                                          @AuthenticationPrincipal User requester) {
-        Profiler profiler = new Profiler("progressForSenior");
-        profiler.start("progressService.overallForSenior");
-        try {
-            logger.info("Progress requested by user={} for seniorId={}",
-                    requester.getUsername(), seniorId);
+        logger.info("Progress requested by user={} for seniorId={}",
+                requester.getUsername(), seniorId);
 
-            ProgressDto dto = progressService.overallForSenior(seniorId, requester);
-            return ResponseEntity.ok(dto);
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
-        }
+        ProgressDto dto = progressService.overallForSenior(seniorId, requester);
+        return ResponseEntity.ok(dto);
     }
 
     // ---------- Complete a lesson ----------
@@ -56,19 +47,12 @@ public class ProgressController {
     public ResponseEntity<Void> completeLesson(@PathVariable Integer moduleId,
                                                @PathVariable Integer lessonId,
                                                @AuthenticationPrincipal User me) {
-        Profiler profiler = new Profiler("completeLesson");
-        profiler.start("progressService.complete");
-        try {
-            logger.info("Lesson completion requested by user: {} (moduleId={}, lessonId={})",
-                    me.getUsername(), moduleId, lessonId);
-            progressService.complete(moduleId, lessonId, me);
-            logger.info("Lesson marked complete successfully: user={}, moduleId={}, lessonId={}",
-                    me.getUsername(), moduleId, lessonId);
-            return ResponseEntity.noContent().build();
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
-        }
+        logger.info("Lesson completion requested by user: {} (moduleId={}, lessonId={})",
+                me.getUsername(), moduleId, lessonId);
+        progressService.complete(moduleId, lessonId, me);
+        logger.info("Lesson marked complete successfully: user={}, moduleId={}, lessonId={}",
+                me.getUsername(), moduleId, lessonId);
+        return ResponseEntity.noContent().build();
     }
 
     // ---------- Un-complete a lesson ----------
@@ -76,19 +60,12 @@ public class ProgressController {
     public ResponseEntity<Void> uncompleteLesson(@PathVariable Integer moduleId,
                                                  @PathVariable Integer lessonId,
                                                  @AuthenticationPrincipal User me) {
-        Profiler profiler = new Profiler("uncompleteLesson");
-        profiler.start("progressService.uncomplete");
-        try {
-            logger.info("Lesson un-completion requested by user: {} (moduleId={}, lessonId={})",
-                    me.getUsername(), moduleId, lessonId);
-            progressService.uncomplete(moduleId, lessonId, me);
-            logger.info("Lesson marked un-complete successfully: user={}, moduleId={}, lessonId={}",
-                    me.getUsername(), moduleId, lessonId);
-            return ResponseEntity.noContent().build();
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
-        }
+        logger.info("Lesson un-completion requested by user: {} (moduleId={}, lessonId={})",
+                me.getUsername(), moduleId, lessonId);
+        progressService.uncomplete(moduleId, lessonId, me);
+        logger.info("Lesson marked un-complete successfully: user={}, moduleId={}, lessonId={}",
+                me.getUsername(), moduleId, lessonId);
+        return ResponseEntity.noContent().build();
     }
 
     // ---------- Complete a quiz ----------

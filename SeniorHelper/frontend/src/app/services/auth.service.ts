@@ -70,28 +70,34 @@ export class AuthService {
 
   saveToken(token: string, remember: boolean) {
     if (!token) return;
+    const local = this.getLocalStorage();
+    const session = this.getSessionStorage();
+
     if (remember) {
-      localStorage.setItem(this.tokenKey, token);
-      sessionStorage.removeItem(this.tokenKey);
+      local?.setItem(this.tokenKey, token);
+      session?.removeItem(this.tokenKey);
     } else {
-      sessionStorage.setItem(this.tokenKey, token);
-      localStorage.removeItem(this.tokenKey);
+      session?.setItem(this.tokenKey, token);
+      local?.removeItem(this.tokenKey);
     }
   }
 
   saveUsername(username: string, remember: boolean) {
     if (!username) return;
+    const local = this.getLocalStorage();
+    const session = this.getSessionStorage();
+
     if (remember) {
-      localStorage.setItem(this.usernameKey, username);
-      sessionStorage.removeItem(this.usernameKey);
+      local?.setItem(this.usernameKey, username);
+      session?.removeItem(this.usernameKey);
     } else {
-      sessionStorage.setItem(this.usernameKey, username);
-      localStorage.removeItem(this.usernameKey);
+      session?.setItem(this.usernameKey, username);
+      local?.removeItem(this.usernameKey);
     }
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey) ?? sessionStorage.getItem(this.tokenKey);
+    return this.getLocalStorage()?.getItem(this.tokenKey) ?? this.getSessionStorage()?.getItem(this.tokenKey) ?? null;
   }
 
   getValidToken(): string | null {
@@ -109,14 +115,17 @@ export class AuthService {
   }
 
   getUsername(): string | null {
-    return localStorage.getItem(this.usernameKey) ?? sessionStorage.getItem(this.usernameKey);
+    return this.getLocalStorage()?.getItem(this.usernameKey) ?? this.getSessionStorage()?.getItem(this.usernameKey) ?? null;
   }
 
   clearSession(): void {
-    localStorage.removeItem(this.tokenKey);
-    sessionStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.usernameKey);
-    sessionStorage.removeItem(this.usernameKey);
+    const local = this.getLocalStorage();
+    const session = this.getSessionStorage();
+
+    local?.removeItem(this.tokenKey);
+    session?.removeItem(this.tokenKey);
+    local?.removeItem(this.usernameKey);
+    session?.removeItem(this.usernameKey);
   }
 
   clearToken(): void {
@@ -162,5 +171,32 @@ export class AuthService {
     const remainder = base64.length % 4;
     const padding = remainder === 0 ? '' : '='.repeat(4 - remainder);
     return atob(base64 + padding);
+  }
+
+  private getLocalStorage(): Storage | null {
+    return this.getStorage('localStorage');
+  }
+
+  private getSessionStorage(): Storage | null {
+    return this.getStorage('sessionStorage');
+  }
+
+  private getStorage(type: 'localStorage' | 'sessionStorage'): Storage | null {
+    try {
+      const storage = globalThis[type];
+
+      if (
+        storage &&
+        typeof storage.getItem === 'function' &&
+        typeof storage.setItem === 'function' &&
+        typeof storage.removeItem === 'function'
+      ) {
+        return storage;
+      }
+    } catch {
+      return null;
+    }
+
+    return null;
   }
 }

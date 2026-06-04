@@ -1,9 +1,13 @@
 package seniorhelper.service;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import seniorhelper.entities.RevokedToken;
 import seniorhelper.entities.User;
+import seniorhelper.entities.UserTokenRevocation;
 import seniorhelper.model.LoginRequest;
 import seniorhelper.model.LoginResponse;
+import seniorhelper.repository.RevokedTokenRepository;
+import seniorhelper.repository.UserTokenRevocationRepository;
 import seniorhelper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,27 +21,24 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.time.Instant;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
-
-    // token JTI -> exp epoch-seconds (revoked until token naturally expires)
-    private final Map<String, Long> revokedJtiExp = new ConcurrentHashMap<>();
-    // username -> revoke cutoff (tokens issued at/before this instant are invalid)
-    private final Map<String, Long> userRevokedAfter = new ConcurrentHashMap<>();
+    private final PasswordEncoder passwordEncoder;
+    private final RevokedTokenRepository revokedTokenRepository;
+    private final UserTokenRevocationRepository userTokenRevocationRepository;
 
     // Defaults are used in tests unless overridden by Spring properties.
     @Value("${app.security.jwt.secret:dev-jwt-secret-change-me-please-dev-jwt-secret}")
@@ -49,8 +50,14 @@ public class AuthService {
     private volatile JwtEncoder jwtEncoder;
     private volatile JwtDecoder jwtDecoder;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       RevokedTokenRepository revokedTokenRepository,
+                       UserTokenRevocationRepository userTokenRevocationRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.revokedTokenRepository = revokedTokenRepository;
+        this.userTokenRevocationRepository = userTokenRevocationRepository;
     }
 
     // Login
@@ -63,13 +70,10 @@ public class AuthService {
         }
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
-        if (user.getSalt() == null || user.getHash() == null) {
-            // User exists but hasn't been migrated to salted+hashed password
+        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Account not password-enabled");
         }
-        // Hash incoming password with stored salt and compare
-        String computedHash = UserService.hashPassword(password, user.getSalt());
-        if (!computedHash.equals(user.getHash())) {
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
         // Issue JWT token
@@ -78,28 +82,29 @@ public class AuthService {
     }
 
     // Logout
+    @Transactional
     public void logout(String token) {
         if (token == null || token.isBlank()) return;
         parseAndValidateToken(token).ifPresent(claims -> {
-            revokedJtiExp.put(claims.jti(), claims.exp());
+            revokedTokenRepository.save(new RevokedToken(claims.jti(), claims.exp()));
         });
         pruneRevocations();
     }
 
     // Logout ALL sessions for a user (used for self-delete or admin delete)
+    @Transactional
     public void logoutAllForUser(Integer userId) {
         if (userId == null) return;
 
-        // get username from repository
         String username = userRepository.findById(userId)
                 .map(User::getUsername)
                 .orElse(null);
         if (username == null) return;
 
-        userRevokedAfter.put(username, Instant.now().getEpochSecond());
+        userTokenRevocationRepository.save(new UserTokenRevocation(username, Instant.now()));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<User> findUserByToken(String token) {
         if (token == null || token.isBlank()) {
             return Optional.empty();
@@ -113,15 +118,16 @@ public class AuthService {
         }
 
         JwtClaims claims = claimsOpt.get();
-        long now = Instant.now().getEpochSecond();
+        Instant now = Instant.now();
 
-        Long revokedExp = revokedJtiExp.get(claims.jti());
-        if (revokedExp != null && revokedExp > now) {
+        if (revokedTokenRepository.existsByJtiAndExpiresAtAfter(claims.jti(), now)) {
             return Optional.empty();
         }
 
-        Long userCutoff = userRevokedAfter.get(claims.username());
-        if (userCutoff != null && claims.iat() <= userCutoff) {
+        Optional<UserTokenRevocation> userRevocation =
+                userTokenRevocationRepository.findById(claims.username());
+        if (userRevocation.isPresent()
+                && !claims.iat().isAfter(userRevocation.get().getRevokedAfter())) {
             return Optional.empty();
         }
 
@@ -169,16 +175,15 @@ public class AuthService {
             return Optional.of(new JwtClaims(
                     username,
                     jti,
-                    issuedAt.getEpochSecond(),
-                    expiresAt.getEpochSecond()));
+                    issuedAt,
+                    expiresAt));
         } catch (JwtException ex) {
             return Optional.empty();
         }
     }
 
     private void pruneRevocations() {
-        long now = Instant.now().getEpochSecond();
-        revokedJtiExp.entrySet().removeIf(e -> e.getValue() == null || e.getValue() <= now);
+        revokedTokenRepository.deleteByExpiresAtBefore(Instant.now());
     }
 
     private JwtEncoder jwtEncoder() {
@@ -208,5 +213,5 @@ public class AuthService {
         return new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
     }
 
-    private record JwtClaims(String username, String jti, long iat, long exp) {}
+    private record JwtClaims(String username, String jti, Instant iat, Instant exp) {}
 }

@@ -71,6 +71,12 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.8.13</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Web dependency with logging excluded -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -87,14 +93,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-
-        <!-- SLF4J Profiler (from the slf4j-ext module) -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-ext</artifactId>
-            <version>2.0.16</version> <!-- matches your Spring Boot 3.x SLF4J
-        version -->
         </dependency>
 
         <dependency>

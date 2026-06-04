@@ -29,8 +29,7 @@ class LessonCompletionRepositoryInMemoryTest {
         User u = new User();
         u.setUsername(username);
         u.setRole(Role.values()[0]);
-        u.setSalt("test-salt");
-        u.setHash("test-hash");
+        u.setPasswordHash("$2a$10$vlloF3RsRY9.bVuzEVXi1eMT1utDA9yz3IUATxcO2URWBtbmp2C0e");
         return em.persistFlushFind(u);
     }
 
