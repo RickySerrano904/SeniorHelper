@@ -16,6 +16,14 @@ class SecurityConfigTest {
     }
 
     @Test
+    void isSwaggerPublic_returnsTrueForDefaultDevProfile() {
+        MockEnvironment environment = new MockEnvironment();
+        environment.setDefaultProfiles("dev");
+
+        assertThat(new SecurityConfig(environment).isSwaggerPublic()).isTrue();
+    }
+
+    @Test
     void isSwaggerPublic_returnsFalseForProductionProfile() {
         MockEnvironment environment = new MockEnvironment();
         environment.setActiveProfiles("production");

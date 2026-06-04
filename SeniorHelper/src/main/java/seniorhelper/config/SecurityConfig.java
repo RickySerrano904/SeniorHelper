@@ -2,9 +2,12 @@ package seniorhelper.config;
 
 import seniorhelper.error.ApiError;
 import seniorhelper.security.TokenAuthFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,15 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
     private final Environment environment;
+    private final ObjectMapper objectMapper;
 
     private static final String[] SWAGGER_WHITELIST = {
             "/v3/api-docs/**",
@@ -35,8 +37,14 @@ public class SecurityConfig {
             "/actuator/health"
     };
 
-    public SecurityConfig(Environment environment) {
+    @Autowired
+    public SecurityConfig(Environment environment, ObjectMapper objectMapper) {
         this.environment = environment;
+        this.objectMapper = objectMapper;
+    }
+
+    SecurityConfig(Environment environment) {
+        this(environment, new ObjectMapper().findAndRegisterModules());
     }
 
     @Bean
@@ -46,7 +54,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, TokenAuthFilter tokenAuthFilter) throws Exception {
-        var mapper = new ObjectMapper();
         http
             .cors(cors -> {})
             .csrf(csrf -> csrf.disable())
@@ -69,7 +76,7 @@ public class SecurityConfig {
                         res.setContentType("application/json");
                         var body = new ApiError(req.getRequestURI(),
                                 "Unauthorized: " + e.getMessage(), 401);
-                        res.getWriter().write(mapper.writeValueAsString(body));
+                        res.getWriter().write(objectMapper.writeValueAsString(body));
                     })
                     // 403 for authenticated but forbidden
                     .accessDeniedHandler((req, res, e) -> {
@@ -77,7 +84,7 @@ public class SecurityConfig {
                         res.setContentType("application/json");
                         var body = new ApiError(req.getRequestURI(),
                                 "Forbidden: " + e.getMessage(), 403);
-                        res.getWriter().write(mapper.writeValueAsString(body));
+                        res.getWriter().write(objectMapper.writeValueAsString(body));
                     })
             )
             .addFilterBefore(tokenAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -85,7 +92,6 @@ public class SecurityConfig {
     }
 
     boolean isSwaggerPublic() {
-        return Arrays.stream(environment.getActiveProfiles())
-                .anyMatch(profile -> profile.equalsIgnoreCase("dev"));
+        return environment.acceptsProfiles(Profiles.of("dev"));
     }
 }
