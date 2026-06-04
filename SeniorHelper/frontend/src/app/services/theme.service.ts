@@ -45,11 +45,11 @@ export class ThemeService {
       this.document.body.classList.add('theme-light');
     }
 
-    localStorage.setItem(this.storageKey, this.theme);
+    this.getStorage()?.setItem(this.storageKey, this.theme);
   }
 
   private readSavedTheme(): Theme | null {
-    const value = localStorage.getItem(this.storageKey);
+    const value = this.getStorage()?.getItem(this.storageKey);
 
     if (value === 'dark') {
       return 'dark';
@@ -57,6 +57,20 @@ export class ThemeService {
 
     if (value === 'light') {
       return 'light';
+    }
+
+    return null;
+  }
+
+  private getStorage(): Storage | null {
+    try {
+      const storage = this.document.defaultView?.localStorage;
+
+      if (storage && typeof storage.getItem === 'function' && typeof storage.setItem === 'function') {
+        return storage;
+      }
+    } catch {
+      return null;
     }
 
     return null;

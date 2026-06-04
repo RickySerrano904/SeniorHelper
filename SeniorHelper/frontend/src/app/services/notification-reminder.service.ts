@@ -213,19 +213,11 @@ export class NotificationReminderService {
   }
 
   private persistPreference(userId: number | null, suffix: string, value: string): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    window.localStorage.setItem(this.notificationPrefKey(userId, suffix), value);
+    this.getLocalStorage()?.setItem(this.notificationPrefKey(userId, suffix), value);
   }
 
   private readPreference(userId: number | null, suffix: string): string | null {
-    if (typeof window === 'undefined') {
-      return null;
-    }
-
-    return window.localStorage.getItem(this.notificationPrefKey(userId, suffix));
+    return this.getLocalStorage()?.getItem(this.notificationPrefKey(userId, suffix)) ?? null;
   }
 
   private buildReminderKey(appointment: Appointment, leadMinutes: number): string {
@@ -254,5 +246,19 @@ export class NotificationReminderService {
 
   private persistNotifiedReminderKeys(userId: number | null, keys: Set<string>): void {
     this.persistPreference(userId, 'notifiedReminderKeys', JSON.stringify(Array.from(keys)));
+  }
+
+  private getLocalStorage(): Storage | null {
+    try {
+      const storage = globalThis.localStorage;
+
+      if (storage && typeof storage.getItem === 'function' && typeof storage.setItem === 'function') {
+        return storage;
+      }
+    } catch {
+      return null;
+    }
+
+    return null;
   }
 }
