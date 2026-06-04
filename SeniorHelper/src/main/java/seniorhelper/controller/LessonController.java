@@ -3,7 +3,6 @@ package seniorhelper.controller;
 import seniorhelper.model.LessonDto;
 import seniorhelper.service.LessonService;
 import jakarta.validation.Valid;
-import org.slf4j.profiler.TimeInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
 import java.util.List;
 
 @RestController
@@ -43,9 +41,6 @@ public class LessonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LessonDto> createLesson(@PathVariable Integer moduleId,
                                                   @Valid @RequestBody LessonDto lessonDto) {
-        Profiler profiler = new Profiler("createLesson");
-        profiler.start("Create Lesson");
-
         logger.info("Attempting to create a new lesson in module ID {}", moduleId);
         try {
             LessonDto created = lessonService.createLesson(moduleId, lessonDto);
@@ -54,9 +49,6 @@ public class LessonController {
         } catch (Exception e) {
             logger.error("Error creating a new lesson in module ID {}, {}", moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 4. Update existing lesson.
@@ -64,9 +56,6 @@ public class LessonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LessonDto> updateLesson(@PathVariable Integer moduleId, @PathVariable Integer lessonId,
                                                   @RequestBody LessonDto lessonDto) {
-        Profiler profiler = new Profiler("updateLesson");
-        profiler.start("Update Lesson");
-
         logger.info("Attempting to update lesson ID {} in module ID {}", lessonId, moduleId);
         try {
             LessonDto updated = lessonService.updateLesson(moduleId, lessonId, lessonDto);
@@ -75,18 +64,12 @@ public class LessonController {
         } catch (Exception e) {
             logger.error("Error updating lesson in module ID {}, {}", moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 5. Delete lesson by its ID.
     @DeleteMapping("/{lessonId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Integer moduleId, @PathVariable Integer lessonId) {
-        Profiler profiler = new Profiler("deleteLesson");
-        profiler.start("Delete Lesson");
-
         logger.debug("Attempting to delete lesson {} from module ID {}", lessonId, moduleId);
         try {
             lessonService.deleteLesson(moduleId, lessonId);
@@ -95,9 +78,6 @@ public class LessonController {
         } catch (Exception e) {
             logger.error("Error deleting lesson {} from module ID {}, {}", lessonId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 }

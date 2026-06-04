@@ -7,8 +7,6 @@ import seniorhelper.model.AppointmentMapper;
 import seniorhelper.service.AppointmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
-import org.slf4j.profiler.TimeInstrument;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,8 +51,6 @@ public class AppointmentController {
     @PreAuthorize("@permissionChecker.hasPermission(principal, #seniorId)")
     public AppointmentDto create(@RequestParam Integer seniorId,
                                  @RequestBody AppointmentDto body) {
-        Profiler profiler = new Profiler("createAppointment");
-        profiler.start("Create Appointment");
         try {
             Appointment created = appointments.create(seniorId, dtoToEntityForWrite(body));
             logger.info("Appointment created successfully: {}", created.getId());
@@ -62,9 +58,6 @@ public class AppointmentController {
         } catch (Exception e) {
             logger.error("Error while creating appointment {}", e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 
@@ -75,8 +68,6 @@ public class AppointmentController {
     public AppointmentDto update(@PathVariable Integer appointmentId,
                                  @RequestParam Integer seniorId,
                                  @RequestBody AppointmentDto body) {
-        Profiler profiler = new Profiler("updateAppointment");
-        profiler.start("Update Appointment");
         try {
             Appointment updated = appointments.update(appointmentId, seniorId, dtoToEntityForWrite(body));
             logger.info("Appointment updated successfully: {}", updated.getId());
@@ -84,9 +75,6 @@ public class AppointmentController {
         } catch (Exception e) {
             logger.error("Error while updating appointment {}", e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 
@@ -97,17 +85,12 @@ public class AppointmentController {
     @PreAuthorize("@permissionChecker.hasPermission(principal, #seniorId)")
     public void delete(@PathVariable Integer appointmentId,
                        @RequestParam Integer seniorId) {
-        Profiler profiler = new Profiler("deleteAppointment");
-        profiler.start("Delete Appointment");
         try {
             appointments.delete(appointmentId, seniorId);
             logger.info("Appointment deleted successfully: {}", appointmentId);
         } catch (Exception e) {
             logger.error("Error while deleting appointment {}", e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 

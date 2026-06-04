@@ -10,8 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
-import org.slf4j.profiler.TimeInstrument;
 import java.util.*;
 
 @RestController
@@ -28,8 +26,6 @@ public class QuestionController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<QuestionDto> create(@PathVariable Integer moduleId, @Valid @RequestBody QuestionDto questionDto) {
-        Profiler profiler = new Profiler("createQuestion");
-        profiler.start("Create Question");
         logger.info("Attempting to create a new question in quiz for module ID {}", moduleId);
         try {
             QuestionDto created = questionService.createQuestion(moduleId, questionDto);
@@ -38,9 +34,6 @@ public class QuestionController {
         } catch (Exception e) {
             logger.error("Error creating a new question in quiz for module ID {}, {}", moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 2. Retrieve all questions for a quiz.
@@ -54,8 +47,6 @@ public class QuestionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<QuestionDto> update(@PathVariable Integer moduleId, @PathVariable Integer questionId,
                                               @Valid @RequestBody QuestionDto questionDto) {
-        Profiler profiler = new Profiler("updateQuestion");
-        profiler.start("Update Question");
         logger.info("Attempting to update question {} in module {}'s quiz", questionId, moduleId);
         try {
             QuestionDto updated = questionService.updateQuestion(moduleId, questionId, questionDto);
@@ -64,17 +55,12 @@ public class QuestionController {
         } catch (Exception e) {
             logger.error("Error updating question {} in quiz for module ID {}, {}", questionId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 4. Delete a question.
     @DeleteMapping("/{questionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Integer moduleId, @PathVariable Integer questionId) {
-        Profiler profiler = new Profiler("deleteQuestion");
-        profiler.start("Delete Question");
         logger.info("Attempting to delete question {} in module {}'s quiz", questionId, moduleId);
         try {
             questionService.deleteQuestion(moduleId, questionId);
@@ -83,9 +69,6 @@ public class QuestionController {
         } catch (Exception e) {
             logger.error("Error deleting question {} in module {}'s quiz, {}", questionId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 }

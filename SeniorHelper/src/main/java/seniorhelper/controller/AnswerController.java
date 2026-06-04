@@ -11,8 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
-import org.slf4j.profiler.TimeInstrument;
 import java.util.*;
 
 @RestController
@@ -28,8 +26,6 @@ public class AnswerController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AnswerDto> create(@PathVariable Integer moduleId, @PathVariable Integer questionId, @Valid @RequestBody AnswerDto dto) {
-        Profiler profiler = new Profiler("createAnswer");
-        profiler.start("Create Answer");
         logger.info("Attempting to create a new answer for question {} in module {}'s quiz", questionId, moduleId);
         try {
             AnswerDto created = answerService.createAnswer(moduleId, questionId, dto);
@@ -38,9 +34,6 @@ public class AnswerController {
         } catch (NotFoundException e) {
             logger.error("Error creating a new answer in question {} for module {}'s quiz, {}", questionId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 2. Retrieve all answers.
@@ -54,8 +47,6 @@ public class AnswerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AnswerDto> updateAnswer(@PathVariable Integer moduleId, @PathVariable Integer questionId,
                                                   @PathVariable Integer answerId, @Valid @RequestBody AnswerDto dto) {
-        Profiler profiler = new Profiler("updateAnswer");
-        profiler.start("Update Answer");
         logger.info("Attempting to update answer {} in question {} for module {}'s quiz", answerId, questionId, moduleId);
         try {
             AnswerDto updated = answerService.updateAnswer(moduleId, questionId, answerId, dto);
@@ -64,17 +55,12 @@ public class AnswerController {
         } catch (Exception e) {
             logger.error("Error updating answer in question {} for module {}'s quiz, {}", questionId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
     // 4. Delete an answer.
     @DeleteMapping("/{answerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAnswer(@PathVariable Integer moduleId, @PathVariable Integer questionId, @PathVariable Integer answerId) {
-        Profiler profiler = new Profiler("deleteAnswer");
-        profiler.start("Delete Answer");
         logger.info("Attempting to delete answer {} in question {} for module {}'s quiz", answerId, questionId, moduleId);
         try {
             answerService.deleteAnswer(moduleId, questionId, answerId);
@@ -83,9 +69,6 @@ public class AnswerController {
         } catch (Exception e) {
             logger.error("Error deleting answer {} in question {} for module {}'s quiz, {}", answerId, questionId, moduleId, e.getMessage());
             throw e;
-        } finally {
-            TimeInstrument ti = profiler.stop();
-            ti.print();
         }
     }
 }
