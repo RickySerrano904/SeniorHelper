@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ModuleService } from '../../services/module.service';
 import { Module } from '../../models/module.model';
 import { Observable, switchMap, forkJoin, map } from 'rxjs';
+import { apiEndpoint } from '../../config/api.config';
 
 @Component({
     selector: 'app-module', 
@@ -33,7 +34,7 @@ export class ModuleComponent {
                 // Fetch both the Module details AND the Progress data
                 return forkJoin({
                     module: this.moduleService.getModuleById(id),
-                    progress: this.http.get<any>('http://localhost:8080/api/progress')
+                    progress: this.http.get<any>(apiEndpoint('/progress'))
                 }).pipe(
                     map(({ module, progress }) => {
                         

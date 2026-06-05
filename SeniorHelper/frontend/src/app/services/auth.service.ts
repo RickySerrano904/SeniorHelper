@@ -6,6 +6,7 @@ import { LoginRequest } from '../models/login-request.model';
 import { LoginResponse } from '../models/login-response.model';
 import { RegisterRequest } from '../models/register-request.model';
 import { RegisterResponse } from '../models/register-response.model';
+import { apiEndpoint } from '../config/api.config';
 
 export interface UserProfileResponse {
   id: number;
@@ -28,20 +29,20 @@ export interface UpdateProfileRequest {
 export class AuthService {
   private readonly tokenKey = 'auth_token';
   private readonly usernameKey = 'auth_username';
-  private readonly usersApiUrl = 'http://localhost:8080/api/users';
+  private readonly usersApiUrl = apiEndpoint('/users');
 
   constructor(private http: HttpClient) {}
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('http://localhost:8080/api/auth/login', request);
+    return this.http.post<LoginResponse>(apiEndpoint('/auth/login'), request);
   }
 
   register(request: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>('http://localhost:8080/api/auth/register', request);
+    return this.http.post<RegisterResponse>(apiEndpoint('/auth/register'), request);
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>('http://localhost:8080/api/auth/logout', {});
+    return this.http.post<void>(apiEndpoint('/auth/logout'), {});
   }
 
   getMyProfile(): Observable<UserProfileResponse> {
