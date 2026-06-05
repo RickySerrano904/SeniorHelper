@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Lesson } from '../models/module.model';
+import { apiEndpoint } from '../config/api.config';
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
-    private readonly apiUrl = 'http://localhost:8080/api/modules';
+    private readonly apiUrl = apiEndpoint('/modules');
 
     constructor(private http: HttpClient) {}
 

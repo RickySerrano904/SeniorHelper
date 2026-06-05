@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Appointment } from '../models/appointment.model';
+import { apiEndpoint } from '../config/api.config';
 
 export interface AppointmentDto {
   id?: number;
@@ -23,8 +24,8 @@ export interface CreateAppointmentRequest {
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
-  private readonly apiUrl = 'http://localhost:8080/api/appointments';
-  private readonly usersApiUrl = 'http://localhost:8080/api/users';
+  private readonly apiUrl = apiEndpoint('/appointments');
+  private readonly usersApiUrl = apiEndpoint('/users');
 
   constructor(private http: HttpClient) {}
 
