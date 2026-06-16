@@ -28,6 +28,21 @@ jobs:
       - name: Run Maven Tests
         run: mvn -f SeniorHelper/pom.xml test
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: SeniorHelper/frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: SeniorHelper/frontend
+        run: npm ci
+
+      - name: Run Frontend Tests
+        working-directory: SeniorHelper/frontend
+        run: npm test -- --watch=false
+
   build-and-run:
     needs: test
     runs-on: ubuntu-latest
